@@ -16,23 +16,5 @@
       <description></description>
     </item>
     
-    <item>
-      <title>Chinese</title>
-      <link>/categories/chinese/</link>
-      <pubDate>Thu, 14 Nov 2019 11:25:05 -0400</pubDate>
-      
-      <guid>/categories/chinese/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Todo</title>
-      <link>/categories/todo/</link>
-      <pubDate>Sun, 18 Mar 2018 02:01:58 +0530</pubDate>
-      
-      <guid>/categories/todo/</guid>
-      <description></description>
-    </item>
-    
   </channel>
 </rss>
