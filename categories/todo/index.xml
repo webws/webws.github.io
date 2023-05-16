@@ -18,5 +18,27 @@ It all keeps piling up, and it can feel overwhelming.
 How do you keep up with it all? How do you find focus and peace and get stuff accomplished when you have too much on your plate?</description>
     </item>
     
+    <item>
+      <title>user-markdown</title>
+      <link>/posts/user-markdown/</link>
+      <pubDate>Sun, 18 Mar 2018 02:01:58 +0530</pubDate>
+      
+      <guid>/posts/user-markdown/</guid>
+      <description>当然，我可以帮您写一篇 Markdown 示例！请看下面的文本：
+Markdown 示例 Markdown 是一种轻量级标记语言，使用简单易懂的语法来为不同的内容添加不同的样式。让我们来看看它是如何工作的。
+代码块 在 Markdown 中添加代码块非常容易。只需要用三个反引号（```）将代码放置在其中即可，例如：
+print(&amp;#34;Hello World!&amp;#34;) 这将会输出 &amp;ldquo;Hello World!&amp;quot;，因为我们使用了 Python 的 print 函数。
+标题 在 Markdown 中添加标题也很容易。只需要在想要添加标题的行的前面加上一个 # 号就可以了。例如：
+这是一个 H3 标题 这将呈现为一个 H3 大小的标题。
+段落 段落是文本中最基本的单位。在 Markdown 中，段落之间用一个空白行分隔开来。例如：
+这是一个段落。
+这是另一个段落。
+序号 如果您需要添加序号，可以使用 Markdown 中的有序列表。只需要在每一行前面添加一个数字和一个句点。例如：
+第一项 第二项 第三项 这将显示为一个有序列表。
+图片 如果您需要在 Markdown 中添加图片，也非常简单。只需要使用 ![alt text](image-url) 语法结构，在中括号内输入替代文本，在括号内输入图片 URL。例如：
+这将会显示一只可爱的猫咪的照片。
+现在您已经知道了 Markdown 的基础语法，开始使用它来使您的文档更加优美和易读吧！以上就是关于 Markdown 示例的内容。</description>
+    </item>
+    
   </channel>
 </rss>
