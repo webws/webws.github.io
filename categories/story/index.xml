@@ -2,35 +2,35 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Story on 套路猿</title>
-    <link>/categories/story/</link>
+    <link>webws.github.io/categories/story/</link>
     <description>Recent content in Story on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sun, 09 Apr 2023 10:58:08 -0400</lastBuildDate><atom:link href="/categories/story/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 09 Apr 2023 10:58:08 -0400</lastBuildDate><atom:link href="webws.github.io/categories/story/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>caption</title>
-      <link>/posts/caption/</link>
+      <link>webws.github.io/posts/caption/</link>
       <pubDate>Sun, 09 Apr 2023 10:58:08 -0400</pubDate>
       
-      <guid>/posts/caption/</guid>
+      <guid>webws.github.io/posts/caption/</guid>
       <description>语聊接入声网字幕 语聊房 接入微软字幕时序图 用户通过客户端cc按钮开启字幕,请求到服务端 服务端判断是否有开启字幕的权限,如果没有,则返回错误；如果有,则通知客户端,开始推流 客户端收到推流通知,开始推流给微软字幕,并得到字幕文本,之后将文本上传给服务端 服务端收到客户端的文本,并将文本广播给房间内的其他用户 客户端其他用户收到文本,并将文本显示在评论区 房主关闭房间,服务端通知客户端停止推流 用户退出房间,如房间无人是vip,或无人使用体验卡,服务端通知客户端停止推流 sequencediagram participant 客户端 participant 服务端 participant 微软 note over 客户端: 开启字幕 客户端-&amp;gt;&amp;gt;服务端: 通过cc按钮开启字幕 服务端-&amp;gt;&amp;gt;客户端: 开启字幕成功,通知客户端开始推流 客户端-&amp;gt;&amp;gt;微软: 推流 微软-&amp;gt;&amp;gt;客户端: 文本 客户端-&amp;gt;&amp;gt;服务端: 上传文本 服务端-&amp;gt;&amp;gt;客户端: 广播文本给房间其他用户 note over 客户端: 关闭字幕 客户端-&amp;gt;&amp;gt;服务端: 有人退出房间/关闭房间/关闭cc 服务端-&amp;gt;&amp;gt;客户端: 判断达到关闭字幕条件,通知客户端停止推流 客户端-&amp;gt;&amp;gt;微软: 停止推流 语聊房接入 声网字幕时序图 服务端调用声网字幕api start 由 声网字幕 通过sdk 广播文本给房间内其他客户端,不由服务端广播 客户端收到 声网字幕文本回调 仍然需要上传文本给服务端,服务端维护字幕历史记录 用户进入房间,查看历史记录,由服务端返回历史记录 用户退出房间,如房间无人是vip,或无人使用体验卡,服务端调用声网字幕api stop 服务端调用声网字幕api stop 后,声网字幕不会再回调文本给客户端 sequencediagram participant 客户端 participant 服务端 participant 声网字幕 note over 客户端: 开启字幕 客户端-&amp;gt;&amp;gt;服务端: 通过cc按钮开启字幕 服务端-&amp;gt;&amp;gt;声网字幕: 开启字幕 声网字幕-&amp;gt;&amp;gt;客户端: 回调广播文本 客户端-&amp;gt;&amp;gt;服务端: 上传文本给服务端存储 note over 客户端: 查看历史字幕 客户端-&amp;gt;&amp;gt;服务端: 查看历史字幕 服务端-&amp;gt;&amp;gt;客户端: 返回历史字幕 note over 客户端: 关闭字幕 客户端-&amp;gt;&amp;gt;服务端: 有人退出房间/关闭房间/关闭cc 服务端-&amp;gt;&amp;gt;声网字幕: 停止字幕 声网字幕-&amp;gt;&amp;gt;客户端: 不再回调文本 与微软字幕对比 微软字幕是服务端通过信令通知客户端,客户端推流给微软字幕,微软字幕返回文本,客户端上传文本给服务端,服务端广播 声网字幕是服务端调用声网字幕api start,声网字幕通过sdk广播文本给客户端,客户端上传文本给服务端,服务端维护历史 使用声网字幕引擎:老版本用户的情况 开启声网字幕时,声网会通过sdk回调广播文本到客户端,这个不区分新老版本 老版本用户客户端因为 没有对回调的文本进行处理,所以不会显示字幕 假设语聊字幕对所有人都能使用的情况下:开启声网字幕,会有以下情况</description>
     </item>
     
     <item>
       <title>Chapter VI: Esmeralda</title>
-      <link>/posts/chapter-6/</link>
+      <link>webws.github.io/posts/chapter-6/</link>
       <pubDate>Fri, 14 Apr 2017 11:25:05 -0400</pubDate>
       
-      <guid>/posts/chapter-6/</guid>
+      <guid>webws.github.io/posts/chapter-6/</guid>
       <description>We are delighted to be able to inform the reader, that during the whole of this scene, Gringoire and his piece had stood firm. His actors, spurred on by him, had not ceased to spout his comedy, and he had not ceased to listen to it. He had made up his mind about the tumult, and was determined to proceed to the end, not giving up the hope of a return of attention on the part of the public.</description>
     </item>
     
     <item>
       <title>Chapter I: The Grand Hall</title>
-      <link>/posts/chapter-1/</link>
+      <link>webws.github.io/posts/chapter-1/</link>
       <pubDate>Sun, 09 Apr 2017 10:58:08 -0400</pubDate>
       
-      <guid>/posts/chapter-1/</guid>
+      <guid>webws.github.io/posts/chapter-1/</guid>
       <description>Three hundred and forty-eight years, six months, and nineteen days ago to-day, the Parisians awoke to the sound of all the bells in the triple circuit of the city, the university, and the town ringing a full peal.
 The sixth of January, 1482, is not, however, a day of which history has preserved the memory. There was nothing notable in the event which thus set the bells and the bourgeois of Paris in a ferment from early morning.</description>
     </item>
