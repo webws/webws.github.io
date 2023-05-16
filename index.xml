@@ -6,9 +6,50 @@
     <description>Recent content on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sun, 09 Apr 2023 10:58:08 -0400</lastBuildDate>
+    <lastBuildDate>Tue, 16 May 2023 17:50:03 +0800</lastBuildDate>
     
         <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>User Markdown</title>
+        <link>/posts/user-markdown/</link>
+        <pubDate>Tue, 16 May 2023 17:50:03 +0800</pubDate>
+        
+        <guid>/posts/user-markdown/</guid>
+        <description>套路猿 /posts/user-markdown/ -&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;当然，我可以帮您写一篇 Markdown 示例！请看下面的文本：&lt;/p&gt;
+&lt;h1 id=&#34;markdown-示例&#34;&gt;Markdown 示例&lt;/h1&gt;
+&lt;p&gt;Markdown 是一种轻量级标记语言，使用简单易懂的语法来为不同的内容添加不同的样式。让我们来看看它是如何工作的。&lt;/p&gt;
+&lt;h2 id=&#34;代码块&#34;&gt;代码块&lt;/h2&gt;
+&lt;p&gt;在 Markdown 中添加代码块非常容易。只需要用三个反引号（```）将代码放置在其中即可，例如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这将会输出 &amp;ldquo;Hello World!&amp;quot;，因为我们使用了 Python 的 &lt;code&gt;print&lt;/code&gt; 函数。&lt;/p&gt;
+&lt;h2 id=&#34;标题&#34;&gt;标题&lt;/h2&gt;
+&lt;p&gt;在 Markdown 中添加标题也很容易。只需要在想要添加标题的行的前面加上一个 &lt;code&gt;#&lt;/code&gt; 号就可以了。例如：&lt;/p&gt;
+&lt;h3 id=&#34;这是一个-h3-标题&#34;&gt;这是一个 H3 标题&lt;/h3&gt;
+&lt;p&gt;这将呈现为一个 H3 大小的标题。&lt;/p&gt;
+&lt;h2 id=&#34;段落&#34;&gt;段落&lt;/h2&gt;
+&lt;p&gt;段落是文本中最基本的单位。在 Markdown 中，段落之间用一个空白行分隔开来。例如：&lt;/p&gt;
+&lt;p&gt;这是一个段落。&lt;/p&gt;
+&lt;p&gt;这是另一个段落。&lt;/p&gt;
+&lt;h2 id=&#34;序号&#34;&gt;序号&lt;/h2&gt;
+&lt;p&gt;如果您需要添加序号，可以使用 Markdown 中的有序列表。只需要在每一行前面添加一个数字和一个句点。例如：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;第一项&lt;/li&gt;
+&lt;li&gt;第二项&lt;/li&gt;
+&lt;li&gt;第三项&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这将显示为一个有序列表。&lt;/p&gt;
+&lt;h2 id=&#34;图片&#34;&gt;图片&lt;/h2&gt;
+&lt;p&gt;如果您需要在 Markdown 中添加图片，也非常简单。只需要使用 &lt;code&gt;![alt text](image-url)&lt;/code&gt; 语法结构，在中括号内输入替代文本，在括号内输入图片 URL。例如：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_November_2010-1a.jpg&#34; alt=&#34;一只猫咪&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这将会显示一只可爱的猫咪的照片。&lt;/p&gt;
+&lt;p&gt;现在您已经知道了 Markdown 的基础语法，开始使用它来使您的文档更加优美和易读吧！以上就是关于 Markdown 示例的内容。&lt;/p&gt;
+- /posts/user-markdown/ - </description>
+        </item>
     
     
     
@@ -266,45 +307,6 @@
 &lt;p&gt;As you practice mindful focus, you’ll learn to practice doing things with an open heart, with curiosity and gratitude, and even joy. Try these one at a time as you get to do each task on your Short List.&lt;/p&gt;
 &lt;p&gt;You’ll find that you’re not so overloaded, but that each task is just perfect for that moment. And that’s a completely new relationship with the work that you do, and a new relationship with life.&lt;/p&gt;
 - /posts/post-1/ - </description>
-        </item>
-    
-    
-    
-        <item>
-        <title>user-markdown</title>
-        <link>/posts/user-markdown/</link>
-        <pubDate>Sun, 18 Mar 2018 02:01:58 +0530</pubDate>
-        
-        <guid>/posts/user-markdown/</guid>
-        <description>套路猿 /posts/user-markdown/ -&lt;p&gt;当然，我可以帮您写一篇 Markdown 示例！请看下面的文本：&lt;/p&gt;
-&lt;h1 id=&#34;markdown-示例&#34;&gt;Markdown 示例&lt;/h1&gt;
-&lt;p&gt;Markdown 是一种轻量级标记语言，使用简单易懂的语法来为不同的内容添加不同的样式。让我们来看看它是如何工作的。&lt;/p&gt;
-&lt;h2 id=&#34;代码块&#34;&gt;代码块&lt;/h2&gt;
-&lt;p&gt;在 Markdown 中添加代码块非常容易。只需要用三个反引号（```）将代码放置在其中即可，例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这将会输出 &amp;ldquo;Hello World!&amp;quot;，因为我们使用了 Python 的 &lt;code&gt;print&lt;/code&gt; 函数。&lt;/p&gt;
-&lt;h2 id=&#34;标题&#34;&gt;标题&lt;/h2&gt;
-&lt;p&gt;在 Markdown 中添加标题也很容易。只需要在想要添加标题的行的前面加上一个 &lt;code&gt;#&lt;/code&gt; 号就可以了。例如：&lt;/p&gt;
-&lt;h3 id=&#34;这是一个-h3-标题&#34;&gt;这是一个 H3 标题&lt;/h3&gt;
-&lt;p&gt;这将呈现为一个 H3 大小的标题。&lt;/p&gt;
-&lt;h2 id=&#34;段落&#34;&gt;段落&lt;/h2&gt;
-&lt;p&gt;段落是文本中最基本的单位。在 Markdown 中，段落之间用一个空白行分隔开来。例如：&lt;/p&gt;
-&lt;p&gt;这是一个段落。&lt;/p&gt;
-&lt;p&gt;这是另一个段落。&lt;/p&gt;
-&lt;h2 id=&#34;序号&#34;&gt;序号&lt;/h2&gt;
-&lt;p&gt;如果您需要添加序号，可以使用 Markdown 中的有序列表。只需要在每一行前面添加一个数字和一个句点。例如：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;第一项&lt;/li&gt;
-&lt;li&gt;第二项&lt;/li&gt;
-&lt;li&gt;第三项&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;这将显示为一个有序列表。&lt;/p&gt;
-&lt;h2 id=&#34;图片&#34;&gt;图片&lt;/h2&gt;
-&lt;p&gt;如果您需要在 Markdown 中添加图片，也非常简单。只需要使用 &lt;code&gt;![alt text](image-url)&lt;/code&gt; 语法结构，在中括号内输入替代文本，在括号内输入图片 URL。例如：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_November_2010-1a.jpg&#34; alt=&#34;一只猫咪&#34;&gt;&lt;/p&gt;
-&lt;p&gt;这将会显示一只可爱的猫咪的照片。&lt;/p&gt;
-&lt;p&gt;现在您已经知道了 Markdown 的基础语法，开始使用它来使您的文档更加优美和易读吧！以上就是关于 Markdown 示例的内容。&lt;/p&gt;
-- /posts/user-markdown/ - </description>
         </item>
     
     
