@@ -6,7 +6,27 @@
     <description>Recent content in Story on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Tue, 16 May 2023 17:50:03 +0800</lastBuildDate><atom:link href="/categories/story/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 May 2023 18:28:26 +0800</lastBuildDate><atom:link href="/categories/story/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ss</title>
+      <link>/posts/ss/</link>
+      <pubDate>Tue, 16 May 2023 18:28:26 +0800</pubDate>
+      
+      <guid>/posts/ss/</guid>
+      <description>当然，我可以帮您写一篇 Markdown 示例！请看下面的文本：
+Markdown 语法示例 Markdown 是一种轻量级标记语言，它使用简单易懂的语法来排版文档和增强可读性。下面是一个包含了常见 Markdown 语法的示例。
+标题 在 Markdown 中添加标题非常简单，只需要在行首使用一到六个井号即可表示不同层次的标题。例如：
+一级标题 二级标题 三级标题 四级标题 五级标题 六级标题 段落 段落是 Markdown 文档中最基本的单元，可以通过空行来区分不同的段落。例如：
+这是一段文字。
+这是另外一段文字。
+序号 如果您需要列出一些有序的内容，可以使用有序列表语法。在列表项前面加上数字和一个句号即可。例如：
+第一项 第二项 第三项 代码块 如果您需要插入代码块，可以用三个反引号（```）将代码块围住。例如：
+print(&amp;#34;Hello, World!&amp;#34;) 图片 插入图片也很简单，只需要使用 ![Alt Text](image URL) 语法结构。例如：
+跳转链接 Markdown 可以非常方便地插入超链接，使用 [link text](URL) 语法结构。例如：
+百度搜索引擎
+这是一个包含了常见 Markdown 语法的示例，希望对您有所帮助！</description>
+    </item>
+    
     <item>
       <title>User Markdown</title>
       <link>/posts/user-markdown/</link>
