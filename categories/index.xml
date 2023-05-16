@@ -6,13 +6,22 @@
     <description>Recent content in Categories on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Tue, 16 May 2023 18:28:26 +0800</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 16 May 2023 22:49:57 +0800</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Story</title>
       <link>/categories/story/</link>
-      <pubDate>Tue, 16 May 2023 18:28:26 +0800</pubDate>
+      <pubDate>Tue, 16 May 2023 22:49:57 +0800</pubDate>
       
       <guid>/categories/story/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>devops</title>
+      <link>/categories/devops/</link>
+      <pubDate>Tue, 16 May 2023 22:39:14 +0800</pubDate>
+      
+      <guid>/categories/devops/</guid>
       <description></description>
     </item>
     

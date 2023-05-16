@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html><head>
+<title>golang 使用 OpenTelemetry 实现跨服务 全链路追踪</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content=" 用户请求了一个接口,接口会调用其他grpc,http接口,或者内部的方法,这样的调用链路,如果出现了问题,我们需要快速的利用工具定位问题,OpenTelemetry就是这样一个工具">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="/posts/images/favicon.jpg">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8-opentelemetry-%e9%93%be%e8%b7%af%e8%bf%bd%e8%b8%aa%e8%af%b4%e6%98%8e" class="nav-使用-opentelemetry-链路追踪说明">
+									使用 OpenTelemetry 链路追踪说明
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9c%8d%e5%8a%a1%e9%93%be%e8%b7%af%e5%85%b3%e7%b3%bb" class="nav-服务链路关系">
+									服务链路关系
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%85%b3%e7%b3%bb%e5%9b%be" class="nav-关系图">
+									关系图
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%af%b4%e6%98%8e" class="nav-说明">
+									说明:
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85jaeger" class="nav-安装jaeger">
+									安装jaeger
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%9d%e5%a7%8b%e5%8c%96-%e5%85%a8%e5%b1%80%e7%9a%84-opentelemetry" class="nav-初始化-全局的-opentelemetry">
+									初始化 全局的 OpenTelemetry
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%af%b4%e6%98%8e-1" class="nav-说明-1">
+									说明
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#http%e6%9c%8d%e5%8a%a1%e9%93%be%e8%b7%af%e8%bf%bd%e8%b8%aa" class="nav-http服务链路追踪">
+									http服务链路追踪
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%90%af%e5%8a%a8-http%e6%9c%8d%e5%8a%a1%e5%bc%80%e5%90%af%e9%93%be%e8%b7%af%e8%bf%bd%e8%b8%aa" class="nav-启动-http服务开启链路追踪">
+									启动 http服务开启链路追踪
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#echo-server-%e7%a4%ba%e4%be%8b" class="nav-echo-server-示例">
+									echo server 示例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gin-%e4%b8%be%e4%be%8b" class="nav-gin-举例">
+									gin 举例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#http-client-%e9%93%be%e8%b7%af%e8%bf%bd%e8%b8%aa" class="nav-http-client-链路追踪">
+									http client 链路追踪
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%af%b4%e6%98%8e-2" class="nav-说明-2">
+									说明
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%b0%83%e7%94%a8%e6%9c%8d%e5%8a%a1%e6%9f%a5%e7%9c%8b%e9%93%be%e8%b7%af%e5%85%b3%e7%b3%bb" class="nav-调用服务查看链路关系">
+									调用服务,查看链路关系
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e6%88%98%e4%bb%a3%e7%a0%81%e6%bc%94%e7%a4%ba" class="nav-实战代码演示">
+									实战代码演示
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%99%ae%e9%80%9a%e8%bf%90%e8%a1%8c" class="nav-普通运行">
+									普通运行
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#docker-%e8%bf%90%e8%a1%8c" class="nav-docker-运行">
+									docker 运行
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9f%a5%e7%9c%8bjaeger-%e9%93%be%e8%b7%af" class="nav-查看jaeger-链路">
+									查看jaeger 链路
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="">
+            套路猿
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">套路猿</div>
+        
+        <div class="single-column-header-subtitle">自古深情留不住，唯有套路得人心</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    golang 使用 OpenTelemetry 实现跨服务 全链路追踪
+                    
+                    <div class="post-subtitle">
+                         用户请求了一个接口,接口会调用其他grpc,http接口,或者内部的方法,这样的调用链路,如果出现了问题,我们需要快速的利用工具定位问题,OpenTelemetry就是这样一个工具
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-05-16 22:39
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/devops">devops</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA">链路追踪</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h2 id="使用-opentelemetry-链路追踪说明">使用 OpenTelemetry 链路追踪说明</h2>
+<ol>
+<li>工作中常常会遇到需要查看服务调用关系,比如用户请求了一个接口</li>
+<li>接口会调用其他grpc,http接口,或者内部的方法</li>
+<li>这样的调用链路,如果出现了问题,我们需要快速的定位问题,这时候就需要一个工具来帮助我们查看调用链路</li>
+<li>OpenTelemetry就是这样一个工具</li>
+<li>本文大概以:main 函数初始化 OpenTelemetry、启动 http server、配置httpclient 请求服务 来进行说明</li>
+<li>完整可执行源码在:<a href="https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing">opentelemetry-go 示例</a></li>
+<li>示例代码已增加 grpc的链路追踪</li>
+</ol>
+<h2 id="服务链路关系">服务链路关系</h2>
+<h4 id="关系图">关系图</h4>
+<p><img src="http://qiniu.taoluyuan.com/2023/blog20230516224243.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
+<h4 id="说明">说明:</h4>
+<ol>
+<li>用户  请求 api1(echo server) 服务的 api1/bar</li>
+<li>api1 调用 Grpc 服务</li>
+<li>api1 调用 api2 (gin server) 服务的 api2/bar</li>
+<li>api2 调用 api3 (echo server )服务的 api3/bar</li>
+<li>api3 调用 内部 调用方法 bar-&gt;bar2-&gt;bar3</li>
+</ol>
+<h2 id="安装jaeger">安装jaeger</h2>
+<ol>
+<li>下载jaeger:我使用的是 jaeger-all-in-one</li>
+<li>启动 jaeger: ~/tool/jaeger-1.31.0-linux-amd64/jaeger-all-in-one</li>
+<li>默认查看面板 地址 http://localhost:16686/</li>
+<li>tracer Batcher的地址,下面代码会体现: http://localhost:14268/api/traces</li>
+</ol>
+<h2 id="初始化-全局的-opentelemetry">初始化 全局的 OpenTelemetry</h2>
+<p>这里openTelemetry 的exporter 以 jaeger 为例</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">tracer</span> = <span style="color:#a6e22e">otel</span>.<span style="color:#a6e22e">Tracer</span>(<span style="color:#e6db74">&#34;go-moda&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">InitJaegerProvider</span>(<span style="color:#a6e22e">jaegerUrl</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">serviceName</span> <span style="color:#66d9ef">string</span>) (<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#66d9ef">error</span>, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">jaegerUrl</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Errorw</span>(<span style="color:#e6db74">&#34;jaeger url is empty&#34;</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">tracer</span> = <span style="color:#a6e22e">otel</span>.<span style="color:#a6e22e">Tracer</span>(<span style="color:#a6e22e">serviceName</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">exp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">jaeger</span>.<span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">jaeger</span>.<span style="color:#a6e22e">WithCollectorEndpoint</span>(<span style="color:#a6e22e">jaeger</span>.<span style="color:#a6e22e">WithEndpoint</span>(<span style="color:#a6e22e">jaegerUrl</span>)))
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">tp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tracesdk</span>.<span style="color:#a6e22e">NewTracerProvider</span>(
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">tracesdk</span>.<span style="color:#a6e22e">WithBatcher</span>(<span style="color:#a6e22e">exp</span>),
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">tracesdk</span>.<span style="color:#a6e22e">WithResource</span>(<span style="color:#a6e22e">resource</span>.<span style="color:#a6e22e">NewSchemaless</span>(
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">semconv</span>.<span style="color:#a6e22e">ServiceNameKey</span>.<span style="color:#a6e22e">String</span>(<span style="color:#a6e22e">serviceName</span>),
+</span></span><span style="display:flex;"><span>		)),
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">otel</span>.<span style="color:#a6e22e">SetTracerProvider</span>(<span style="color:#a6e22e">tp</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// otel.SetTextMapPropagator(propagation.TraceContext{})
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">b3Propagator</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">b3</span>.<span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">b3</span>.<span style="color:#a6e22e">WithInjectEncoding</span>(<span style="color:#a6e22e">b3</span>.<span style="color:#a6e22e">B3MultipleHeader</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">propagator</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">propagation</span>.<span style="color:#a6e22e">NewCompositeTextMapPropagator</span>(<span style="color:#a6e22e">propagation</span>.<span style="color:#a6e22e">TraceContext</span>{}, <span style="color:#a6e22e">propagation</span>.<span style="color:#a6e22e">Baggage</span>{}, <span style="color:#a6e22e">b3Propagator</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">otel</span>.<span style="color:#a6e22e">SetTextMapPropagator</span>(<span style="color:#a6e22e">propagator</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">tp</span>.<span style="color:#a6e22e">Shutdown</span>, <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="说明-1">说明</h4>
+<ol>
+<li>jaegerUrl ,如果安装的是 jaeger-all-in-one,则地址默认为 http://localhost:14268/api/traces</li>
+<li>serviceName 是服务名称,这里我使用的是 api1,api2,api3</li>
+<li>增加 span 可以使用 tracer.Start(ctx, &ldquo;spanName&rdquo;)</li>
+</ol>
+<h2 id="http服务链路追踪">http服务链路追踪</h2>
+<p>初始化了全局的 OpenTelemetry后,在当前服务就可以使用 OpenTelemetry 的 tracer 进行链路追踪 比如</p>
+<pre tabindex="0"><code>ctx, span := tracing.Start(ctx, &#34;service.bar&#34;)
+defer span.End()
+</code></pre><p>但如果是跨服务进行调用,比如 http server之间的调用,需要:</p>
+<ol>
+<li>对于 http client:  请求server的时候,将ctx(上下文) 注入到 请求头中(req header) 中</li>
+<li>对于 http server: 在获取http请求时,解析 出请求头 中的 parent trace 信息 这样就可以实现跨服务链路追踪</li>
+</ol>
+<h3 id="启动-http服务开启链路追踪">启动 http服务开启链路追踪</h3>
+<p>http服务,解析请求头中的trace信息:echo 和 gin 都有成熟的的中间件,我们在初始化的时候,将中间件加入到服务中即可,下面是 echo 和 gin启动服务的演示:</p>
+<h4 id="echo-server-示例">echo server 示例</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">e</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">echo</span>.<span style="color:#a6e22e">New</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">Server</span>.<span style="color:#a6e22e">Use</span>(<span style="color:#a6e22e">otelecho</span>.<span style="color:#a6e22e">Middleware</span>(<span style="color:#e6db74">&#34;moda&#34;</span>))
+</span></span></code></pre></div><h4 id="gin-举例">gin 举例</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ginEngine</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Default</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">g</span>.<span style="color:#a6e22e">GetServer</span>().<span style="color:#a6e22e">Use</span>(<span style="color:#a6e22e">otelgin</span>.<span style="color:#a6e22e">Middleware</span>(<span style="color:#e6db74">&#34;my-server&#34;</span>))
+</span></span></code></pre></div><h3 id="http-client-链路追踪">http client 链路追踪</h3>
+<p>httpserver 启动时 通过解析 请求头 中的 parent trace 来进行链路追踪
+那么在调用服务时,就需要将上下文注入到 req header 中 下面是我个人封装的 httpclient,可以参考:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">tracing</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;bytes&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;context&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;encoding/json&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 新增 options  http.Transport
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ClientOption</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Transport</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Transport</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ClientOptionFunc</span> <span style="color:#66d9ef">func</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">ClientOption</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">WithClientTransport</span>(<span style="color:#a6e22e">transport</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Transport</span>) <span style="color:#a6e22e">ClientOptionFunc</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">option</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ClientOption</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">option</span>.<span style="color:#a6e22e">Transport</span> = <span style="color:#a6e22e">transport</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// CallAPI 为 http client 封装,默认使用 otelhttp.NewTransport(http.DefaultTransport)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CallAPI</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">url</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">method</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">reqBody</span> <span style="color:#66d9ef">interface</span>{}, <span style="color:#a6e22e">option</span> <span style="color:#f92672">...</span><span style="color:#a6e22e">ClientOptionFunc</span>) ([]<span style="color:#66d9ef">byte</span>, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">clientOption</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ClientOption</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">o</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">option</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">o</span>(<span style="color:#a6e22e">clientOption</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{<span style="color:#a6e22e">Transport</span>: <span style="color:#a6e22e">otelhttp</span>.<span style="color:#a6e22e">NewTransport</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">DefaultTransport</span>)}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">clientOption</span>.<span style="color:#a6e22e">Transport</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Transport</span> = <span style="color:#a6e22e">otelhttp</span>.<span style="color:#a6e22e">NewTransport</span>(<span style="color:#a6e22e">clientOption</span>.<span style="color:#a6e22e">Transport</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">requestBody</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Reader</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">reqBody</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">payload</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">Marshal</span>(<span style="color:#a6e22e">reqBody</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">requestBody</span> = <span style="color:#a6e22e">bytes</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#a6e22e">payload</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewRequestWithContext</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">method</span>, <span style="color:#a6e22e">url</span>, <span style="color:#a6e22e">requestBody</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#a6e22e">req</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">resBody</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">resBody</span>, <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="说明-2">说明</h4>
+<ol>
+<li>上面代码中,主要是使用了 otelhttp.NewTransport(http.DefaultTransport) 将上下文注入到 req header 中</li>
+<li>调用服务时,需要将上下文(ctx)传入到 CallAPI 方法</li>
+</ol>
+<h2 id="调用服务查看链路关系">调用服务,查看链路关系</h2>
+<h3 id="实战代码演示">实战代码演示</h3>
+<p>跨服务 链路追踪 大概说完 下面是运行实战代码,分为普通运行和docker 一键运行
+查看源码位置:<a href="https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing">opentelemetry-go 示例</a></p>
+<h4 id="普通运行">普通运行</h4>
+<ol>
+<li>示例文件:moda_tracing下 有四个目录,分别是 api1_http,api2_http,api3_http,grpc 分别对应三个api服务 一个grpc服务</li>
+<li>分别启动三个服务,进入目录 go run ./ -c ./conf.toml 即可启动服务</li>
+</ol>
+<h4 id="docker-运行">docker 运行</h4>
+<ol>
+<li>进入moda_tracing目录</li>
+<li>执行 make deploy,会同时启动 jaeger,api1,api2,api3,grpc(mac 和 linux经过试验可行,win如不行可使用第一种)</li>
+</ol>
+<h4 id="查看jaeger-链路">查看jaeger 链路</h4>
+<ol>
+<li>根据上面链路关系,调用api1 等待调用完成: curl localhost:8081/api1/bar</li>
+<li>打开 jaeger 面板,查看链路关系图,http://localhost:16686/</li>
+</ol>
+<p><img src="http://qiniu.taoluyuan.com/2023/blog20230516224511.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
+<p>可以看到对应的链路,在bar,bar2,bar3 刻意sleep 加了耗时也体现了出来</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-05-16</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/posts/docker-makefile/">
+			下回<br>Makefile 与 docker 进行多服务 一次性构建
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/ss/">
+			上回<br>markdown 笔记
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="/">
+    
+        <div class="nav-title">
+            套路猿
+        </div>
+        
+        <div class="nav-subtitle">
+            自古深情留不住，唯有套路得人心
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+
+
+&copy;
+	
+	2023 套路猿
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8-opentelemetry-%e9%93%be%e8%b7%af%e8%bf%bd%e8%b8%aa%e8%af%b4%e6%98%8e" class="nav-使用-opentelemetry-链路追踪说明">
+									使用 OpenTelemetry 链路追踪说明
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9c%8d%e5%8a%a1%e9%93%be%e8%b7%af%e5%85%b3%e7%b3%bb" class="nav-服务链路关系">
+									服务链路关系
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%85%b3%e7%b3%bb%e5%9b%be" class="nav-关系图">
+									关系图
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%af%b4%e6%98%8e" class="nav-说明">
+									说明:
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85jaeger" class="nav-安装jaeger">
+									安装jaeger
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%9d%e5%a7%8b%e5%8c%96-%e5%85%a8%e5%b1%80%e7%9a%84-opentelemetry" class="nav-初始化-全局的-opentelemetry">
+									初始化 全局的 OpenTelemetry
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%af%b4%e6%98%8e-1" class="nav-说明-1">
+									说明
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#http%e6%9c%8d%e5%8a%a1%e9%93%be%e8%b7%af%e8%bf%bd%e8%b8%aa" class="nav-http服务链路追踪">
+									http服务链路追踪
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%90%af%e5%8a%a8-http%e6%9c%8d%e5%8a%a1%e5%bc%80%e5%90%af%e9%93%be%e8%b7%af%e8%bf%bd%e8%b8%aa" class="nav-启动-http服务开启链路追踪">
+									启动 http服务开启链路追踪
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#echo-server-%e7%a4%ba%e4%be%8b" class="nav-echo-server-示例">
+									echo server 示例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gin-%e4%b8%be%e4%be%8b" class="nav-gin-举例">
+									gin 举例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#http-client-%e9%93%be%e8%b7%af%e8%bf%bd%e8%b8%aa" class="nav-http-client-链路追踪">
+									http client 链路追踪
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%af%b4%e6%98%8e-2" class="nav-说明-2">
+									说明
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%b0%83%e7%94%a8%e6%9c%8d%e5%8a%a1%e6%9f%a5%e7%9c%8b%e9%93%be%e8%b7%af%e5%85%b3%e7%b3%bb" class="nav-调用服务查看链路关系">
+									调用服务,查看链路关系
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e6%88%98%e4%bb%a3%e7%a0%81%e6%bc%94%e7%a4%ba" class="nav-实战代码演示">
+									实战代码演示
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%99%ae%e9%80%9a%e8%bf%90%e8%a1%8c" class="nav-普通运行">
+									普通运行
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#docker-%e8%bf%90%e8%a1%8c" class="nav-docker-运行">
+									docker 运行
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9f%a5%e7%9c%8bjaeger-%e9%93%be%e8%b7%af" class="nav-查看jaeger-链路">
+									查看jaeger 链路
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+
+
+&copy;
+	
+	2023 套路猿
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>devops on 套路猿</title>
+    <link>/categories/devops/</link>
+    <description>Recent content in devops on 套路猿</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Tue, 16 May 2023 22:39:14 +0800</lastBuildDate><atom:link href="/categories/devops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>golang 使用 OpenTelemetry 实现跨服务 全链路追踪</title>
+      <link>/posts/opentelmetry/</link>
+      <pubDate>Tue, 16 May 2023 22:39:14 +0800</pubDate>
+      
+      <guid>/posts/opentelmetry/</guid>
+      <description>使用 OpenTelemetry 链路追踪说明 工作中常常会遇到需要查看服务调用关系,比如用户请求了一个接口 接口会调用其他grpc,http接口,或者内部的方法 这样的调用链路,如果出现了问题,我们需要快速的定位问题,这时候就需要一个工具来帮助我们查看调用链路 OpenTelemetry就是这样一个工具 本文大概以:main 函数初始化 OpenTelemetry、启动 http server、配置httpclient 请求服务 来进行说明 完整可执行源码在:opentelemetry-go 示例 示例代码已增加 grpc的链路追踪 服务链路关系 关系图 说明: 用户 请求 api1(echo server) 服务的 api1/bar api1 调用 Grpc 服务 api1 调用 api2 (gin server) 服务的 api2/bar api2 调用 api3 (echo server )服务的 api3/bar api3 调用 内部 调用方法 bar-&amp;gt;bar2-&amp;gt;bar3 安装jaeger 下载jaeger:我使用的是 jaeger-all-in-one 启动 jaeger: ~/tool/jaeger-1.31.0-linux-amd64/jaeger-all-in-one 默认查看面板 地址 http://localhost:16686/ tracer Batcher的地址,下面代码会体现: http://localhost:14268/api/traces 初始化 全局的 OpenTelemetry 这里openTelemetry 的exporter 以 jaeger 为例</description>
+    </item>
+    
+  </channel>
+</rss>

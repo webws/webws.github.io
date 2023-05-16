@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html><head>
+<title>Makefile 与 docker 进行多服务 一次性构建</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="不使用gitlab ci/cd, 在本机快速通过 makefile&#43;docker-compose 编排多个服务">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="/posts/images/favicon.jpg">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%9c%ac%e6%9c%ba%e5%a4%9a%e6%9c%8d%e5%8a%a1%e4%b8%80%e6%ac%a1%e6%80%a7%e6%9e%84%e5%bb%ba%e8%83%8c%e6%99%af" class="nav-本机多服务一次性构建背景">
+									本机多服务一次性构建背景
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%a3%e5%b8%b8cicd%e6%b5%81%e7%a8%8b" class="nav-正常cicd流程">
+									正常cicd流程
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9c%ac%e6%9c%ba-makefile-docker-%e9%83%a8%e7%bd%b2%e6%b5%81%e7%a8%8b" class="nav-本机-makefile-docker-部署流程">
+									本机 makefile &#43;docker 部署流程
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#golang-%e6%9c%8d%e5%8a%a1%e8%af%b4%e6%98%8e" class="nav-golang-服务说明">
+									golang 服务说明
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%bc%96%e5%86%99makefile" class="nav-编写makefile">
+									编写makefile
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%bc%96%e5%86%99docker-composeyaml" class="nav-编写docker-composeyaml">
+									编写docker-compose.yaml
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%90%af%e5%8a%a8%e6%89%80%e6%9c%89%e6%9c%8d%e5%8a%a1" class="nav-启动所有服务">
+									启动所有服务
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9f%a5%e7%9c%8b-jaeger" class="nav-查看-jaeger">
+									查看 jaeger
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="">
+            套路猿
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">套路猿</div>
+        
+        <div class="single-column-header-subtitle">自古深情留不住，唯有套路得人心</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Makefile 与 docker 进行多服务 一次性构建
+                    
+                    <div class="post-subtitle">
+                        不使用gitlab ci/cd, 在本机快速通过 makefile&#43;docker-compose 编排多个服务
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-05-16 22:49
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/story">Story</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/scene">scene</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h3 id="本机多服务一次性构建背景">本机多服务一次性构建背景</h3>
+<ol>
+<li>本机开发多个服务,每个服务还会互相调用</li>
+<li>正常情况,开发者需要在本地启动多个服务,并且手动调用</li>
+<li>想着不使用gitlab ci/cd, 在本机快速通过 makefile+docker-compose 编排多个服务</li>
+<li>可执行源码在:https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing</li>
+</ol>
+<h3 id="正常cicd流程">正常cicd流程</h3>
+<p><img src="http://qiniu.taoluyuan.com/2023/blog20230516225200.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
+<h3 id="本机-makefile-docker-部署流程">本机 makefile +docker 部署流程</h3>
+<ol>
+<li>开发者写好功能,本地 go build 为二进制包</li>
+<li>dockerfile 基于 alpha 镜像,运行二进制包</li>
+<li>docker-compose 编排执行 dockerfile 运行多个服</li>
+</ol>
+<p><img src="http://qiniu.taoluyuan.com/2023/blog20230516225253.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
+<h3 id="golang-服务说明">golang 服务说明</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>├── api1_http
+</span></span><span style="display:flex;"><span>│   ├── main.go
+</span></span><span style="display:flex;"><span>├── api2_http
+</span></span><span style="display:flex;"><span>│   ├── main.go
+</span></span><span style="display:flex;"><span>├── api3_http
+</span></span><span style="display:flex;"><span>│   ├── main.go
+</span></span><span style="display:flex;"><span>├── grpc
+</span></span><span style="display:flex;"><span>│   ├── main.go
+</span></span><span style="display:flex;"><span>├── Makefile
+</span></span><span style="display:flex;"><span>|── docker-compose.yaml
+</span></span></code></pre></div><p>四个golang服务,只需要知道他们是golang服务即可,3个api,1个grpc</p>
+<h3 id="编写makefile">编写makefile</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span>SERVICES <span style="color:#f92672">=</span> api1_http api2_http api3_http grpc
+</span></span><span style="display:flex;"><span>DOCKERFILE_CONTENT <span style="color:#f92672">=</span> FROM alpine:latest<span style="color:#ae81ff">\n</span>WORKDIR /app
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 定义 alpine:3.12 镜像为基础镜像
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>IMAGE <span style="color:#f92672">=</span> alpine:3.12
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.PHONY</span><span style="color:#f92672">:</span> build dockerfiles deploy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">build</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	@rm -rf ./bin
+</span></span><span style="display:flex;"><span>	@echo <span style="color:#e6db74">&#34;Building </span>$$<span style="color:#e6db74">@&#34;</span>
+</span></span><span style="display:flex;"><span>	@for service in <span style="color:#66d9ef">$(</span>SERVICES<span style="color:#66d9ef">)</span> ; <span style="color:#66d9ef">do</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>		CGO_ENABLED<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> GOOS<span style="color:#f92672">=</span>linux go build -o ./bin/$$service ./$$service ; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	<span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">dockerfiles</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	@for service in <span style="color:#66d9ef">$(</span>SERVICES<span style="color:#66d9ef">)</span> ; <span style="color:#66d9ef">do</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>		mkdir -p ./dockerfiles/$$service ; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>		echo <span style="color:#e6db74">&#34;FROM </span><span style="color:#66d9ef">$(</span>IMAGE<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> &gt; ./dockerfiles/$$service/Dockerfile ; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>		echo <span style="color:#e6db74">&#34;WORKDIR /app&#34;</span> &gt;&gt; ./dockerfiles/$$service/Dockerfile ; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>		echo <span style="color:#e6db74">&#34;COPY ./bin/</span>$$<span style="color:#e6db74">service ./&#34;</span> &gt;&gt; ./dockerfiles/$$service/Dockerfile ; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>		echo <span style="color:#e6db74">&#34;CMD [\&#34;./</span>$$<span style="color:#e6db74">service\&#34;]&#34;</span> &gt;&gt; ./dockerfiles/$$service/Dockerfile ; <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	<span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">deploy</span><span style="color:#f92672">:</span> build dockerfiles
+</span></span><span style="display:flex;"><span>	@docker-compose up --build
+</span></span></code></pre></div><p>makefile 文件内容包含了三个部分</p>
+<ol>
+<li>build: 批量编译golang服务,生成二进制文件</li>
+<li>dockerfiles: 批量生成dockerfile文件,基于alpine:3.12镜像,运行二进制文件</li>
+<li>为什么要基于alpine镜像运行二进制文件,因为alpine镜像体积小,适合作为基础镜像</li>
+</ol>
+<p>生成的dockerfile文件内容如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> alpine:3.12</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> ./bin/api1_http ./<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;./api1_http&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><h3 id="编写docker-composeyaml">编写docker-compose.yaml</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">version</span>: <span style="color:#e6db74">&#39;3.8&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">api1_http</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">build</span>: 
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">context</span>: <span style="color:#ae81ff">.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">dockerfile</span>: <span style="color:#ae81ff">./dockerfiles/api1_http/Dockerfile</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">8081</span>:<span style="color:#ae81ff">8081</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env_file</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">.env</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">api2_http</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">build</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">context</span>: <span style="color:#ae81ff">.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">dockerfile</span>: <span style="color:#ae81ff">./dockerfiles/api2_http/Dockerfile</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">8082</span>:<span style="color:#ae81ff">8081</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env_file</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">.env</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">api3_http</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">build</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">context</span>: <span style="color:#ae81ff">.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">dockerfile</span>: <span style="color:#ae81ff">./dockerfiles/api3_http/Dockerfile</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">8083</span>:<span style="color:#ae81ff">8081</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env_file</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">.env</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">grpc</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">build</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">context</span>: <span style="color:#ae81ff">.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">dockerfile</span>: <span style="color:#ae81ff">./dockerfiles/grpc/Dockerfile</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">8084</span>:<span style="color:#ae81ff">8082</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">env_file</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">.env</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">jaeger</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">jaegertracing/all-in-one:1.6</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">16686</span>:<span style="color:#ae81ff">16686</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">14268</span>:<span style="color:#ae81ff">14268</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">16685</span>:<span style="color:#ae81ff">16685</span>
+</span></span></code></pre></div><p>docker-compose.yaml 包含了golang 服务 和 jaeger 服务</p>
+<ol>
+<li>golang服务 的context 是当前目录, 所以dockerfile 文件里的COPY ./bin/api1_http ./ 会将当前目录下的bin/api1_http 复制到镜像的/app目录下</li>
+<li>这里还有一个.env文件,里面包含了环境变量,主要是在golang业务代码里使用,这里不做过多介绍</li>
+<li>golang 业务里 会进行服务之间调用,集成了 jaeger 服务,所以需要将 jaeger 服务也编排进来</li>
+</ol>
+<h3 id="启动所有服务">启动所有服务</h3>
+<p>在源码 <a href="https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing">https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing</a>
+moda_tracing 目录下,执行以下命令即可</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>make deploy
+</span></span></code></pre></div><h3 id="查看-jaeger">查看 jaeger</h3>
+<p>我的 golang 服务 业务代码会互相调用,启动后 调用一个接口,就会在 jaeger 生成完整链路追踪</p>
+<pre tabindex="0"><code>curl http://localhost:8081/api1
+</code></pre><p>打开 jaeger 地址 http://localhost:16686
+<img src="http://qiniu.taoluyuan.com/2023/blog20230516224511.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-05-16</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/opentelmetry/">
+			上回<br>golang 使用 OpenTelemetry 实现跨服务 全链路追踪
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="/">
+    
+        <div class="nav-title">
+            套路猿
+        </div>
+        
+        <div class="nav-subtitle">
+            自古深情留不住，唯有套路得人心
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+
+
+&copy;
+	
+	2023 套路猿
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%9c%ac%e6%9c%ba%e5%a4%9a%e6%9c%8d%e5%8a%a1%e4%b8%80%e6%ac%a1%e6%80%a7%e6%9e%84%e5%bb%ba%e8%83%8c%e6%99%af" class="nav-本机多服务一次性构建背景">
+									本机多服务一次性构建背景
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%a3%e5%b8%b8cicd%e6%b5%81%e7%a8%8b" class="nav-正常cicd流程">
+									正常cicd流程
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9c%ac%e6%9c%ba-makefile-docker-%e9%83%a8%e7%bd%b2%e6%b5%81%e7%a8%8b" class="nav-本机-makefile-docker-部署流程">
+									本机 makefile &#43;docker 部署流程
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#golang-%e6%9c%8d%e5%8a%a1%e8%af%b4%e6%98%8e" class="nav-golang-服务说明">
+									golang 服务说明
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%bc%96%e5%86%99makefile" class="nav-编写makefile">
+									编写makefile
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%bc%96%e5%86%99docker-composeyaml" class="nav-编写docker-composeyaml">
+									编写docker-compose.yaml
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%90%af%e5%8a%a8%e6%89%80%e6%9c%89%e6%9c%8d%e5%8a%a1" class="nav-启动所有服务">
+									启动所有服务
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9f%a5%e7%9c%8b-jaeger" class="nav-查看-jaeger">
+									查看 jaeger
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+
+
+&copy;
+	
+	2023 套路猿
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
