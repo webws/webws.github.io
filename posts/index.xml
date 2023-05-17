@@ -44,35 +44,5 @@ wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_darwin
       <description>使用 OpenTelemetry 链路追踪说明 工作中常常会遇到需要查看服务调用关系,比如用户请求了一个接口 接口会调用其他grpc,http接口,或者内部的方法 这样的调用链路,如果出现了问题,我们需要快速的定位问题,这时候就需要一个工具来帮助我们查看调用链路 OpenTelemetry就是这样一个工具 本文大概以:main 函数初始化 OpenTelemetry、启动 http server、配置httpclient 请求服务 来进行说明 完整可执行源码在:opentelemetry-go 示例 示例代码已增加 grpc的链路追踪 服务链路关系 关系图 说明: 用户 请求 api1(echo server) 服务的 api1/bar api1 调用 Grpc 服务 api1 调用 api2 (gin server) 服务的 api2/bar api2 调用 api3 (echo server )服务的 api3/bar api3 调用 内部 调用方法 bar-&amp;gt;bar2-&amp;gt;bar3 安装jaeger 下载jaeger:我使用的是 jaeger-all-in-one 启动 jaeger: ~/tool/jaeger-1.31.0-linux-amd64/jaeger-all-in-one 默认查看面板 地址 http://localhost:16686/ tracer Batcher的地址,下面代码会体现: http://localhost:14268/api/traces 初始化 全局的 OpenTelemetry 这里openTelemetry 的exporter 以 jaeger 为例</description>
     </item>
     
-    <item>
-      <title>markdown 笔记</title>
-      <link>/posts/ss/</link>
-      <pubDate>Tue, 16 May 2023 18:28:26 +0800</pubDate>
-      
-      <guid>/posts/ss/</guid>
-      <description>当然，我可以帮您写一篇 Markdown 示例！请看下面的文本：
-Markdown 语法示例 Markdown 是一种轻量级标记语言，它使用简单易懂的语法来排版文档和增强可读性。下面是一个包含了常见 Markdown 语法的示例。
-标题 在 Markdown 中添加标题非常简单，只需要在行首使用一到六个井号即可表示不同层次的标题。例如：
-一级标题 二级标题 三级标题 四级标题 五级标题 六级标题 段落 段落是 Markdown 文档中最基本的单元，可以通过空行来区分不同的段落。例如：
-这是一段文字。
-这是另外一段文字。
-序号 如果您需要列出一些有序的内容，可以使用有序列表语法。在列表项前面加上数字和一个句号即可。例如：
-第一项 第二项 第三项 代码块 如果您需要插入代码块，可以用三个反引号（```）将代码块围住。例如：
-print(&amp;#34;Hello, World!&amp;#34;) 图片 插入图片也很简单，只需要使用 ![Alt Text](image URL) 语法结构。例如：
-跳转链接 Markdown 可以非常方便地插入超链接，使用 [link text](URL) 语法结构。例如：
-百度搜索引擎
-这是一个包含了常见 Markdown 语法的示例，希望对您有所帮助！</description>
-    </item>
-    
-    <item>
-      <title>Typography - Test for features</title>
-      <link>/posts/post-5/</link>
-      <pubDate>Sun, 18 Mar 2018 12:13:38 +0530</pubDate>
-      
-      <guid>/posts/post-5/</guid>
-      <description>Lid est laborum et dolorum fuga. Et harum quidem rerum facilis est et expeditasi distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihilse impedit quo minus id quod amets untra dolor amet sad. Sed ut perspser iciatis unde omnis iste natus error sit voluptatem accusantium doloremque laste. Dolores sadips ipsums sits.
-Heading 1 Lid est laborum et dolorum fuga. Et harum quidem rerum facilis est et expeditasi distinctio.</description>
-    </item>
-    
   </channel>
 </rss>
