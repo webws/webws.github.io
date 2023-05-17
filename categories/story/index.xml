@@ -6,17 +6,7 @@
     <description>Recent content in Story on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Tue, 16 May 2023 22:49:57 +0800</lastBuildDate><atom:link href="/categories/story/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Makefile 与 docker 进行多服务 一次性构建</title>
-      <link>/posts/docker-makefile/</link>
-      <pubDate>Tue, 16 May 2023 22:49:57 +0800</pubDate>
-      
-      <guid>/posts/docker-makefile/</guid>
-      <description>本机多服务一次性构建背景 本机开发多个服务,每个服务还会互相调用 正常情况,开发者需要在本地启动多个服务,并且手动调用 想着不使用gitlab ci/cd, 在本机快速通过 makefile+docker-compose 编排多个服务 可执行源码在:https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing 正常cicd流程 本机 makefile +docker 部署流程 开发者写好功能,本地 go build 为二进制包 dockerfile 基于 alpha 镜像,运行二进制包 docker-compose 编排执行 dockerfile 运行多个服 golang 服务说明 ├── api1_http │ ├── main.go ├── api2_http │ ├── main.go ├── api3_http │ ├── main.go ├── grpc │ ├── main.go ├── Makefile |── docker-compose.yaml 四个golang服务,只需要知道他们是golang服务即可,3个api,1个grpc
-编写makefile SERVICES = api1_http api2_http api3_http grpc DOCKERFILE_CONTENT = FROM alpine:latest\nWORKDIR /app # 定义 alpine:3.12 镜像为基础镜像 IMAGE = alpine:3.</description>
-    </item>
-    
+    <lastBuildDate>Tue, 16 May 2023 18:28:26 +0800</lastBuildDate><atom:link href="/categories/story/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>markdown 笔记</title>
       <link>/posts/ss/</link>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html><head>
+<title>frp 和 nginx 搭建一个内网穿透服务器</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="最终实现效果:通过域名打开家里主机建设的网站">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="/posts/images/favicon.jpg">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.101ef407a1e27ccf92936b24b892c7ca0a5f57d754d0689042310afca8e795d9.css" integrity="sha256-EB70B6HifM&#43;Sk2skuJLHygpfV9dU0GiQQjEK/Kjnldk=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="">
+            套路猿
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">套路猿</div>
+        
+        <div class="single-column-header-subtitle">自古深情留不住，唯有套路得人心</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    frp 和 nginx 搭建一个内网穿透服务器
+                    
+                    <div class="post-subtitle">
+                        最终实现效果:通过域名打开家里主机建设的网站
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-05-17 22:15
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/devops">devops</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/frp">frp</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>###相关资料</p>
+<ul>
+<li>frp下载 ：<a href="https://github.com/fatedier/frp">https://github.com/fatedier/frp</a></li>
+<li>相关文档: <a href="https://github.com/fatedier/frp">https://github.com/fatedier/frp</a></li>
+</ul>
+<p>###下载</p>
+<p>下载地址：https://github.com/fatedier/frp/releases
+选择对应的版本进行下载</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_linux_386.tar.gz
+</span></span></code></pre></div><p>如果是windows需要下载windos版本</p>
+<pre tabindex="0"><code>wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_darwin_amd64.tar.gz
+</code></pre><p>下载后、我的服务端是centos 客户端是windows</p>
+<blockquote>
+<p>服务端需要关注的文件是 frps、frps.ini
+客户端需要关注的文件是 frpc（或者是frpc.exe）、frpc.ini</p>
+</blockquote>
+<p>注意，如果运行的环境是windows就要运行windows版本的，也就是exe后缀的</p>
+<p>###配置服务端</p>
+<p>###配置文件</p>
+<pre tabindex="0"><code> frps.ini
+[common]
+#服务端需要开启的端口（与客户端绑定的进行通信的端口）
+bind_port = 7000
+#服务端需要开启的端口（访问客户端web服务自定义的端口号）
+vhost_http_port = 8081
+auth_token = websong
+
+type = http
+custom_domains = abc.baidu.com
+auth_token = websong
+</code></pre><p>####配置文件说明</p>
+<ul>
+<li>bind_port
+服务端需要开启的端口</li>
+<li>vhost_http_port<br>
+服务端需要开启的端口</li>
+<li>auth_token
+需要客户端的auth_token与此一样</li>
+<li>type
+其实除了http还有其他参数，比如tcp,这里只讲述http，其他的请看相关文档: <a href="https://github.com/fatedier/frp">https://github.com/fatedier/frp</a></li>
+<li>custom_domains
+域名<br>
+具体接下来在配置客户端说明</li>
+</ul>
+<p>####启动服务</p>
+<p>正常启动，ctrl+c能推出
+```
+./frps -c ./frps.ini</p>
+<pre><code>```
+</code></pre>
+<p>后台启动</p>
+<pre><code>```
+nohup ./frps -c ./frps.ini &amp;
+```
+如果有兴趣，更可以设置成开机启动（这里不讲述）
+</code></pre>
+<p>###配置客户端
+####配置文件</p>
+<pre tabindex="0"><code># frpc.ini
+[common]
+server_addr = 48.104.176.184
+server_port = 7000
+auth_token = websong
+
+[web6]
+type = http
+local_port = 80
+custom_domains =b.abc.baidu.com
+</code></pre><p>####配置文件讲解</p>
+<ul>
+<li>server_addr
+对应服务器ip ,</li>
+<li>server_port
+与服务端配置bind_port一样</li>
+<li>auth_token
+与服务端配置auth_token一样</li>
+<li>[web6]
+这个是唯一的，假如在另外一个客户端用了web6将会报明显的错误</li>
+<li>local_port
+此端口，假如是80，那就是访问客户端机器的80端口</li>
+<li>custom_domains
+域名 这里重点说一下,这个参数可以填的域名有
+<pre tabindex="0"><code> abc.baidu.com
+*.abc.baidu.com
+</code></pre></li>
+</ul>
+<p>但是，这些域名都是需要解析到服务器ip的
+*.abc.baidu.com 这里就需要使用到域名泛解析
+具体百度即可</p>
+<p>####客户端启动</p>
+<pre tabindex="0"><code>./frpc -c ./frpc.ini
+</code></pre><p>windows</p>
+<pre tabindex="0"><code> ./frpc.exe -c ./frpc.ini
+</code></pre><p>后台启动前面加 nohup 跟服务端一样</p>
+<pre tabindex="0"><code>nohup ./frpc.exe -c ./frpc.ini
+</code></pre><p>###穿透成功</p>
+<p>####启动网站</p>
+<blockquote>
+<p>如果以上服务端启动，客户端启动都没问题的话
+以客户端的配置的域名：custom_domains
+和 服务端配置的端口vhost_http_port在浏览器打开即可
+也就是 b.abc.baidu.com：8081
+其实这些就相当于访问你客户端本机的
+127.0.0.1：80 或者localhost:80,
+这个80端口是客户端配置文件的的local_port</p>
+</blockquote>
+<p>至此内网穿透完成</p>
+<p>####但是</p>
+<ul>
+<li>但是刚刚有没有发现，访问的是带端口的网址，b.abc.baidu.com：8081</li>
+<li>如果不想带端口呢，浏览器的默认端口是80，也就是说，我把服务端vhost_http_port，配置成80就好了，当然这样能解决</li>
+<li>但是如果服务器有其他程序占用80端口呢，比如nginx,总不能把nginx换成其他端口吧，那我的博客www.blog.com就因为这个得改成www.blog.com:9090 假设改成9090，所以肯定有办法公用的</li>
+<li>办法就是，我们可以利用nginx的反向代理就能完成，请接下来往下看 配置nginx<br>
+原文地址：<a href="http://www.taoluyuan.com/index.php/archives/42/">http://www.taoluyuan.com/index.php/archives/42/</a></li>
+</ul>
+<p>###配置nginx</p>
+<p>####配置文件</p>
+<pre tabindex="0"><code>server{
+ listen 80;
+    server_name *.abc.baidu.com;
+    index index.php index.html index.htm default.php default.htm default.html;
+    root /www/wwwroot/abc/;
+
+ location / 
+    {
+        proxy_pass http://48.104.176.184:8081;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header REMOTE-HOST $remote_addr;                       
+    }
+}
+</code></pre><p>###说明</p>
+<p>如配置文件所属</p>
+<ul>
+<li>本来是需要访问 <a href="http://b.abc.baidu.com">http://b.abc.baidu.com</a>：8081 的</li>
+<li>nginx使用了泛域名配置，*.abc.baidu.com (你自己的域名肯定不一样)</li>
+</ul>
+<pre tabindex="0"><code> server_name *.abc.baidu.com;
+</code></pre><ul>
+<li>反向代理配置</li>
+</ul>
+<pre tabindex="0"><code> proxy_pass http://48.104.176.184:8081;
+</code></pre><p>ip是服务端的ip，端口是服务端配置vhost_http_port 8081</p>
+<blockquote>
+<p>至于nginx的其他参数，跟平常大多数nginx配置网站参数一样
+这里使用到了nginx泛域名解析，和反向代理</p>
+</blockquote>
+<p>####完成打开网站
+如果客户端配置的custom_domains是b.abc.baidu.com
+在浏览器输入 b.abc.baidu.com ，就不用带端口号8081 ，应为已经被nginx反向代理了；
+这样做的好处是</p>
+<ul>
+<li>使用的时候直接在浏览器输入域名就可以，不用输入端口，用户也不用知道服务端的vhost_http_port 端口是什么，</li>
+<li>让服务器其他网站的端口可以不用改；</li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-05-17</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/docker-makefile/">
+			上回<br>Makefile 与 docker 进行多服务 一次性构建
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="webws/webws.github.io"
+        data-repo-id="R_kgDOJjhGQQ"
+        data-category="Announcements"
+        data-category-id=""
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled=""
+        data-emit-metadata=""
+        data-input-position=""
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="/">
+    
+        <div class="nav-title">
+            套路猿
+        </div>
+        
+        <div class="nav-subtitle">
+            自古深情留不住，唯有套路得人心
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

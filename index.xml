@@ -6,9 +6,176 @@
     <description>Recent content on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Tue, 16 May 2023 22:49:57 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 17 May 2023 22:15:05 +0800</lastBuildDate>
     
         <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>frp 和 nginx 搭建一个内网穿透服务器</title>
+        <link>/posts/frp-server/</link>
+        <pubDate>Wed, 17 May 2023 22:15:05 +0800</pubDate>
+        
+        <guid>/posts/frp-server/</guid>
+        <description>套路猿 /posts/frp-server/ -&lt;p&gt;###相关资料&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;frp下载 ：&lt;a href=&#34;https://github.com/fatedier/frp&#34;&gt;https://github.com/fatedier/frp&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;相关文档: &lt;a href=&#34;https://github.com/fatedier/frp&#34;&gt;https://github.com/fatedier/frp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;###下载&lt;/p&gt;
+&lt;p&gt;下载地址：https://github.com/fatedier/frp/releases
+选择对应的版本进行下载&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_linux_386.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果是windows需要下载windos版本&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_darwin_amd64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;下载后、我的服务端是centos 客户端是windows&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;服务端需要关注的文件是 frps、frps.ini
+客户端需要关注的文件是 frpc（或者是frpc.exe）、frpc.ini&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;注意，如果运行的环境是windows就要运行windows版本的，也就是exe后缀的&lt;/p&gt;
+&lt;p&gt;###配置服务端&lt;/p&gt;
+&lt;p&gt;###配置文件&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; frps.ini
+[common]
+#服务端需要开启的端口（与客户端绑定的进行通信的端口）
+bind_port = 7000
+#服务端需要开启的端口（访问客户端web服务自定义的端口号）
+vhost_http_port = 8081
+auth_token = websong
+
+type = http
+custom_domains = abc.baidu.com
+auth_token = websong
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;####配置文件说明&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;bind_port
+服务端需要开启的端口&lt;/li&gt;
+&lt;li&gt;vhost_http_port&lt;br&gt;
+服务端需要开启的端口&lt;/li&gt;
+&lt;li&gt;auth_token
+需要客户端的auth_token与此一样&lt;/li&gt;
+&lt;li&gt;type
+其实除了http还有其他参数，比如tcp,这里只讲述http，其他的请看相关文档: &lt;a href=&#34;https://github.com/fatedier/frp&#34;&gt;https://github.com/fatedier/frp&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;custom_domains
+域名&lt;br&gt;
+具体接下来在配置客户端说明&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;####启动服务&lt;/p&gt;
+&lt;p&gt;正常启动，ctrl+c能推出
+```
+./frps -c ./frps.ini&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;后台启动&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```
+nohup ./frps -c ./frps.ini &amp;amp;
+```
+如果有兴趣，更可以设置成开机启动（这里不讲述）
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;###配置客户端
+####配置文件&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# frpc.ini
+[common]
+server_addr = 48.104.176.184
+server_port = 7000
+auth_token = websong
+
+[web6]
+type = http
+local_port = 80
+custom_domains =b.abc.baidu.com
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;####配置文件讲解&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;server_addr
+对应服务器ip ,&lt;/li&gt;
+&lt;li&gt;server_port
+与服务端配置bind_port一样&lt;/li&gt;
+&lt;li&gt;auth_token
+与服务端配置auth_token一样&lt;/li&gt;
+&lt;li&gt;[web6]
+这个是唯一的，假如在另外一个客户端用了web6将会报明显的错误&lt;/li&gt;
+&lt;li&gt;local_port
+此端口，假如是80，那就是访问客户端机器的80端口&lt;/li&gt;
+&lt;li&gt;custom_domains
+域名 这里重点说一下,这个参数可以填的域名有
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; abc.baidu.com
+*.abc.baidu.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;但是，这些域名都是需要解析到服务器ip的
+*.abc.baidu.com 这里就需要使用到域名泛解析
+具体百度即可&lt;/p&gt;
+&lt;p&gt;####客户端启动&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;./frpc -c ./frpc.ini
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;windows&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; ./frpc.exe -c ./frpc.ini
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;后台启动前面加 nohup 跟服务端一样&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;nohup ./frpc.exe -c ./frpc.ini
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;###穿透成功&lt;/p&gt;
+&lt;p&gt;####启动网站&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果以上服务端启动，客户端启动都没问题的话
+以客户端的配置的域名：custom_domains
+和 服务端配置的端口vhost_http_port在浏览器打开即可
+也就是 b.abc.baidu.com：8081
+其实这些就相当于访问你客户端本机的
+127.0.0.1：80 或者localhost:80,
+这个80端口是客户端配置文件的的local_port&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;至此内网穿透完成&lt;/p&gt;
+&lt;p&gt;####但是&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;但是刚刚有没有发现，访问的是带端口的网址，b.abc.baidu.com：8081&lt;/li&gt;
+&lt;li&gt;如果不想带端口呢，浏览器的默认端口是80，也就是说，我把服务端vhost_http_port，配置成80就好了，当然这样能解决&lt;/li&gt;
+&lt;li&gt;但是如果服务器有其他程序占用80端口呢，比如nginx,总不能把nginx换成其他端口吧，那我的博客www.blog.com就因为这个得改成www.blog.com:9090 假设改成9090，所以肯定有办法公用的&lt;/li&gt;
+&lt;li&gt;办法就是，我们可以利用nginx的反向代理就能完成，请接下来往下看 配置nginx&lt;br&gt;
+原文地址：&lt;a href=&#34;http://www.taoluyuan.com/index.php/archives/42/&#34;&gt;http://www.taoluyuan.com/index.php/archives/42/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;###配置nginx&lt;/p&gt;
+&lt;p&gt;####配置文件&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;server{
+ listen 80;
+    server_name *.abc.baidu.com;
+    index index.php index.html index.htm default.php default.htm default.html;
+    root /www/wwwroot/abc/;
+
+ location / 
+    {
+        proxy_pass http://48.104.176.184:8081;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header REMOTE-HOST $remote_addr;                       
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;###说明&lt;/p&gt;
+&lt;p&gt;如配置文件所属&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;本来是需要访问 &lt;a href=&#34;http://b.abc.baidu.com&#34;&gt;http://b.abc.baidu.com&lt;/a&gt;：8081 的&lt;/li&gt;
+&lt;li&gt;nginx使用了泛域名配置，*.abc.baidu.com (你自己的域名肯定不一样)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; server_name *.abc.baidu.com;
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;反向代理配置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; proxy_pass http://48.104.176.184:8081;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;ip是服务端的ip，端口是服务端配置vhost_http_port 8081&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;至于nginx的其他参数，跟平常大多数nginx配置网站参数一样
+这里使用到了nginx泛域名解析，和反向代理&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;####完成打开网站
+如果客户端配置的custom_domains是b.abc.baidu.com
+在浏览器输入 b.abc.baidu.com ，就不用带端口号8081 ，应为已经被nginx反向代理了；
+这样做的好处是&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用的时候直接在浏览器输入域名就可以，不用输入端口，用户也不用知道服务端的vhost_http_port 端口是什么，&lt;/li&gt;
+&lt;li&gt;让服务器其他网站的端口可以不用改；&lt;/li&gt;
+&lt;/ul&gt;
+- /posts/frp-server/ - </description>
+        </item>
     
     
     
