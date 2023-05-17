@@ -18,12 +18,12 @@
         <pubDate>Wed, 17 May 2023 22:15:05 +0800</pubDate>
         
         <guid>/posts/frp-server/</guid>
-        <description>套路猿 /posts/frp-server/ -&lt;p&gt;###相关资料&lt;/p&gt;
+        <description>套路猿 /posts/frp-server/ -&lt;h3 id=&#34;相关资料&#34;&gt;相关资料&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;frp下载 ：&lt;a href=&#34;https://github.com/fatedier/frp&#34;&gt;https://github.com/fatedier/frp&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;相关文档: &lt;a href=&#34;https://github.com/fatedier/frp&#34;&gt;https://github.com/fatedier/frp&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;###下载&lt;/p&gt;
+&lt;h3 id=&#34;下载&#34;&gt;下载&lt;/h3&gt;
 &lt;p&gt;下载地址：https://github.com/fatedier/frp/releases
 选择对应的版本进行下载&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_linux_386.tar.gz
@@ -35,8 +35,8 @@
 客户端需要关注的文件是 frpc（或者是frpc.exe）、frpc.ini&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;注意，如果运行的环境是windows就要运行windows版本的，也就是exe后缀的&lt;/p&gt;
-&lt;p&gt;###配置服务端&lt;/p&gt;
-&lt;p&gt;###配置文件&lt;/p&gt;
+&lt;h3 id=&#34;配置服务端&#34;&gt;配置服务端&lt;/h3&gt;
+&lt;h3 id=&#34;配置文件&#34;&gt;配置文件&lt;/h3&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; frps.ini
 [common]
 #服务端需要开启的端口（与客户端绑定的进行通信的端口）
@@ -48,7 +48,7 @@ auth_token = websong
 type = http
 custom_domains = abc.baidu.com
 auth_token = websong
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;####配置文件说明&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;配置文件说明&#34;&gt;配置文件说明&lt;/h4&gt;
 &lt;ul&gt;
 &lt;li&gt;bind_port
 服务端需要开启的端口&lt;/li&gt;
@@ -62,7 +62,7 @@ auth_token = websong
 域名&lt;br&gt;
 具体接下来在配置客户端说明&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;####启动服务&lt;/p&gt;
+&lt;h4 id=&#34;启动服务&#34;&gt;启动服务&lt;/h4&gt;
 &lt;p&gt;正常启动，ctrl+c能推出
 ```
 ./frps -c ./frps.ini&lt;/p&gt;
@@ -74,8 +74,8 @@ nohup ./frps -c ./frps.ini &amp;amp;
 ```
 如果有兴趣，更可以设置成开机启动（这里不讲述）
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;###配置客户端
-####配置文件&lt;/p&gt;
+&lt;h3 id=&#34;配置客户端&#34;&gt;配置客户端&lt;/h3&gt;
+&lt;h4 id=&#34;配置文件-1&#34;&gt;配置文件&lt;/h4&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# frpc.ini
 [common]
 server_addr = 48.104.176.184
@@ -86,7 +86,7 @@ auth_token = websong
 type = http
 local_port = 80
 custom_domains =b.abc.baidu.com
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;####配置文件讲解&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;配置文件讲解&#34;&gt;配置文件讲解&lt;/h4&gt;
 &lt;ul&gt;
 &lt;li&gt;server_addr
 对应服务器ip ,&lt;/li&gt;
@@ -107,14 +107,14 @@ custom_domains =b.abc.baidu.com
 &lt;p&gt;但是，这些域名都是需要解析到服务器ip的
 *.abc.baidu.com 这里就需要使用到域名泛解析
 具体百度即可&lt;/p&gt;
-&lt;p&gt;####客户端启动&lt;/p&gt;
+&lt;h4 id=&#34;客户端启动&#34;&gt;客户端启动&lt;/h4&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;./frpc -c ./frpc.ini
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;windows&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; ./frpc.exe -c ./frpc.ini
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;后台启动前面加 nohup 跟服务端一样&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;nohup ./frpc.exe -c ./frpc.ini
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;###穿透成功&lt;/p&gt;
-&lt;p&gt;####启动网站&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;穿透成功&#34;&gt;穿透成功&lt;/h3&gt;
+&lt;h4 id=&#34;启动网站&#34;&gt;启动网站&lt;/h4&gt;
 &lt;blockquote&gt;
 &lt;p&gt;如果以上服务端启动，客户端启动都没问题的话
 以客户端的配置的域名：custom_domains
@@ -125,7 +125,7 @@ custom_domains =b.abc.baidu.com
 这个80端口是客户端配置文件的的local_port&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;至此内网穿透完成&lt;/p&gt;
-&lt;p&gt;####但是&lt;/p&gt;
+&lt;h4 id=&#34;但是&#34;&gt;但是&lt;/h4&gt;
 &lt;ul&gt;
 &lt;li&gt;但是刚刚有没有发现，访问的是带端口的网址，b.abc.baidu.com：8081&lt;/li&gt;
 &lt;li&gt;如果不想带端口呢，浏览器的默认端口是80，也就是说，我把服务端vhost_http_port，配置成80就好了，当然这样能解决&lt;/li&gt;
@@ -133,8 +133,8 @@ custom_domains =b.abc.baidu.com
 &lt;li&gt;办法就是，我们可以利用nginx的反向代理就能完成，请接下来往下看 配置nginx&lt;br&gt;
 原文地址：&lt;a href=&#34;http://www.taoluyuan.com/index.php/archives/42/&#34;&gt;http://www.taoluyuan.com/index.php/archives/42/&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;###配置nginx&lt;/p&gt;
-&lt;p&gt;####配置文件&lt;/p&gt;
+&lt;h3 id=&#34;配置nginx&#34;&gt;配置nginx&lt;/h3&gt;
+&lt;h4 id=&#34;配置文件-2&#34;&gt;配置文件&lt;/h4&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;server{
  listen 80;
     server_name *.abc.baidu.com;
@@ -166,8 +166,8 @@ custom_domains =b.abc.baidu.com
 &lt;p&gt;至于nginx的其他参数，跟平常大多数nginx配置网站参数一样
 这里使用到了nginx泛域名解析，和反向代理&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;####完成打开网站
-如果客户端配置的custom_domains是b.abc.baidu.com
+&lt;h4 id=&#34;完成打开网站&#34;&gt;完成打开网站&lt;/h4&gt;
+&lt;p&gt;如果客户端配置的custom_domains是b.abc.baidu.com
 在浏览器输入 b.abc.baidu.com ，就不用带端口号8081 ，应为已经被nginx反向代理了；
 这样做的好处是&lt;/p&gt;
 &lt;ul&gt;
