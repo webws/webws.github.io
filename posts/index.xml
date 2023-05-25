@@ -44,5 +44,17 @@ wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_darwin
       <description>使用 OpenTelemetry 链路追踪说明 工作中常常会遇到需要查看服务调用关系,比如用户请求了一个接口 接口会调用其他grpc,http接口,或者内部的方法 这样的调用链路,如果出现了问题,我们需要快速的定位问题,这时候就需要一个工具来帮助我们查看调用链路 OpenTelemetry就是这样一个工具 本文大概以:main 函数初始化 OpenTelemetry、启动 http server、配置httpclient 请求服务 来进行说明 完整可执行源码在:opentelemetry-go 示例 示例代码已增加 grpc的链路追踪 服务链路关系 关系图 说明: 用户 请求 api1(echo server) 服务的 api1/bar api1 调用 Grpc 服务 api1 调用 api2 (gin server) 服务的 api2/bar api2 调用 api3 (echo server )服务的 api3/bar api3 调用 内部 调用方法 bar-&amp;gt;bar2-&amp;gt;bar3 安装jaeger 下载jaeger:我使用的是 jaeger-all-in-one 启动 jaeger: ~/tool/jaeger-1.31.0-linux-amd64/jaeger-all-in-one 默认查看面板 地址 http://localhost:16686/ tracer Batcher的地址,下面代码会体现: http://localhost:14268/api/traces 初始化 全局的 OpenTelemetry 这里openTelemetry 的exporter 以 jaeger 为例</description>
     </item>
     
+    <item>
+      <title></title>
+      <link>/posts/embedding-openai/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/embedding-openai/</guid>
+      <description>使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库 流程 将数据集 通过 openai embedding 得到向量+组装payload,存入 qdrant 用户进行问题搜索,通过 openai embedding 得到向量,从 qdrant 中搜索相似度大于0.8的数据 从 qdrant 中取出第一条数据 将问题标题,问题描述,问题回答,组装成promot向gpt进行提问,得到回答 向量数据库 qdrant 是一个开源的向量搜索引擎,支持多种向量距离计算方式 官方文档:https://qdrant.tech/documentation/quick_start/ 本节 介绍 qdrant 都是基于官方文档的例子,如已熟悉可以直接阅读下一节 [数据集导入qdrant]
+安装 qdrant docker 安装
+docker pull qdrant/qdrant &amp;amp;&amp;amp; \ docker run -p 6333:6333 -p 6334:6334 qdrant/qdrant collection 说明 collection 是 qdrant 中的一个概念,类似于 mysql 中的 database,用于区分不同的数据集合 官方文档:https://qdrant.tech/documentation/collections/#collections collection 下面是 collection 字段说明,以创建 collection 为例
+PUT /collections/{collection_name} { &amp;#34;name&amp;#34;: &amp;#34;example_collection&amp;#34;, &amp;#34;vectors&amp;#34;: { &amp;#34;size&amp;#34;: 300, &amp;#34;distance&amp;#34;: &amp;#34;Cosine&amp;#34; } } name: collection 名称 vectors: 向量的配置</description>
+    </item>
+    
   </channel>
 </rss>
