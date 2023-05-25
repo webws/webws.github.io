@@ -6,7 +6,25 @@
     <description>Recent content in Tags on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Wed, 17 May 2023 22:15:05 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 26 May 2023 01:03:00 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>embedding</title>
+      <link>/tags/embedding/</link>
+      <pubDate>Fri, 26 May 2023 01:03:00 +0800</pubDate>
+      
+      <guid>/tags/embedding/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>qdrant</title>
+      <link>/tags/qdrant/</link>
+      <pubDate>Fri, 26 May 2023 01:03:00 +0800</pubDate>
+      
+      <guid>/tags/qdrant/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>frp</title>
       <link>/tags/frp/</link>

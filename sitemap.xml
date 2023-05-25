@@ -2,8 +2,29 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/posts/embedding-openai/</loc>
+    <lastmod>2023-05-26T01:03:00+08:00</lastmod>
+  </url><url>
+    <loc>/categories/aiops/</loc>
+    <lastmod>2023-05-26T01:03:00+08:00</lastmod>
+  </url><url>
     <loc>/categories/</loc>
-    <lastmod>2023-05-17T22:15:05+08:00</lastmod>
+    <lastmod>2023-05-26T01:03:00+08:00</lastmod>
+  </url><url>
+    <loc>/tags/embedding/</loc>
+    <lastmod>2023-05-26T01:03:00+08:00</lastmod>
+  </url><url>
+    <loc>/posts/</loc>
+    <lastmod>2023-05-26T01:03:00+08:00</lastmod>
+  </url><url>
+    <loc>/tags/qdrant/</loc>
+    <lastmod>2023-05-26T01:03:00+08:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2023-05-26T01:03:00+08:00</lastmod>
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2023-05-26T01:03:00+08:00</lastmod>
   </url><url>
     <loc>/categories/devops/</loc>
     <lastmod>2023-05-17T22:15:05+08:00</lastmod>
@@ -12,15 +33,6 @@
     <lastmod>2023-05-17T22:15:05+08:00</lastmod>
   </url><url>
     <loc>/posts/frp-server/</loc>
-    <lastmod>2023-05-17T22:15:05+08:00</lastmod>
-  </url><url>
-    <loc>/posts/</loc>
-    <lastmod>2023-05-17T22:15:05+08:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2023-05-17T22:15:05+08:00</lastmod>
-  </url><url>
-    <loc>/</loc>
     <lastmod>2023-05-17T22:15:05+08:00</lastmod>
   </url><url>
     <loc>/tags/docker/</loc>
@@ -34,7 +46,5 @@
   </url><url>
     <loc>/tags/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/</loc>
     <lastmod>2023-05-16T22:39:14+08:00</lastmod>
-  </url><url>
-    <loc>/posts/embedding-openai/</loc>
   </url>
 </urlset>
