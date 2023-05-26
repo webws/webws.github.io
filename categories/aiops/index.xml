@@ -13,7 +13,7 @@
       <pubDate>Fri, 26 May 2023 01:03:00 +0800</pubDate>
       
       <guid>/posts/embedding-openai/</guid>
-      <description>使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库 流程 将数据集 通过 openai embedding 得到向量+组装payload,存入 qdrant 用户进行问题搜索,通过 openai embedding 得到向量,从 qdrant 中搜索相似度大于0.8的数据 从 qdrant 中取出相似度高的数据 将获取到的QA,组装成 prompt 向chatgpt进行提问,得到回答 向量数据库 qdrant qdrant 是一个开源的向量搜索引擎,支持多种向量距离计算方式 官方文档:https://qdrant.tech/documentation/quick_start/ 本节 介绍 qdrant 都是基于官方文档的例子,如已熟悉可以直接阅读下一节 [数据集导入qdrant] 安装 qdrant docker 安装
+      <description>使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库 流程 将数据集 通过 openai embedding 得到向量+组装payload,存入 qdrant 用户进行问题搜索,通过 openai embedding 得到向量,从 qdrant 中搜索相似度大于0.8的数据 从 qdrant 中取出相似度高的数据 将获取到的QA,组装成 prompt 向chatgpt进行提问,得到回答 向量数据库 qdrant qdrant 是一个开源的向量搜索引擎,支持多种向量距离计算方式 官方文档:https://qdrant.tech/documentation/quick_start/ 本节 介绍 qdrant 都是基于官方文档的例子,如已熟悉可以直接阅读下一节 [数据导入k8s知识库] 安装 qdrant docker 安装
 docker pull qdrant/qdrant &amp;amp;&amp;amp; \ docker run -p 6333:6333 -p 6334:6334 qdrant/qdrant collection 说明 collection 是 qdrant 中的一个概念,类似于 mysql 中的 database,用于区分不同的数据集合 官方文档:https://qdrant.tech/documentation/collections/#collections collection 下面是 collection 字段说明,以创建 collection 为例
 PUT /collections/{collection_name} { &amp;#34;name&amp;#34;: &amp;#34;example_collection&amp;#34;, &amp;#34;vectors&amp;#34;: { &amp;#34;size&amp;#34;: 300, &amp;#34;distance&amp;#34;: &amp;#34;Cosine&amp;#34; } } name: collection 名称 vectors: 向量的配置</description>
     </item>

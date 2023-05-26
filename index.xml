@@ -31,7 +31,7 @@
 &lt;ul&gt;
 &lt;li&gt;qdrant 是一个开源的向量搜索引擎,支持多种向量距离计算方式&lt;/li&gt;
 &lt;li&gt;官方文档:https://qdrant.tech/documentation/quick_start/&lt;/li&gt;
-&lt;li&gt;本节 介绍 qdrant 都是基于官方文档的例子,如已熟悉可以直接阅读下一节 [数据集导入qdrant]&lt;/li&gt;
+&lt;li&gt;本节 介绍 qdrant 都是基于官方文档的例子,如已熟悉可以直接阅读下一节 [数据导入k8s知识库]&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;安装-qdrant&#34;&gt;安装 qdrant&lt;/h3&gt;
 &lt;p&gt;docker 安装&lt;/p&gt;
@@ -83,7 +83,7 @@ distance: 向量的距离计算方式,Cosine(余弦距离), Euclidean(欧式距�
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    }&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;vector:向量,通过 openai embedding 得到
 limit:返回的数据条数&lt;/p&gt;
-&lt;h2 id=&#34;数据集导入k8s知识数据库&#34;&gt;数据集导入k8s知识数据库&lt;/h2&gt;
+&lt;h2 id=&#34;数据导入k8s知识库&#34;&gt;数据导入k8s知识库&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// 模拟数据集 question:answer
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;questions&lt;/span&gt; = []&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;{
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;什么是Kubernetes中的Deployment？&amp;#34;&lt;/span&gt;,
