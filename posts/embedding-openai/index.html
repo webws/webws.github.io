@@ -161,8 +161,8 @@
 						
 						
 							<li>
-								<a href="#%e5%90%91%e9%87%8f%e6%95%b0%e6%8d%ae%e5%ba%93" class="nav-向量数据库">
-									向量数据库
+								<a href="#%e5%90%91%e9%87%8f%e6%95%b0%e6%8d%ae%e5%ba%93-qdrant" class="nav-向量数据库-qdrant">
+									向量数据库 qdrant
 								</a>
 							</li>
 						
@@ -511,13 +511,15 @@
 <ol>
 <li>将数据集 通过 openai embedding 得到向量+组装payload,存入 qdrant</li>
 <li>用户进行问题搜索,通过 openai embedding 得到向量,从 qdrant 中搜索相似度大于0.8的数据</li>
-<li>从 qdrant 中取出第一条数据</li>
-<li>将问题标题,问题描述,问题回答,组装成promot向gpt进行提问,得到回答</li>
+<li>从 qdrant 中取出相似度高的数据</li>
+<li>将获取到的QA,组装成 prompt 向chatgpt进行提问,得到回答</li>
 </ol>
-<h2 id="向量数据库">向量数据库</h2>
-<p>qdrant 是一个开源的向量搜索引擎,支持多种向量距离计算方式
-官方文档:https://qdrant.tech/documentation/quick_start/
-本节 介绍 qdrant 都是基于官方文档的例子,如已熟悉可以直接阅读下一节 [数据集导入qdrant]</p>
+<h2 id="向量数据库-qdrant">向量数据库 qdrant</h2>
+<ul>
+<li>qdrant 是一个开源的向量搜索引擎,支持多种向量距离计算方式</li>
+<li>官方文档:https://qdrant.tech/documentation/quick_start/</li>
+<li>本节 介绍 qdrant 都是基于官方文档的例子,如已熟悉可以直接阅读下一节 [数据集导入qdrant]</li>
+</ul>
 <h3 id="安装-qdrant">安装 qdrant</h3>
 <p>docker 安装</p>
 <pre tabindex="0"><code>docker pull qdrant/qdrant &amp;&amp; \
@@ -559,7 +561,7 @@ distance: 向量的距离计算方式,Cosine(余弦距离), Euclidean(欧式距�
 <li>payload:任意的自定义 json 数据</li>
 </ul>
 <h3 id="搜索数据">搜索数据</h3>
-<p>这是 qdrant 官方搜索数据的例子,可以看到返回的数据中包含了 payload 中的数据</p>
+<p>这是 qdrant 官方搜索数据的例子</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -L -X POST <span style="color:#e6db74">&#39;http://localhost:6333/collections/test_collection/points/search&#39;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -H <span style="color:#e6db74">&#39;Content-Type: application/json&#39;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --data-raw <span style="color:#e6db74">&#39;{
@@ -608,7 +610,7 @@ limit:返回的数据条数</p>
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><ul>
-<li>上面代码 通过模拟数据集,将数据集导入到 k8s 知识数据库中,具体的实现可以参考 prebuild/prebuild.go 的代码</li>
+<li>模拟数据集,将数据集导入到 k8s 知识数据库中</li>
 <li>BuildQdrantPoint 函数是将问题和答案转换成 qdrant 的 point</li>
 <li>其中 vector 是通过 openai embedding 得到的,这里使用的是 <a href="https://openai.com/blog/new-and-improved-embedding-model">openai embedding</a></li>
 </ul>
@@ -648,8 +650,8 @@ limit:返回的数据条数</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;不依赖本地知识库, chatgpt的直接回答是:%s\n&#34;</span>, <span style="color:#a6e22e">myai</span>.<span style="color:#a6e22e">K8sChat</span>(<span style="color:#a6e22e">prompt</span>))
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><ul>
-<li>上面代码是通过 prompt 搜索qdrant 知识库,如果相似度小于 0.8,有可能是用户乱提问,或问知识库无关的问题,直接返回</li>
-<li>如果相似度大于 0.8,则取第一条数据,将问题标题,问题描述,问题回答,组装成promot向gpt进行提问,得到回答</li>
+<li>通过 prompt 搜索qdrant 知识库,如果相似度小于 0.8,有可能是用户乱提问,或问知识库无关的问题,直接返回</li>
+<li>取相似度度大于 0.8,则取第一条数据,组装成promot向gpt进行提问,得到回答</li>
 <li>具体的实现可以参考 main.go 的代码</li>
 </ul>
 <h3 id="示例">示例</h3>
@@ -659,10 +661,13 @@ limit:返回的数据条数</p>
 可以看到 相似度太低,提示违规问题或者超纲问题</li>
 <li>问k8s 本地知识库的问题,比如:什么是Kubernetes中的Deployment？
 <img src="http://qiniu.taoluyuan.com/2023/blog20230526002640.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/1" alt=""></li>
-<li>问k8s本地知识库的问题,但问题单独向chatgpt提问,并不能得到k8s相关问题.体现qdrant 本地知识库 辅助的重要性,比如问 网关是什么<br>
-<img src="http://qiniu.taoluyuan.com/2023/blog20230526003436.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt="">
-可以看到,红线部分,直接问chatgpt,得到的答案可能跟k8s无关,结合k8s本地知识库,可以让回答偏向 数据集设定的主题,比如k8s</li>
+<li>问k8s本地知识库的问题,但单独向chatgpt提问,得到的答案 并不是已定与k8s相关,比如问 网关是什么<br>
+<img src="http://qiniu.taoluyuan.com/2023/blog20230526003436.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></li>
 </ol>
+<ul>
+<li>可以看到,红线部分,是直接将用户问题  向 chatgpt 请求 得到的答案,跟k8s无关</li>
+<li>红线前面的回答:是正确的,结合k8s本地知识库,可以让回答偏向 数据集设定的主题</li>
+</ul>
 <h2 id="示例源码地址及使用">示例源码地址及使用</h2>
 <p>源码地址:<a href="https://github.com/webws/embedding-knowledge-base">embedding-knowledge-base</a>
 进入根目录,将目录 ai/common.go 的 以下 const改成自己的</p>
@@ -874,8 +879,8 @@ uv <span id="busuanzi_value_site_uv"></span> 人
 						
 						
 							<li>
-								<a href="#%e5%90%91%e9%87%8f%e6%95%b0%e6%8d%ae%e5%ba%93" class="nav-向量数据库">
-									向量数据库
+								<a href="#%e5%90%91%e9%87%8f%e6%95%b0%e6%8d%ae%e5%ba%93-qdrant" class="nav-向量数据库-qdrant">
+									向量数据库 qdrant
 								</a>
 							</li>
 						
