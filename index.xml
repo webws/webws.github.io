@@ -19,8 +19,9 @@
         
         <guid>/posts/embedding-openai/</guid>
         <description>套路猿 /posts/embedding-openai/ -&lt;h1 id=&#34;使用golang-基于-openai-embedding--qdrant-实现k8s本地知识库&#34;&gt;使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库&lt;/h1&gt;
+&lt;p&gt;文章博客地址:&lt;a href=&#34;https://blog.taoluyuan.com/posts/embedding-openai/&#34;&gt;套路猿-使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;流程&#34;&gt;流程&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;http://qiniu.taoluyuan.com/2023/blog20230526000739.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230526000739.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;将数据集 通过 openai embedding 得到向量+组装payload,存入 qdrant&lt;/li&gt;
 &lt;li&gt;用户进行问题搜索,通过 openai embedding 得到向量,从 qdrant 中搜索相似度大于0.8的数据&lt;/li&gt;
@@ -170,10 +171,10 @@ limit:返回的数据条数&lt;/p&gt;
 &lt;h3 id=&#34;示例&#34;&gt;示例&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;问无关的问题,比如:苹果不削皮能吃吗
-&lt;img src=&#34;http://qiniu.taoluyuan.com/2023/blog20230526002303.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;
+&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230526002303.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;
 可以看到 相似度太低,提示违规问题或者超纲问题&lt;/li&gt;
 &lt;li&gt;问k8s 本地知识库的问题,比如:什么是Kubernetes中的Deployment？
-&lt;img src=&#34;http://qiniu.taoluyuan.com/2023/blog20230526002640.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/1&#34; alt=&#34;&#34;&gt;&lt;/li&gt;
+&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230526002640.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/1&#34; alt=&#34;&#34;&gt;&lt;/li&gt;
 &lt;li&gt;问k8s本地知识库的问题,但单独向chatgpt提问,得到的答案 并不是已定与k8s相关,比如问 网关是什么&lt;br&gt;
 &lt;img src=&#34;http://qiniu.taoluyuan.com/2023/blog20230526003436.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/li&gt;
 &lt;/ol&gt;

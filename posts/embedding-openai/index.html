@@ -506,8 +506,9 @@
                 <div class="post-body" v-pre>
                 
                     <h1 id="使用golang-基于-openai-embedding--qdrant-实现k8s本地知识库">使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库</h1>
+<p>文章博客地址:<a href="https://blog.taoluyuan.com/posts/embedding-openai/">套路猿-使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库</a></p>
 <h2 id="流程">流程</h2>
-<p><img src="http://qiniu.taoluyuan.com/2023/blog20230526000739.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
+<p><img src="https://qiniu.taoluyuan.com/2023/blog20230526000739.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
 <ol>
 <li>将数据集 通过 openai embedding 得到向量+组装payload,存入 qdrant</li>
 <li>用户进行问题搜索,通过 openai embedding 得到向量,从 qdrant 中搜索相似度大于0.8的数据</li>
@@ -657,10 +658,10 @@ limit:返回的数据条数</p>
 <h3 id="示例">示例</h3>
 <ol>
 <li>问无关的问题,比如:苹果不削皮能吃吗
-<img src="http://qiniu.taoluyuan.com/2023/blog20230526002303.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt="">
+<img src="https://qiniu.taoluyuan.com/2023/blog20230526002303.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt="">
 可以看到 相似度太低,提示违规问题或者超纲问题</li>
 <li>问k8s 本地知识库的问题,比如:什么是Kubernetes中的Deployment？
-<img src="http://qiniu.taoluyuan.com/2023/blog20230526002640.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/1" alt=""></li>
+<img src="https://qiniu.taoluyuan.com/2023/blog20230526002640.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/1" alt=""></li>
 <li>问k8s本地知识库的问题,但单独向chatgpt提问,得到的答案 并不是已定与k8s相关,比如问 网关是什么<br>
 <img src="http://qiniu.taoluyuan.com/2023/blog20230526003436.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></li>
 </ol>
