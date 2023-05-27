@@ -21,7 +21,7 @@
         <description>套路猿 /posts/embedding-openai/ -&lt;h1 id=&#34;使用golang-基于-openai-embedding--qdrant-实现k8s本地知识库&#34;&gt;使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库&lt;/h1&gt;
 &lt;p&gt;文章博客地址:&lt;a href=&#34;https://blog.taoluyuan.com/posts/embedding-openai/&#34;&gt;套路猿-使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;流程&#34;&gt;流程&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230526000739.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230527115805.png?imageMogr2/auto-orient/thumbnail/!70p/blur/9x0/quality/75&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;将数据集 通过 openai embedding 得到向量+组装payload,存入 qdrant&lt;/li&gt;
 &lt;li&gt;用户进行问题搜索,通过 openai embedding 得到向量,从 qdrant 中搜索相似度大于0.8的数据&lt;/li&gt;
@@ -208,7 +208,8 @@ limit:返回的数据条数&lt;/p&gt;
         <pubDate>Wed, 17 May 2023 22:15:05 +0800</pubDate>
         
         <guid>/posts/frp-server/</guid>
-        <description>套路猿 /posts/frp-server/ -&lt;h3 id=&#34;相关资料&#34;&gt;相关资料&lt;/h3&gt;
+        <description>套路猿 /posts/frp-server/ -&lt;p&gt;文章博客地址: &lt;a href=&#34;https://blog.taoluyuan.com/posts/frp-server/&#34;&gt;https://blog.taoluyuan.com/posts/frp-server/&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;相关资料&#34;&gt;相关资料&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;frp下载 ：&lt;a href=&#34;https://github.com/fatedier/frp&#34;&gt;https://github.com/fatedier/frp&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;相关文档: &lt;a href=&#34;https://github.com/fatedier/frp&#34;&gt;https://github.com/fatedier/frp&lt;/a&gt;&lt;/li&gt;
@@ -375,7 +376,8 @@ custom_domains =b.abc.baidu.com
         <pubDate>Tue, 16 May 2023 22:49:57 +0800</pubDate>
         
         <guid>/posts/docker-makefile/</guid>
-        <description>套路猿 /posts/docker-makefile/ -&lt;h3 id=&#34;本机多服务一次性构建背景&#34;&gt;本机多服务一次性构建背景&lt;/h3&gt;
+        <description>套路猿 /posts/docker-makefile/ -&lt;p&gt;文章博客地址:&lt;a href=&#34;https://blog.taoluyuan.com/posts/docker-makefile/&#34;&gt;https://blog.taoluyuan.com/posts/docker-makefile/&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;本机多服务一次性构建背景&#34;&gt;本机多服务一次性构建背景&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;本机开发多个服务,每个服务还会互相调用&lt;/li&gt;
 &lt;li&gt;正常情况,开发者需要在本地启动多个服务,并且手动调用&lt;/li&gt;
@@ -507,7 +509,8 @@ moda_tracing 目录下,执行以下命令即可&lt;/p&gt;
         <pubDate>Tue, 16 May 2023 22:39:14 +0800</pubDate>
         
         <guid>/posts/opentelmetry/</guid>
-        <description>套路猿 /posts/opentelmetry/ -&lt;h2 id=&#34;使用-opentelemetry-链路追踪说明&#34;&gt;使用 OpenTelemetry 链路追踪说明&lt;/h2&gt;
+        <description>套路猿 /posts/opentelmetry/ -&lt;p&gt;文章博客地址: &lt;a href=&#34;https://blog.taoluyuan.com/posts/opentelmetry/&#34;&gt;https://blog.taoluyuan.com/posts/opentelmetry/&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;使用-opentelemetry-链路追踪说明&#34;&gt;使用 OpenTelemetry 链路追踪说明&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;工作中常常会遇到需要查看服务调用关系,比如用户请求了一个接口&lt;/li&gt;
 &lt;li&gt;接口会调用其他grpc,http接口,或者内部的方法&lt;/li&gt;

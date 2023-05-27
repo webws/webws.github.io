@@ -13,7 +13,8 @@
       <pubDate>Wed, 17 May 2023 22:15:05 +0800</pubDate>
       
       <guid>/posts/frp-server/</guid>
-      <description>相关资料 frp下载 ：https://github.com/fatedier/frp 相关文档: https://github.com/fatedier/frp 下载 下载地址：https://github.com/fatedier/frp/releases 选择对应的版本进行下载
+      <description>文章博客地址: https://blog.taoluyuan.com/posts/frp-server/
+相关资料 frp下载 ：https://github.com/fatedier/frp 相关文档: https://github.com/fatedier/frp 下载 下载地址：https://github.com/fatedier/frp/releases 选择对应的版本进行下载
 wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_linux_386.tar.gz 如果是windows需要下载windos版本
 wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_darwin_amd64.tar.gz 下载后、我的服务端是centos 客户端是windows
 服务端需要关注的文件是 frps、frps.ini 客户端需要关注的文件是 frpc（或者是frpc.exe）、frpc.ini
@@ -22,7 +23,7 @@ wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_darwin
 服务端需要开启的端口 auth_token 需要客户端的auth_token与此一样 type 其实除了http还有其他参数，比如tcp,这里只讲述http，其他的请看相关文档: https://github.com/fatedier/frp custom_domains 域名
 具体接下来在配置客户端说明 启动服务 正常启动，ctrl+c能推出 ``` ./frps -c ./frps.ini
 ``` 后台启动
-``` nohup ./frps -c ./frps.ini &amp;amp; ``` 如果有兴趣，更可以设置成开机启动（这里不讲述） 配置客户端 配置文件 # frpc.</description>
+``` nohup ./frps -c .</description>
     </item>
     
     <item>
@@ -31,7 +32,8 @@ wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_darwin
       <pubDate>Tue, 16 May 2023 22:49:57 +0800</pubDate>
       
       <guid>/posts/docker-makefile/</guid>
-      <description>本机多服务一次性构建背景 本机开发多个服务,每个服务还会互相调用 正常情况,开发者需要在本地启动多个服务,并且手动调用 想着不使用gitlab ci/cd, 在本机快速通过 makefile+docker-compose 编排多个服务 可执行源码在:https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing 正常cicd流程 本机 makefile +docker 部署流程 开发者写好功能,本地 go build 为二进制包 dockerfile 基于 alpha 镜像,运行二进制包 docker-compose 编排执行 dockerfile 运行多个服 golang 服务说明 ├── api1_http │ ├── main.go ├── api2_http │ ├── main.go ├── api3_http │ ├── main.go ├── grpc │ ├── main.go ├── Makefile |── docker-compose.yaml 四个golang服务,只需要知道他们是golang服务即可,3个api,1个grpc
+      <description>文章博客地址:https://blog.taoluyuan.com/posts/docker-makefile/
+本机多服务一次性构建背景 本机开发多个服务,每个服务还会互相调用 正常情况,开发者需要在本地启动多个服务,并且手动调用 想着不使用gitlab ci/cd, 在本机快速通过 makefile+docker-compose 编排多个服务 可执行源码在:https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing 正常cicd流程 本机 makefile +docker 部署流程 开发者写好功能,本地 go build 为二进制包 dockerfile 基于 alpha 镜像,运行二进制包 docker-compose 编排执行 dockerfile 运行多个服 golang 服务说明 ├── api1_http │ ├── main.go ├── api2_http │ ├── main.go ├── api3_http │ ├── main.go ├── grpc │ ├── main.go ├── Makefile |── docker-compose.yaml 四个golang服务,只需要知道他们是golang服务即可,3个api,1个grpc
 编写makefile SERVICES = api1_http api2_http api3_http grpc DOCKERFILE_CONTENT = FROM alpine:latest\nWORKDIR /app # 定义 alpine:3.12 镜像为基础镜像 IMAGE = alpine:3.</description>
     </item>
     
@@ -41,7 +43,8 @@ wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_darwin
       <pubDate>Tue, 16 May 2023 22:39:14 +0800</pubDate>
       
       <guid>/posts/opentelmetry/</guid>
-      <description>使用 OpenTelemetry 链路追踪说明 工作中常常会遇到需要查看服务调用关系,比如用户请求了一个接口 接口会调用其他grpc,http接口,或者内部的方法 这样的调用链路,如果出现了问题,我们需要快速的定位问题,这时候就需要一个工具来帮助我们查看调用链路 OpenTelemetry就是这样一个工具 本文大概以:main 函数初始化 OpenTelemetry、启动 http server、配置httpclient 请求服务 来进行说明 完整可执行源码在:opentelemetry-go 示例 示例代码已增加 grpc的链路追踪 服务链路关系 关系图 说明: 用户 请求 api1(echo server) 服务的 api1/bar api1 调用 Grpc 服务 api1 调用 api2 (gin server) 服务的 api2/bar api2 调用 api3 (echo server )服务的 api3/bar api3 调用 内部 调用方法 bar-&amp;gt;bar2-&amp;gt;bar3 安装jaeger 下载jaeger:我使用的是 jaeger-all-in-one 启动 jaeger: ~/tool/jaeger-1.31.0-linux-amd64/jaeger-all-in-one 默认查看面板 地址 http://localhost:16686/ tracer Batcher的地址,下面代码会体现: http://localhost:14268/api/traces 初始化 全局的 OpenTelemetry 这里openTelemetry 的exporter 以 jaeger 为例</description>
+      <description>文章博客地址: https://blog.taoluyuan.com/posts/opentelmetry/
+使用 OpenTelemetry 链路追踪说明 工作中常常会遇到需要查看服务调用关系,比如用户请求了一个接口 接口会调用其他grpc,http接口,或者内部的方法 这样的调用链路,如果出现了问题,我们需要快速的定位问题,这时候就需要一个工具来帮助我们查看调用链路 OpenTelemetry就是这样一个工具 本文大概以:main 函数初始化 OpenTelemetry、启动 http server、配置httpclient 请求服务 来进行说明 完整可执行源码在:opentelemetry-go 示例 示例代码已增加 grpc的链路追踪 服务链路关系 关系图 说明: 用户 请求 api1(echo server) 服务的 api1/bar api1 调用 Grpc 服务 api1 调用 api2 (gin server) 服务的 api2/bar api2 调用 api3 (echo server )服务的 api3/bar api3 调用 内部 调用方法 bar-&amp;gt;bar2-&amp;gt;bar3 安装jaeger 下载jaeger:我使用的是 jaeger-all-in-one 启动 jaeger: ~/tool/jaeger-1.31.0-linux-amd64/jaeger-all-in-one 默认查看面板 地址 http://localhost:16686/ tracer Batcher的地址,下面代码会体现: http://localhost:14268/api/traces 初始化 全局的 OpenTelemetry 这里openTelemetry 的exporter 以 jaeger 为例</description>
     </item>
     
   </channel>
