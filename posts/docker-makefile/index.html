@@ -363,14 +363,14 @@
 <li>可执行源码在:https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing</li>
 </ol>
 <h3 id="正常cicd流程">正常cicd流程</h3>
-<p><img src="http://qiniu.taoluyuan.com/2023/blog20230516225200.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
+<p><img src="https://qiniu.taoluyuan.com/2023/blog20230516225200.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
 <h3 id="本机-makefile-docker-部署流程">本机 makefile +docker 部署流程</h3>
 <ol>
 <li>开发者写好功能,本地 go build 为二进制包</li>
 <li>dockerfile 基于 alpha 镜像,运行二进制包</li>
 <li>docker-compose 编排执行 dockerfile 运行多个服</li>
 </ol>
-<p><img src="http://qiniu.taoluyuan.com/2023/blog20230516225253.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
+<p><img src="https://qiniu.taoluyuan.com/2023/blog20230516225253.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
 <h3 id="golang-服务说明">golang 服务说明</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>├── api1_http
 </span></span><span style="display:flex;"><span>│   ├── main.go
@@ -475,7 +475,7 @@ moda_tracing 目录下,执行以下命令即可</p>
 <p>我的 golang 服务 业务代码会互相调用,启动后 调用一个接口,就会在 jaeger 生成完整链路追踪</p>
 <pre tabindex="0"><code>curl http://localhost:8081/api1
 </code></pre><p>打开 jaeger 地址 http://localhost:16686
-<img src="http://qiniu.taoluyuan.com/2023/blog20230516224511.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
+<img src="https://qiniu.taoluyuan.com/2023/blog20230516224511.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
 
                     
                     <HR width="100%" id="EOF">

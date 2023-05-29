@@ -385,14 +385,14 @@ custom_domains =b.abc.baidu.com
 &lt;li&gt;可执行源码在:https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;正常cicd流程&#34;&gt;正常cicd流程&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;http://qiniu.taoluyuan.com/2023/blog20230516225200.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230516225200.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;本机-makefile-docker-部署流程&#34;&gt;本机 makefile +docker 部署流程&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;开发者写好功能,本地 go build 为二进制包&lt;/li&gt;
 &lt;li&gt;dockerfile 基于 alpha 镜像,运行二进制包&lt;/li&gt;
 &lt;li&gt;docker-compose 编排执行 dockerfile 运行多个服&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;http://qiniu.taoluyuan.com/2023/blog20230516225253.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230516225253.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;golang-服务说明&#34;&gt;golang 服务说明&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── api1_http
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   ├── main.go
@@ -497,7 +497,7 @@ moda_tracing 目录下,执行以下命令即可&lt;/p&gt;
 &lt;p&gt;我的 golang 服务 业务代码会互相调用,启动后 调用一个接口,就会在 jaeger 生成完整链路追踪&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;curl http://localhost:8081/api1
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;打开 jaeger 地址 http://localhost:16686
-&lt;img src=&#34;http://qiniu.taoluyuan.com/2023/blog20230516224511.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230516224511.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 - /posts/docker-makefile/ - </description>
         </item>
     
