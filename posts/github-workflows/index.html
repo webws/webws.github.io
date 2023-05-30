@@ -564,7 +564,7 @@
 </span></span><span style="display:flex;"><span>                  <span style="color:#f92672">cname</span>: <span style="color:#ae81ff">${{ secrets.DOMAIN }}</span>
 </span></span></code></pre></div><p>上面 GitHub Actions配置文件用于自动部署Hugo博客到我的 GitHub Pages。以下是每个步骤的功能和解释：</p>
 <h4 id="步骤1checkout">步骤1：Checkout</h4>
-<p>此步骤使用 <code>actions/checkout</code> 插件来检出 GitHub 仓库,具体使用文档地址是 <img src="https://github.com/marketplace/actions/checkout" alt="checkout">
+<p>此步骤使用 <code>actions/checkout</code> 插件来检出 GitHub 仓库,具体使用文档地址是 <a href="https://github.com/marketplace/actions/checkout">checkout</a>
 <code>submodules: true</code> 参数用于同时检出子模块，<code>fetch-depth: 0</code> 用于完整地检出所有历史记录。</p>
 <h4 id="步骤2setup-hugo">步骤2：Setup Hugo</h4>
 <p>此步骤使用 <code>peaceiris/actions-hugo</code> 插件来安装最新版本的 Hugo。</p>

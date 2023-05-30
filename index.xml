@@ -86,7 +86,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f92672&#34;&gt;cname&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.DOMAIN }}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;上面 GitHub Actions配置文件用于自动部署Hugo博客到我的 GitHub Pages。以下是每个步骤的功能和解释：&lt;/p&gt;
 &lt;h4 id=&#34;步骤1checkout&#34;&gt;步骤1：Checkout&lt;/h4&gt;
-&lt;p&gt;此步骤使用 &lt;code&gt;actions/checkout&lt;/code&gt; 插件来检出 GitHub 仓库,具体使用文档地址是 &lt;img src=&#34;https://github.com/marketplace/actions/checkout&#34; alt=&#34;checkout&#34;&gt;
+&lt;p&gt;此步骤使用 &lt;code&gt;actions/checkout&lt;/code&gt; 插件来检出 GitHub 仓库,具体使用文档地址是 &lt;a href=&#34;https://github.com/marketplace/actions/checkout&#34;&gt;checkout&lt;/a&gt;
 &lt;code&gt;submodules: true&lt;/code&gt; 参数用于同时检出子模块，&lt;code&gt;fetch-depth: 0&lt;/code&gt; 用于完整地检出所有历史记录。&lt;/p&gt;
 &lt;h4 id=&#34;步骤2setup-hugo&#34;&gt;步骤2：Setup Hugo&lt;/h4&gt;
 &lt;p&gt;此步骤使用 &lt;code&gt;peaceiris/actions-hugo&lt;/code&gt; 插件来安装最新版本的 Hugo。&lt;/p&gt;
