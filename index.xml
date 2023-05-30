@@ -6,9 +6,124 @@
     <description>Recent content on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Fri, 26 May 2023 01:03:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 30 May 2023 10:29:04 +0800</lastBuildDate>
     
         <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>通过 Github workflows CI/CD 自动化部署 Github Pages hugo 免费博客</title>
+        <link>/posts/github-workflows/</link>
+        <pubDate>Tue, 30 May 2023 10:29:04 +0800</pubDate>
+        
+        <guid>/posts/github-workflows/</guid>
+        <description>套路猿 /posts/github-workflows/ -&lt;h1 id=&#34;通过-github-workflows-cicd-自动化部署-github-pages-hugo-免费博客&#34;&gt;通过 Github workflows CI/CD 自动化部署 Github Pages hugo 免费博客&lt;/h1&gt;
+&lt;p&gt;文章博客地址：&lt;a href=&#34;https://blog.taoluyuan.com/posts/github-workflows/&#34;&gt;https://blog.taoluyuan.com/posts/github-workflows/&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;github-workflows-介绍&#34;&gt;Github Workflows 介绍&lt;/h2&gt;
+&lt;h3 id=&#34;github-actions-介绍&#34;&gt;GitHub Actions 介绍&lt;/h3&gt;
+&lt;p&gt;GitHub 文档：https://docs.github.com/zh/actions/learn-github-actions/understanding-github-actions
+官方介绍:&lt;code&gt;GitHub Actions&lt;/code&gt; 是一种持续集成和持续交付 (CI/CD) 平台，可用于自动执行生成、测试和部署管道。 您可以创建工作流程来构建和测试存储库的每个拉取请求，或将合并的拉取请求部署到生产环境&lt;/p&gt;
+&lt;h3 id=&#34;流程及原理介绍&#34;&gt;流程及原理介绍&lt;/h3&gt;
+&lt;p&gt;本文主要介绍使用GitHub Actions 来实现自动化部署博客网站 ,静态网站生成使用的是Hugo,部署使用的是Github pages,并且使用自定义域名。
+&lt;img src=&#34;https://img-blog.csdnimg.cn/524cb3bdda054f95b09933c8a1016f28.jpeg#pic_center&#34; alt=&#34;在这里插入图片描述&#34;&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;本地写hugo-blog 博客,hugo-blog 是一个hugo的博客模板,使用&lt;code&gt;hugo new site hugo-blog&lt;/code&gt;命令创建,可以在里面写markdown文件&lt;/li&gt;
+&lt;li&gt;写好后推送到github hugo-blog 仓库,触发github actions ci/cd,执行hugo命令生成静态网站,并且推送到github-pages 仓库&lt;/li&gt;
+&lt;li&gt;github-pages 仓库接收到推送后,会自动部署到github pages,公网可以通过 github pages 域名 访问,也可以通过CNAME配置自定义域名访问&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;github-pages-介绍&#34;&gt;Github Pages 介绍&lt;/h2&gt;
+&lt;p&gt;Github Pages 是一个静态网站托管服务,可以通过github pages 托管静态网站,并且可以通过自定义域名访问&lt;br&gt;
+创建github pages 仓库,仓库名必须是&lt;code&gt;username.github.io&lt;/code&gt;格式,username是你的github用户名,仓库名必须是这个,否则无法部署到github pages   访问地址就是 是https://username.github.io,username
+自定义域名访问,例如&lt;code&gt;www.abc.com&lt;/code&gt;,在域名服务商添加CNAME记录,指向&lt;code&gt;username.github.io&lt;/code&gt;, 在github pages 仓库设置中添加自定义域名, 这样就可以通过www.abc.com访问你的github pages了,下面的 Actions 部分会介绍如何自动化部署到github pages,并且配置自定义域名&lt;/p&gt;
+&lt;h2 id=&#34;hugo-介绍&#34;&gt;Hugo 介绍&lt;/h2&gt;
+&lt;p&gt;Hugo 是一个静态网站生成器,可以通过markdown文件生成静态网站,官网:https://gohugo.io/&lt;br&gt;
+写好markdown文件后,执行hugo命令,在public目录生成静态网站,然后 将public目录推送到github pages 仓库,就可以通过github pages 访问了
+接下来 介绍的 github actions工作流 就是通过hugo命令生成静态网站,并且推送到github pages 仓库&lt;/p&gt;
+&lt;h2 id=&#34;使用-github-actions-自动化部署&#34;&gt;使用 Github Actions 自动化部署&lt;/h2&gt;
+&lt;h3 id=&#34;创建-github-actions&#34;&gt;创建 Github Actions&lt;/h3&gt;
+&lt;p&gt;在github 仓库中(hugo-blog)创建.github/workflows目录,并且在目录中创建deploy.yml文件,文件名可以自定义,但是后缀必须是yml,例如deploy.yml,这样就创建了一个github actions,并且会自动执行,下面介绍我的deploy.yml文件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;deploy&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;push&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;workflow_dispatch&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;build&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Checkout&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@v2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f92672&#34;&gt;submodules&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f92672&#34;&gt;fetch-depth&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Setup Hugo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;peaceiris/actions-hugo@v2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f92672&#34;&gt;hugo-version&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;latest&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Build Web&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;hugo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Deploy Web&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;peaceiris/actions-gh-pages@v3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f92672&#34;&gt;PERSONAL_TOKEN&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.BLOG_TOKEN }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f92672&#34;&gt;EXTERNAL_REPOSITORY&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;webws/webws.github.io&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f92672&#34;&gt;PUBLISH_BRANCH&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;master&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f92672&#34;&gt;PUBLISH_DIR&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;./public&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f92672&#34;&gt;commit_message&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ github.event.head_commit.message }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f92672&#34;&gt;cname&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.DOMAIN }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;上面 GitHub Actions配置文件用于自动部署Hugo博客到我的 GitHub Pages。以下是每个步骤的功能和解释：&lt;/p&gt;
+&lt;h4 id=&#34;步骤1checkout&#34;&gt;步骤1：Checkout&lt;/h4&gt;
+&lt;p&gt;此步骤使用 &lt;code&gt;actions/checkout&lt;/code&gt; 插件来检出 GitHub 仓库,具体使用文档地址是 &lt;img src=&#34;https://github.com/marketplace/actions/checkout&#34; alt=&#34;checkout&#34;&gt;
+&lt;code&gt;submodules: true&lt;/code&gt; 参数用于同时检出子模块，&lt;code&gt;fetch-depth: 0&lt;/code&gt; 用于完整地检出所有历史记录。&lt;/p&gt;
+&lt;h4 id=&#34;步骤2setup-hugo&#34;&gt;步骤2：Setup Hugo&lt;/h4&gt;
+&lt;p&gt;此步骤使用 &lt;code&gt;peaceiris/actions-hugo&lt;/code&gt; 插件来安装最新版本的 Hugo。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;- &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Setup Hugo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;peaceiris/actions-hugo@v2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;hugo-version&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;latest&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;步骤3build-web&#34;&gt;步骤3：Build Web&lt;/h4&gt;
+&lt;p&gt;此步骤在运行时调用 Hugo 构建静态网站，并在 &lt;code&gt;public&lt;/code&gt; 目录中生成静态html文件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;- &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Build Web&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;hugo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;步骤4deploy-web&#34;&gt;步骤4：Deploy Web&lt;/h4&gt;
+&lt;p&gt;此步骤使用 &lt;code&gt;peaceiris/actions-gh-pages&lt;/code&gt; 插件将静态网站部署到 GitHub Pages 上。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;- &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Deploy Web&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;peaceiris/actions-gh-pages@v3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;PERSONAL_TOKEN&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.BLOG_TOKEN }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;EXTERNAL_REPOSITORY&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;webws/webws.github.io&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;PUBLISH_BRANCH&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;master&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;PUBLISH_DIR&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;./public&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;commit_message&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ github.event.head_commit.message }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;cname&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.DOMAIN }}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;参数的含义：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;PERSONAL_TOKEN&lt;/code&gt;: GitHub Personal Access Tokens 用于访问 GitHub 仓库,需要 到&lt;img src=&#34;https://github.com/settings/tokens&#34; alt=&#34;github Personal access tokens设置&#34;&gt; ，添加权限 并将Token存储在仓库的 Secrets 中以供 Workflow 使用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;EXTERNAL_REPOSITORY&lt;/code&gt;: 部署到的 GitHub Pages 仓库,webws/webws.github.io 是我的github pages 仓库,需要修改为你的github pages 仓库&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PUBLISH_BRANCH&lt;/code&gt;: 要在其上部署站点的分支名称（通常为master）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PUBLISH_DIR&lt;/code&gt;: hugo 静态html文件目录。（在此例中，Hugo 输出位于 &lt;code&gt;./public&lt;/code&gt; 目录中）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;commit_message&lt;/code&gt;: 提交更改时使用的提交消息，从上游分支获取。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cname&lt;/code&gt;: 自定义域名,CNAME记录,我自己的是 blog.taoluyuan.com,需要修改为你的自定义域名,如果没有,可以删除这个参数,使用默认的github pages域名也访问 webws.github.io&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;设置 Secrets 变量,对应 yml 文件中的 PERSONAL_TOKEN 和 DOMAIN ,具体设置 在 仓库中(hugo-blog) 的 Settings -&amp;gt; secrets and variables-&amp;gt;actions 中,hugo-blog 要换成你自己的仓库名&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;BLOG_TOKEN&lt;/code&gt;:  GitHub Personal Access Token。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;DOMAIN&lt;/code&gt;: 你的自定义域名。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;触发-github-actions&#34;&gt;触发 Github Actions&lt;/h3&gt;
+&lt;p&gt;在github 仓库中(hugo-blog)创建.md文件,并且提交到github,这样就会触发github actions,自动部署到github pages 仓库,并且可以通过自定义域名访问了
+可以通过  仓库中 Actions 标签查看部署状态&lt;/p&gt;
+&lt;h3 id=&#34;访问-github-pages&#34;&gt;访问 Github Pages&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;通过github pages域名访问, &lt;a href=&#34;https://webws.github.io&#34;&gt;https://webws.github.io&lt;/a&gt;，因为我设置了自定义域名,所以这个域名会自动跳转到 &lt;a href=&#34;https://blog.taoluyuan.com&#34;&gt;https://blog.taoluyuan.com&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;通过自定义域名访问, &lt;a href=&#34;https://blog.taoluyuan.com&#34;&gt;https://blog.taoluyuan.com&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+- /posts/github-workflows/ - </description>
+        </item>
     
     
     

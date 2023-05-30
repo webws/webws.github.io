@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hugo on 套路猿</title>
+    <link>/tags/hugo/</link>
+    <description>Recent content in hugo on 套路猿</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Tue, 30 May 2023 10:29:04 +0800</lastBuildDate><atom:link href="/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>通过 Github workflows CI/CD 自动化部署 Github Pages hugo 免费博客</title>
+      <link>/posts/github-workflows/</link>
+      <pubDate>Tue, 30 May 2023 10:29:04 +0800</pubDate>
+      
+      <guid>/posts/github-workflows/</guid>
+      <description>通过 Github workflows CI/CD 自动化部署 Github Pages hugo 免费博客 文章博客地址：https://blog.taoluyuan.com/posts/github-workflows/
+Github Workflows 介绍 GitHub Actions 介绍 GitHub 文档：https://docs.github.com/zh/actions/learn-github-actions/understanding-github-actions 官方介绍:GitHub Actions 是一种持续集成和持续交付 (CI/CD) 平台，可用于自动执行生成、测试和部署管道。 您可以创建工作流程来构建和测试存储库的每个拉取请求，或将合并的拉取请求部署到生产环境
+流程及原理介绍 本文主要介绍使用GitHub Actions 来实现自动化部署博客网站 ,静态网站生成使用的是Hugo,部署使用的是Github pages,并且使用自定义域名。 本地写hugo-blog 博客,hugo-blog 是一个hugo的博客模板,使用hugo new site hugo-blog命令创建,可以在里面写markdown文件 写好后推送到github hugo-blog 仓库,触发github actions ci/cd,执行hugo命令生成静态网站,并且推送到github-pages 仓库 github-pages 仓库接收到推送后,会自动部署到github pages,公网可以通过 github pages 域名 访问,也可以通过CNAME配置自定义域名访问 Github Pages 介绍 Github Pages 是一个静态网站托管服务,可以通过github pages 托管静态网站,并且可以通过自定义域名访问
+创建github pages 仓库,仓库名必须是username.github.io格式,username是你的github用户名,仓库名必须是这个,否则无法部署到github pages 访问地址就是 是https://username.github.io,username 自定义域名访问,例如www.abc.com,在域名服务商添加CNAME记录,指向username.github.io, 在github pages 仓库设置中添加自定义域名, 这样就可以通过www.abc.com访问你的github pages了,下面的 Actions 部分会介绍如何自动化部署到github pages,并且配置自定义域名</description>
+    </item>
+    
+  </channel>
+</rss>

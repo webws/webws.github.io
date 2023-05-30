@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html><head>
+<title>通过 Github workflows CI/CD 自动化部署 Github Pages hugo 免费博客</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="通过 github actions,将hugo 博客自动部署到github pages,并且配置自定义域名">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="/posts/images/favicon.jpg">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.101ef407a1e27ccf92936b24b892c7ca0a5f57d754d0689042310afca8e795d9.css" integrity="sha256-EB70B6HifM&#43;Sk2skuJLHygpfV9dU0GiQQjEK/Kjnldk=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%80%9a%e8%bf%87-github-workflows-cicd-%e8%87%aa%e5%8a%a8%e5%8c%96%e9%83%a8%e7%bd%b2-github-pages-hugo-%e5%85%8d%e8%b4%b9%e5%8d%9a%e5%ae%a2" class="nav-通过-github-workflows-cicd-自动化部署-github-pages-hugo-免费博客">
+									通过 Github workflows CI/CD 自动化部署 Github Pages hugo 免费博客
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#github-workflows-%e4%bb%8b%e7%bb%8d" class="nav-github-workflows-介绍">
+									Github Workflows 介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#github-actions-%e4%bb%8b%e7%bb%8d" class="nav-github-actions-介绍">
+									GitHub Actions 介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b5%81%e7%a8%8b%e5%8f%8a%e5%8e%9f%e7%90%86%e4%bb%8b%e7%bb%8d" class="nav-流程及原理介绍">
+									流程及原理介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#github-pages-%e4%bb%8b%e7%bb%8d" class="nav-github-pages-介绍">
+									Github Pages 介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hugo-%e4%bb%8b%e7%bb%8d" class="nav-hugo-介绍">
+									Hugo 介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8-github-actions-%e8%87%aa%e5%8a%a8%e5%8c%96%e9%83%a8%e7%bd%b2" class="nav-使用-github-actions-自动化部署">
+									使用 Github Actions 自动化部署
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%88%9b%e5%bb%ba-github-actions" class="nav-创建-github-actions">
+									创建 Github Actions
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%ad%a5%e9%aa%a41checkout" class="nav-步骤1checkout">
+									步骤1：Checkout
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%a5%e9%aa%a42setup-hugo" class="nav-步骤2setup-hugo">
+									步骤2：Setup Hugo
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%a5%e9%aa%a43build-web" class="nav-步骤3build-web">
+									步骤3：Build Web
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%a5%e9%aa%a44deploy-web" class="nav-步骤4deploy-web">
+									步骤4：Deploy Web
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%a7%a6%e5%8f%91-github-actions" class="nav-触发-github-actions">
+									触发 Github Actions
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%bf%e9%97%ae-github-pages" class="nav-访问-github-pages">
+									访问 Github Pages
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="">
+            套路猿
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">套路猿</div>
+        
+        <div class="single-column-header-subtitle">自古深情留不住，唯有套路得人心</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    通过 Github workflows CI/CD 自动化部署 Github Pages hugo 免费博客
+                    
+                    <div class="post-subtitle">
+                        通过 github actions,将hugo 博客自动部署到github pages,并且配置自定义域名
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-05-30 10:29
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/devops">devops</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/workflow">workflow</a>
+                                &nbsp;
+                            
+                                <a href="/tags/github">github</a>
+                                &nbsp;
+                            
+                                <a href="/tags/hugo">hugo</a>
+                                &nbsp;
+                            
+                                <a href="/tags/blog">blog</a>
+                                &nbsp;
+                            
+                                <a href="/tags/github-pages">github pages</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="通过-github-workflows-cicd-自动化部署-github-pages-hugo-免费博客">通过 Github workflows CI/CD 自动化部署 Github Pages hugo 免费博客</h1>
+<p>文章博客地址：<a href="https://blog.taoluyuan.com/posts/github-workflows/">https://blog.taoluyuan.com/posts/github-workflows/</a></p>
+<h2 id="github-workflows-介绍">Github Workflows 介绍</h2>
+<h3 id="github-actions-介绍">GitHub Actions 介绍</h3>
+<p>GitHub 文档：https://docs.github.com/zh/actions/learn-github-actions/understanding-github-actions
+官方介绍:<code>GitHub Actions</code> 是一种持续集成和持续交付 (CI/CD) 平台，可用于自动执行生成、测试和部署管道。 您可以创建工作流程来构建和测试存储库的每个拉取请求，或将合并的拉取请求部署到生产环境</p>
+<h3 id="流程及原理介绍">流程及原理介绍</h3>
+<p>本文主要介绍使用GitHub Actions 来实现自动化部署博客网站 ,静态网站生成使用的是Hugo,部署使用的是Github pages,并且使用自定义域名。
+<img src="https://img-blog.csdnimg.cn/524cb3bdda054f95b09933c8a1016f28.jpeg#pic_center" alt="在这里插入图片描述"></p>
+<ol>
+<li>本地写hugo-blog 博客,hugo-blog 是一个hugo的博客模板,使用<code>hugo new site hugo-blog</code>命令创建,可以在里面写markdown文件</li>
+<li>写好后推送到github hugo-blog 仓库,触发github actions ci/cd,执行hugo命令生成静态网站,并且推送到github-pages 仓库</li>
+<li>github-pages 仓库接收到推送后,会自动部署到github pages,公网可以通过 github pages 域名 访问,也可以通过CNAME配置自定义域名访问</li>
+</ol>
+<h2 id="github-pages-介绍">Github Pages 介绍</h2>
+<p>Github Pages 是一个静态网站托管服务,可以通过github pages 托管静态网站,并且可以通过自定义域名访问<br>
+创建github pages 仓库,仓库名必须是<code>username.github.io</code>格式,username是你的github用户名,仓库名必须是这个,否则无法部署到github pages   访问地址就是 是https://username.github.io,username
+自定义域名访问,例如<code>www.abc.com</code>,在域名服务商添加CNAME记录,指向<code>username.github.io</code>, 在github pages 仓库设置中添加自定义域名, 这样就可以通过www.abc.com访问你的github pages了,下面的 Actions 部分会介绍如何自动化部署到github pages,并且配置自定义域名</p>
+<h2 id="hugo-介绍">Hugo 介绍</h2>
+<p>Hugo 是一个静态网站生成器,可以通过markdown文件生成静态网站,官网:https://gohugo.io/<br>
+写好markdown文件后,执行hugo命令,在public目录生成静态网站,然后 将public目录推送到github pages 仓库,就可以通过github pages 访问了
+接下来 介绍的 github actions工作流 就是通过hugo命令生成静态网站,并且推送到github pages 仓库</p>
+<h2 id="使用-github-actions-自动化部署">使用 Github Actions 自动化部署</h2>
+<h3 id="创建-github-actions">创建 Github Actions</h3>
+<p>在github 仓库中(hugo-blog)创建.github/workflows目录,并且在目录中创建deploy.yml文件,文件名可以自定义,但是后缀必须是yml,例如deploy.yml,这样就创建了一个github actions,并且会自动执行,下面介绍我的deploy.yml文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">deploy</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">on</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">push</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">workflow_dispatch</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">jobs</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">build</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-latest</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">steps</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Checkout</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v2</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">submodules</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">fetch-depth</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Setup Hugo</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">peaceiris/actions-hugo@v2</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">hugo-version</span>: <span style="color:#e6db74">&#34;latest&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build Web</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">run</span>: <span style="color:#ae81ff">hugo</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy Web</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">peaceiris/actions-gh-pages@v3</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">PERSONAL_TOKEN</span>: <span style="color:#ae81ff">${{ secrets.BLOG_TOKEN }}</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">EXTERNAL_REPOSITORY</span>: <span style="color:#ae81ff">webws/webws.github.io</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">PUBLISH_BRANCH</span>: <span style="color:#ae81ff">master</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">PUBLISH_DIR</span>: <span style="color:#ae81ff">./public</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">commit_message</span>: <span style="color:#ae81ff">${{ github.event.head_commit.message }}</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">cname</span>: <span style="color:#ae81ff">${{ secrets.DOMAIN }}</span>
+</span></span></code></pre></div><p>上面 GitHub Actions配置文件用于自动部署Hugo博客到我的 GitHub Pages。以下是每个步骤的功能和解释：</p>
+<h4 id="步骤1checkout">步骤1：Checkout</h4>
+<p>此步骤使用 <code>actions/checkout</code> 插件来检出 GitHub 仓库,具体使用文档地址是 <img src="https://github.com/marketplace/actions/checkout" alt="checkout">
+<code>submodules: true</code> 参数用于同时检出子模块，<code>fetch-depth: 0</code> 用于完整地检出所有历史记录。</p>
+<h4 id="步骤2setup-hugo">步骤2：Setup Hugo</h4>
+<p>此步骤使用 <code>peaceiris/actions-hugo</code> 插件来安装最新版本的 Hugo。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Setup Hugo</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">peaceiris/actions-hugo@v2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">hugo-version</span>: <span style="color:#e6db74">&#34;latest&#34;</span>
+</span></span></code></pre></div><h4 id="步骤3build-web">步骤3：Build Web</h4>
+<p>此步骤在运行时调用 Hugo 构建静态网站，并在 <code>public</code> 目录中生成静态html文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build Web</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">run</span>: <span style="color:#ae81ff">hugo</span>
+</span></span></code></pre></div><h4 id="步骤4deploy-web">步骤4：Deploy Web</h4>
+<p>此步骤使用 <code>peaceiris/actions-gh-pages</code> 插件将静态网站部署到 GitHub Pages 上。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy Web</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">peaceiris/actions-gh-pages@v3</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">with</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">PERSONAL_TOKEN</span>: <span style="color:#ae81ff">${{ secrets.BLOG_TOKEN }}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">EXTERNAL_REPOSITORY</span>: <span style="color:#ae81ff">webws/webws.github.io</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">PUBLISH_BRANCH</span>: <span style="color:#ae81ff">master</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">PUBLISH_DIR</span>: <span style="color:#ae81ff">./public</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">commit_message</span>: <span style="color:#ae81ff">${{ github.event.head_commit.message }}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cname</span>: <span style="color:#ae81ff">${{ secrets.DOMAIN }}</span>
+</span></span></code></pre></div><p>参数的含义：</p>
+<ul>
+<li><code>PERSONAL_TOKEN</code>: GitHub Personal Access Tokens 用于访问 GitHub 仓库,需要 到<img src="https://github.com/settings/tokens" alt="github Personal access tokens设置"> ，添加权限 并将Token存储在仓库的 Secrets 中以供 Workflow 使用</li>
+<li><code>EXTERNAL_REPOSITORY</code>: 部署到的 GitHub Pages 仓库,webws/webws.github.io 是我的github pages 仓库,需要修改为你的github pages 仓库</li>
+<li><code>PUBLISH_BRANCH</code>: 要在其上部署站点的分支名称（通常为master）。</li>
+<li><code>PUBLISH_DIR</code>: hugo 静态html文件目录。（在此例中，Hugo 输出位于 <code>./public</code> 目录中）。</li>
+<li><code>commit_message</code>: 提交更改时使用的提交消息，从上游分支获取。</li>
+<li><code>cname</code>: 自定义域名,CNAME记录,我自己的是 blog.taoluyuan.com,需要修改为你的自定义域名,如果没有,可以删除这个参数,使用默认的github pages域名也访问 webws.github.io</li>
+</ul>
+<p>设置 Secrets 变量,对应 yml 文件中的 PERSONAL_TOKEN 和 DOMAIN ,具体设置 在 仓库中(hugo-blog) 的 Settings -&gt; secrets and variables-&gt;actions 中,hugo-blog 要换成你自己的仓库名</p>
+<ul>
+<li><code>BLOG_TOKEN</code>:  GitHub Personal Access Token。</li>
+<li><code>DOMAIN</code>: 你的自定义域名。</li>
+</ul>
+<h3 id="触发-github-actions">触发 Github Actions</h3>
+<p>在github 仓库中(hugo-blog)创建.md文件,并且提交到github,这样就会触发github actions,自动部署到github pages 仓库,并且可以通过自定义域名访问了
+可以通过  仓库中 Actions 标签查看部署状态</p>
+<h3 id="访问-github-pages">访问 Github Pages</h3>
+<ol>
+<li>通过github pages域名访问, <a href="https://webws.github.io">https://webws.github.io</a>，因为我设置了自定义域名,所以这个域名会自动跳转到 <a href="https://blog.taoluyuan.com">https://blog.taoluyuan.com</a></li>
+<li>通过自定义域名访问, <a href="https://blog.taoluyuan.com">https://blog.taoluyuan.com</a></li>
+</ol>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-05-30</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/embedding-openai/">
+			上回<br> 使用golang 基于 OpenAI Embedding &#43; qdrant 实现k8s本地知识库
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="webws/webws.github.io"
+        data-repo-id="R_kgDOJjhGQQ"
+        data-category="Announcements"
+        data-category-id=""
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled=""
+        data-emit-metadata=""
+        data-input-position=""
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="/">
+    
+        <div class="nav-title">
+            套路猿
+        </div>
+        
+        <div class="nav-subtitle">
+            自古深情留不住，唯有套路得人心
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%80%9a%e8%bf%87-github-workflows-cicd-%e8%87%aa%e5%8a%a8%e5%8c%96%e9%83%a8%e7%bd%b2-github-pages-hugo-%e5%85%8d%e8%b4%b9%e5%8d%9a%e5%ae%a2" class="nav-通过-github-workflows-cicd-自动化部署-github-pages-hugo-免费博客">
+									通过 Github workflows CI/CD 自动化部署 Github Pages hugo 免费博客
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#github-workflows-%e4%bb%8b%e7%bb%8d" class="nav-github-workflows-介绍">
+									Github Workflows 介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#github-actions-%e4%bb%8b%e7%bb%8d" class="nav-github-actions-介绍">
+									GitHub Actions 介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b5%81%e7%a8%8b%e5%8f%8a%e5%8e%9f%e7%90%86%e4%bb%8b%e7%bb%8d" class="nav-流程及原理介绍">
+									流程及原理介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#github-pages-%e4%bb%8b%e7%bb%8d" class="nav-github-pages-介绍">
+									Github Pages 介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hugo-%e4%bb%8b%e7%bb%8d" class="nav-hugo-介绍">
+									Hugo 介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8-github-actions-%e8%87%aa%e5%8a%a8%e5%8c%96%e9%83%a8%e7%bd%b2" class="nav-使用-github-actions-自动化部署">
+									使用 Github Actions 自动化部署
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%88%9b%e5%bb%ba-github-actions" class="nav-创建-github-actions">
+									创建 Github Actions
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%ad%a5%e9%aa%a41checkout" class="nav-步骤1checkout">
+									步骤1：Checkout
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%a5%e9%aa%a42setup-hugo" class="nav-步骤2setup-hugo">
+									步骤2：Setup Hugo
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%a5%e9%aa%a43build-web" class="nav-步骤3build-web">
+									步骤3：Build Web
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%a5%e9%aa%a44deploy-web" class="nav-步骤4deploy-web">
+									步骤4：Deploy Web
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%a7%a6%e5%8f%91-github-actions" class="nav-触发-github-actions">
+									触发 Github Actions
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%bf%e9%97%ae-github-pages" class="nav-访问-github-pages">
+									访问 Github Pages
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
