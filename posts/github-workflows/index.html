@@ -504,7 +504,7 @@
 官方介绍:<code>GitHub Actions</code> 是一种持续集成和持续交付 (CI/CD) 平台，可用于自动执行生成、测试和部署管道。 您可以创建工作流程来构建和测试存储库的每个拉取请求，或将合并的拉取请求部署到生产环境</p>
 <h3 id="流程及原理介绍">流程及原理介绍</h3>
 <p>本文主要介绍使用GitHub Actions 来实现自动化部署博客网站 ,静态网站生成使用的是Hugo,部署使用的是Github pages,并且使用自定义域名。
-<img src="https://img-blog.csdnimg.cn/524cb3bdda054f95b09933c8a1016f28.jpeg#pic_center" alt="在这里插入图片描述"></p>
+<img src="https://qiniu.taoluyuan.com/2023/github-workflows.jpg?imageMogr2/auto-orient/thumbnail/!70p/blur/9x0/quality/75" alt=""></p>
 <ol>
 <li>本地写hugo-blog 博客,hugo-blog 是一个hugo的博客模板,使用<code>hugo new site hugo-blog</code>命令创建,可以在里面写markdown文件</li>
 <li>写好后推送到github hugo-blog 仓库,触发github actions ci/cd,执行hugo命令生成静态网站,并且推送到github-pages 仓库</li>
