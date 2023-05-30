@@ -500,24 +500,33 @@
 <p>文章博客地址：<a href="https://blog.taoluyuan.com/posts/github-workflows/">https://blog.taoluyuan.com/posts/github-workflows/</a></p>
 <h2 id="github-workflows-介绍">Github Workflows 介绍</h2>
 <h3 id="github-actions-介绍">GitHub Actions 介绍</h3>
-<p>GitHub 文档：https://docs.github.com/zh/actions/learn-github-actions/understanding-github-actions
-官方介绍:<code>GitHub Actions</code> 是一种持续集成和持续交付 (CI/CD) 平台，可用于自动执行生成、测试和部署管道。 您可以创建工作流程来构建和测试存储库的每个拉取请求，或将合并的拉取请求部署到生产环境</p>
+<ul>
+<li>GitHub 文档：https://docs.github.com/zh/actions/learn-github-actions/understanding-github-actions</li>
+<li>官方介绍:<code>GitHub Actions</code> 是一种持续集成和持续交付 (CI/CD) 平台，可用于自动执行生成、测试和部署管道。 您可以创建工作流程来构建和测试存储库的每个拉取请求，或将合并的拉取请求部署到生产环境</li>
+</ul>
 <h3 id="流程及原理介绍">流程及原理介绍</h3>
-<p>本文主要介绍使用GitHub Actions 来实现自动化部署博客网站 ,静态网站生成使用的是Hugo,部署使用的是Github pages,并且使用自定义域名。
-<img src="https://qiniu.taoluyuan.com/2023/github-workflows.jpg?imageMogr2/auto-orient/thumbnail/!70p/blur/9x0/quality/75" alt=""></p>
+<ul>
+<li>本文主要介绍使用GitHub Actions 来实现自动化部署博客网站 ,静态网站生成使用的是Hugo,部署使用的是Github pages,并且使用自定义域名。
+<img src="https://qiniu.taoluyuan.com/2023/github-workflows.jpg?imageMogr2/auto-orient/thumbnail/!70p/blur/9x0/quality/75" alt=""></li>
+</ul>
 <ol>
 <li>本地写hugo-blog 博客,hugo-blog 是一个hugo的博客模板,使用<code>hugo new site hugo-blog</code>命令创建,可以在里面写markdown文件</li>
 <li>写好后推送到github hugo-blog 仓库,触发github actions ci/cd,执行hugo命令生成静态网站,并且推送到github-pages 仓库</li>
 <li>github-pages 仓库接收到推送后,会自动部署到github pages,公网可以通过 github pages 域名 访问,也可以通过CNAME配置自定义域名访问</li>
 </ol>
 <h2 id="github-pages-介绍">Github Pages 介绍</h2>
-<p>Github Pages 是一个静态网站托管服务,可以通过github pages 托管静态网站,并且可以通过自定义域名访问<br>
-创建github pages 仓库,仓库名必须是<code>username.github.io</code>格式,username是你的github用户名,仓库名必须是这个,否则无法部署到github pages   访问地址就是 是https://username.github.io,username
-自定义域名访问,例如<code>www.abc.com</code>,在域名服务商添加CNAME记录,指向<code>username.github.io</code>, 在github pages 仓库设置中添加自定义域名, 这样就可以通过www.abc.com访问你的github pages了,下面的 Actions 部分会介绍如何自动化部署到github pages,并且配置自定义域名</p>
+<ul>
+<li>Github Pages 是一个静态网站托管服务,可以通过github pages 托管静态网站,并且可以通过自定义域名访问</li>
+<li>创建github pages 仓库,仓库名必须是<code>username.github.io</code>格式,username是你的github用户名,仓库名必须是这个,否则无法部署成功   访问地址就是 <a href="https://username.github.io">https://username.github.io</a></li>
+<li>自定义域名访问,例如<code>www.abc.com</code>,在域名服务商添加CNAME记录,指向<code>username.github.io</code>, 然后在github pages 仓库设置中添加自定义域名, 这样通过www.abc.com 就能访问github pages</li>
+<li>下面的 Actions 部分会介绍如何自动化部署到github pages,并且配置自定义域名</li>
+</ul>
 <h2 id="hugo-介绍">Hugo 介绍</h2>
-<p>Hugo 是一个静态网站生成器,可以通过markdown文件生成静态网站,官网:https://gohugo.io/<br>
-写好markdown文件后,执行hugo命令,在public目录生成静态网站,然后 将public目录推送到github pages 仓库,就可以通过github pages 访问了
-接下来 介绍的 github actions工作流 就是通过hugo命令生成静态网站,并且推送到github pages 仓库</p>
+<ul>
+<li>Hugo 是一个静态网站生成器,可以通过markdown文件生成静态网站,官网:https://gohugo.io/</li>
+<li>写好markdown文件后,执行hugo命令,在public目录生成静态网站,然后 将public目录推送到github pages 仓库</li>
+<li>github actions工作流 就是通过hugo命令生成静态网站,并且推送到github pages 仓库</li>
+</ul>
 <h2 id="使用-github-actions-自动化部署">使用 Github Actions 自动化部署</h2>
 <h3 id="创建-github-actions">创建 Github Actions</h3>
 <p>在github 仓库中(hugo-blog)创建.github/workflows目录,并且在目录中创建deploy.yml文件,文件名可以自定义,但是后缀必须是yml,例如deploy.yml,这样就创建了一个github actions,并且会自动执行,下面介绍我的deploy.yml文件</p>
@@ -593,8 +602,10 @@
 <li><code>DOMAIN</code>: 你的自定义域名。</li>
 </ul>
 <h3 id="触发-github-actions">触发 Github Actions</h3>
-<p>在github 仓库中(hugo-blog)创建.md文件,并且提交到github,这样就会触发github actions,自动部署到github pages 仓库,并且可以通过自定义域名访问了
-可以通过  仓库中 Actions 标签查看部署状态</p>
+<ul>
+<li>在github 仓库中(hugo-blog)创建.md文件,并且提交到github,这样就会触发github actions,自动部署到github pages 仓库,并且可以通过自定义域名访问了</li>
+<li>可以通过  仓库中 Actions 标签查看部署状态</li>
+</ul>
 <h3 id="访问-github-pages">访问 Github Pages</h3>
 <ol>
 <li>通过github pages域名访问, <a href="https://webws.github.io">https://webws.github.io</a>，因为我设置了自定义域名,所以这个域名会自动跳转到 <a href="https://blog.taoluyuan.com">https://blog.taoluyuan.com</a></li>
