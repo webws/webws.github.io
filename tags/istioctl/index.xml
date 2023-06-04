@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>istioctl on 套路猿</title>
+    <link>/tags/istioctl/</link>
+    <description>Recent content in istioctl on 套路猿</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sun, 04 Jun 2023 15:37:03 +0800</lastBuildDate><atom:link href="/tags/istioctl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>k8s istio 集成 多版本应用服务 和 网格监测</title>
+      <link>/posts/istio-getting-started/</link>
+      <pubDate>Sun, 04 Jun 2023 15:37:03 +0800</pubDate>
+      
+      <guid>/posts/istio-getting-started/</guid>
+      <description>说明 博客文章地址:https://blog.taoluyuan.com/posts/istio-getting-started/ 本主要是内容:
+使用 istioctl 安装 istio 采用 istio 官方提供 的 应用bookinfo,实现多版本的服务应用部署 istio 网关 gateway,vs,dr 的基本使用 利用监测工具 prometheus,grafana,jaeger 查看 istio 的监控数据 文章提到的yaml,也是istio官方提供的,整理后单独放到github github k8s-istio-practice 根目录 makefile 集成了相关命令,你们可以直接通过 makefile 安装 service,gateway,vs,dr,监控,以实现跟文章一样的效果
+istio 官方文档:https://istio.io/latest/zh/docs/
+安装 参考官方安装文档:官方demo配置组合安装文档
+采用 demo 配置组合,它包含了一组专为测试准备的功能集合 curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.17.2 sh - &amp;amp;&amp;amp; \ cd istio-1.17.2 &amp;amp;&amp;amp; \ export PATH=$PWD/bin:$PATH &amp;amp;&amp;amp; \ istioctl install --set profile=demo 给命名空间添加标签，指示 在 default命名空间 部署应用的时候，自动注入 Envoy kubectl label namespace default istio-injection=enabled 安装的istio相关资源在 istio-system 命名空间下,可以通过以下查看安装的资源 k get all -n istio-system bookinfo 应用程序 bookinfo 架构及介绍 bookinfo 由四个单独的微服务构成 ,以下是官方对bookinfo的介绍,也可以直接看官方文档 istio-bookinfo</description>
+    </item>
+    
+  </channel>
+</rss>

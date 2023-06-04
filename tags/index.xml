@@ -6,7 +6,52 @@
     <description>Recent content in Tags on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Tue, 30 May 2023 10:29:04 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Jun 2023 15:37:03 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>istio</title>
+      <link>/tags/istio/</link>
+      <pubDate>Sun, 04 Jun 2023 15:37:03 +0800</pubDate>
+      
+      <guid>/tags/istio/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>istio gateway</title>
+      <link>/tags/istio-gateway/</link>
+      <pubDate>Sun, 04 Jun 2023 15:37:03 +0800</pubDate>
+      
+      <guid>/tags/istio-gateway/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>istioctl</title>
+      <link>/tags/istioctl/</link>
+      <pubDate>Sun, 04 Jun 2023 15:37:03 +0800</pubDate>
+      
+      <guid>/tags/istioctl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>k8s</title>
+      <link>/tags/k8s/</link>
+      <pubDate>Sun, 04 Jun 2023 15:37:03 +0800</pubDate>
+      
+      <guid>/tags/k8s/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubernetes</title>
+      <link>/tags/kubernetes/</link>
+      <pubDate>Sun, 04 Jun 2023 15:37:03 +0800</pubDate>
+      
+      <guid>/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>blog</title>
       <link>/tags/blog/</link>
