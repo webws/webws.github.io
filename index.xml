@@ -27,7 +27,7 @@
 &lt;li&gt;istio 网关 gateway,vs,dr 的基本使用&lt;/li&gt;
 &lt;li&gt;利用监测工具 prometheus,grafana,jaeger 查看 istio 的监控数据&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;文章提到的yaml,也是istio官方提供的,整理后单独放到github &lt;a href=&#34;%22https://github.com/webws/k8s-istio-practice%22&#34;&gt;github k8s-istio-practice&lt;/a&gt;
+&lt;p&gt;文章提到的yaml,也是istio官方提供的,整理后单独放到github &lt;a href=&#34;https://github.com/webws/k8s-istio-practice&#34;&gt;github k8s-istio-practice&lt;/a&gt;
 根目录 makefile 集成了相关命令,你们可以直接通过 makefile 安装 service,gateway,vs,dr,监控,以实现跟文章一样的效果&lt;/p&gt;
 &lt;h1 id=&#34;istio&#34;&gt;istio&lt;/h1&gt;
 &lt;p&gt;官方文档:https://istio.io/latest/zh/docs/&lt;/p&gt;
@@ -204,7 +204,7 @@ istio-ingressgateway   NodePort   10.43.249.207   &amp;lt;none&amp;gt;        15
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230604135016.png?imageMogr2/auto-orient/thumbnail/!70p/blur/9x0/quality/75&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
 &lt;p&gt;istio 部署多版本应用 和 可视化网格监控 已完成
-文字有点多,但是操作起来很简单,我将所有的 yaml 文件都放在了仓库中&lt;a href=&#34;%22https://github.com/webws/k8s-istio-practice%22&#34;&gt;github k8s-istio-practice&lt;/a&gt;,将所有的命令都写在了 makefile 中,只需要执行以下:&lt;/p&gt;
+文字有点多,但是操作起来很简单,我将所有的 yaml 文件都放在了仓库中&lt;a href=&#34;https://github.com/webws/k8s-istio-practice&#34;&gt;github k8s-istio-practice&lt;/a&gt;,将所有的命令都写在了 makefile 中,只需要执行以下:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;安装 istio&lt;/li&gt;
 &lt;/ol&gt;
