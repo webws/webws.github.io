@@ -25,7 +25,6 @@
 &lt;ol&gt;
 &lt;li&gt;一台master,一台node&lt;/li&gt;
 &lt;li&gt;主机1(master) ip:192.168.31.122,主机2 192.168.31.166&lt;/li&gt;
-&lt;li&gt;已转好docker环境&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;1-docker-安装&#34;&gt;1. docker 安装&lt;/h3&gt;
 &lt;p&gt;如已经安装好docker 可跳过
