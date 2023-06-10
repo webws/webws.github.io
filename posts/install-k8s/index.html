@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html><head>
+<title>k8s &#43; docker 基于 kubeadmin 多节点集群部署</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="k8s &#43; docker &#43; flannel &#43; kubeadmin 在 ubuntu-server 22.10 进行 多节点集群部署">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="/posts/images/favicon.jpg">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.101ef407a1e27ccf92936b24b892c7ca0a5f57d754d0689042310afca8e795d9.css" integrity="sha256-EB70B6HifM&#43;Sk2skuJLHygpfV9dU0GiQQjEK/Kjnldk=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#k8s--docker-%e5%9f%ba%e4%ba%8e-kubeadmin-%e5%a4%9a%e8%8a%82%e7%82%b9%e9%9b%86%e7%be%a4%e9%83%a8%e7%bd%b2" class="nav-k8s--docker-基于-kubeadmin-多节点集群部署">
+									k8s &#43; docker 基于 kubeadmin 多节点集群部署
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%90%84%e4%b8%aa%e8%8a%82%e7%82%b9%e7%8e%af%e5%a2%83%e5%87%86%e5%a4%87" class="nav-各个节点环境准备">
+									各个节点环境准备
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#1-docker-%e5%ae%89%e8%a3%85" class="nav-1-docker-安装">
+									1. docker 安装
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-%e5%ae%89%e8%a3%85-kubeadm-kubelet-%e5%92%8c-kubectl" class="nav-2-安装-kubeadm-kubelet-和-kubectl">
+									2. 安装 kubeadm, kubelet 和 kubectl
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8-systemd-%e4%bd%9c%e4%b8%ba-docker-cgroup-%e9%a9%b1%e5%8a%a8%e7%a8%8b%e5%ba%8f" class="nav-使用-systemd-作为-docker-cgroup-驱动程序">
+									使用 systemd 作为 docker cgroup 驱动程序
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#4-swapoff-%e8%ae%be%e7%bd%ae" class="nav-4-swapoff-设置">
+									4. swapoff 设置
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#kubeadm-%e4%b8%bb%e8%8a%82%e7%82%b9-%e5%ae%89%e8%a3%85-k8s" class="nav-kubeadm-主节点-安装-k8s">
+									kubeadm 主节点 安装 k8s
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#kubeadm-init-%e5%ae%89%e8%a3%85-k8s" class="nav-kubeadm-init-安装-k8s">
+									kubeadm init 安装 k8s
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85%e7%bd%91%e7%bb%9c%e6%8f%92%e4%bb%b6" class="nav-安装网络插件">
+									安装网络插件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%90%e8%8a%82%e7%82%b9%e5%8a%a0%e5%85%a5%e9%9b%86%e7%be%a4" class="nav-子节点加入集群">
+									子节点加入集群
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85%e7%9b%b8%e5%85%b3%e9%97%ae%e9%a2%98%e6%8e%92%e6%9f%a5" class="nav-安装相关问题排查">
+									安装相关问题排查
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="">
+            套路猿
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">套路猿</div>
+        
+        <div class="single-column-header-subtitle">自古深情留不住，唯有套路得人心</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    k8s &#43; docker 基于 kubeadmin 多节点集群部署
+                    
+                    <div class="post-subtitle">
+                        k8s &#43; docker &#43; flannel &#43; kubeadmin 在 ubuntu-server 22.10 进行 多节点集群部署
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-06-08 21:36
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/devops">devops</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/k8s">k8s</a>
+                                &nbsp;
+                            
+                                <a href="/tags/docker">docker</a>
+                                &nbsp;
+                            
+                                <a href="/tags/flannel">flannel</a>
+                                &nbsp;
+                            
+                                <a href="/tags/kubeadmin">kubeadmin</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="k8s--docker-基于-kubeadmin-多节点集群部署">k8s + docker 基于 kubeadmin 多节点集群部署</h1>
+<p>博客文章地址:<a href="https://blog.taoluyuan.com/posts/install-k8s/">https://blog.taoluyuan.com/posts/install-k8s/</a></p>
+<h2 id="各个节点环境准备">各个节点环境准备</h2>
+<p>[环境准备] 这章的操作都要在两台机器上分别执行,我准备了两台机器,如下:</p>
+<ol>
+<li>一台master,一台node</li>
+<li>主机1(master) ip:192.168.31.122,主机2 192.168.31.166</li>
+<li>已转好docker环境</li>
+</ol>
+<h3 id="1-docker-安装">1. docker 安装</h3>
+<p>如已经安装好docker 可跳过
+docker 官方安装 <a href="https://docs.docker.com/engine/install/ubuntu/">https://docs.docker.com/engine/install/ubuntu/</a> 有点慢
+清华大学 镜像安装方法 <a href="https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/">https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/</a></p>
+<p>安装依赖</p>
+<pre tabindex="0"><code>sudo apt-get install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  &#34;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu \
+  &#34;$(. /etc/os-release &amp;&amp; echo &#34;$VERSION_CODENAME&#34;)&#34; stable&#34; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+</code></pre><p>安装 docker-ce</p>
+<pre tabindex="0"><code>sudo apt-get update
+sudo apt-get install docker-ce
+</code></pre><p>docker组授予用户根级权限,让当前登陆也可以使用docker</p>
+<pre tabindex="0"><code>sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+</code></pre><p>镜像加速器</p>
+<p>通过修改daemon配置文件/etc/docker/daemon.json修改 registry,我使用的是上海交大</p>
+<pre tabindex="0"><code>sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json &lt;&lt;-&#39;EOF&#39;
+{
+  &#34;registry-mirrors&#34;: [&#34;https://docker.mirrors.sjtug.sjtu.edu.cn/&#34;]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+</code></pre><h3 id="2-安装-kubeadm-kubelet-和-kubectl">2. 安装 kubeadm, kubelet 和 kubectl</h3>
+<p><a href="https://developer.aliyun.com/mirror/kubernetes?spm=a2c6h.13651102.0.0.560a1b11o3aTbI">阿里云官方推荐源</a></p>
+<pre tabindex="0"><code>apt-get update &amp;&amp; apt-get install -y apt-transport-https
+curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - 
+cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list
+deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+EOF
+sudo apt-get update
+</code></pre><p>安装1.22.0版本</p>
+<pre tabindex="0"><code>apt-get install -y kubelet=1.22.0-00 kubeadm=1.22.0-00 kubectl=1.22.0-00
+</code></pre><p>查看版本</p>
+<pre tabindex="0"><code>kubelet --version
+kubeadm version
+kubectl version
+</code></pre><p>kubelet 开机自启</p>
+<pre tabindex="0"><code>systemctl enable kubelet
+</code></pre><h3 id="使用-systemd-作为-docker-cgroup-驱动程序">使用 systemd 作为 docker cgroup 驱动程序</h3>
+<p>从 v1.22 开始，在使用 kubeadm 创建集群时,kubeadm 默认使用 systemd,而 docker 默认使用 cgroupfs,所以需要修改 docker 的 cgroup 驱动程序为 systemd,<a href="https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/#cgroup-drivers">k8s cgroup-drivers说明</a>
+打开 /etc/docker/daemon.json 文件,追加以下配置</p>
+<pre tabindex="0"><code>{
+  &#34;exec-opts&#34;: [&#34;native.cgroupdriver=systemd&#34;]
+}
+</code></pre><p>重启docker</p>
+<pre tabindex="0"><code>systemctl daemon-reload
+systemctl restart docker
+systemctl enable docker
+</code></pre><p>查看cgroup驱动,必须是systemd,才行</p>
+<pre tabindex="0"><code>docker info|grep Cgroup
+</code></pre><h3 id="4-swapoff-设置">4. swapoff 设置</h3>
+<p>设置 swapoff</p>
+<pre tabindex="0"><code>sudo swapoff -a
+</code></pre><p>永久设置 swapoff,注释掉swap那一行</p>
+<pre tabindex="0"><code>vim /etc/fstab
+</code></pre><p>查看swapon,必须是空的,不然接下来的kubeadm init会报错</p>
+<pre tabindex="0"><code>swapon -s
+</code></pre><h3 id="kubeadm-主节点-安装-k8s">kubeadm 主节点 安装 k8s</h3>
+<h4 id="kubeadm-init-安装-k8s">kubeadm init 安装 k8s</h4>
+<ol>
+<li>可以先拉取镜像,这样kubeadm init的时候就不会拉取镜</li>
+</ol>
+<pre tabindex="0"><code>sudo kubeadm config images pull --kubernetes-version=v1.22.0 --image-repository registry.aliyuncs.com/google_containers
+</code></pre><ol start="2">
+<li>执行init</li>
+</ol>
+<ul>
+<li>&ndash;kubernetes-version 指定k8s 版本为1.22.0,</li>
+<li>&ndash;image-repository 指定镜像仓库为阿里云:registry.aliyuncs.com/google_containers,因为 k8s 默认的镜像仓库是 gcr.io,国内访问不了</li>
+<li>&ndash;pod-network-cidr 指定pod的网段,需要与cni插件的网段一致,否则会出现pod无法通信的问题 ,flannel的网段是 10.244.0.0/16</li>
+</ul>
+<pre tabindex="0"><code>sudo kubeadm init --kubernetes-version=v1.22.0 --image-repository registry.aliyuncs.com/google_containers --pod-network-cidr=10.244.0.0/16
+</code></pre><ol start="3">
+<li>kubectl get nodes 查看节点状态</li>
+</ol>
+<pre tabindex="0"><code>kubectl get nodes
+</code></pre><p>应该会 出现 localhost:8080 was refused - did you specify the right host or port? 错误
+将 /etc/kubernetes/admin.conf 拷贝到 $HOME/.kube/config</p>
+<pre tabindex="0"><code>mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown -R $USER:$USER $HOME/.kube
+</code></pre><p>再查看nodes状态</p>
+<h4 id="安装网络插件">安装网络插件</h4>
+<p>此时获取节点状态会发现有一个节点是 NotReady 状态，
+而且,查看pod状态会发现,coredns 也是 Pending 状态</p>
+<pre tabindex="0"><code>kubectl get pods --all-namespaces
+</code></pre><p>这是因为还没有安装网络插件,这里我选择安装 flannel</p>
+<pre tabindex="0"><code>kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+</code></pre><p>网络不好可以使用ghproxy</p>
+<pre tabindex="0"><code>kubectl apply -f https://ghproxy.com/https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+</code></pre><p>等待会再次查看pod状态,coredns状态是 Running,节点状态是 Ready</p>
+<h2 id="子节点加入集群">子节点加入集群</h2>
+<ol>
+<li>master节点生成token,并且指定master节点的ip,生成join命令</li>
+</ol>
+<pre tabindex="0"><code>kubeadm token create --print-join-command --ttl 0 --kubeconfig /etc/kubernetes/admin.conf
+</code></pre><p>会出现 类似以下 join 命令</p>
+<pre tabindex="0"><code>kubeadm join 192.168.31.122:6443 --token kzmdey.dk0tcgyg4ivr8y87 --discovery-token-ca-cert-hash sha256:bc2e3252080ba81e342933955682ae119decc948fef2180e5135b0dd891e5891
+</code></pre><ol start="2">
+<li>在子节点执行上面的join命令,加入集群</li>
+<li>在master节点查看节点状态</li>
+</ol>
+<pre tabindex="0"><code> k get nodes -o wide
+</code></pre><p>可以看到两个节点都是 Ready 状态</p>
+<pre tabindex="0"><code>NAME    STATUS   ROLES                  AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION      CONTAINER-RUNTIME
+song    Ready    control-plane,master   45h   v1.22.0   192.168.31.122   &lt;none&gt;        Ubuntu 22.10   5.19.0-21-generic   docker://24.0.2
+song2   Ready    &lt;none&gt;                 77m   v1.22.0   192.168.31.166   &lt;none&gt;        Ubuntu 22.10   5.19.0-21-generic   docker://24.0.2
+</code></pre><h2 id="安装相关问题排查">安装相关问题排查</h2>
+<ol>
+<li>container runtime is not running: output: time=&ldquo;2023-06-08T14:09:02Z&rdquo; level=fatal msg=&ldquo;validate service connection: CRI v1 runtime API is not implemented for endpoint &quot;unix:///var/run/containerd/containerd.sock&quot;: rpc error: code = Unimplemented desc = unknown service runtime.v1.RuntimeService&rdquo;
+解决方法</li>
+</ol>
+<pre tabindex="0"><code>sudo rm /etc/containerd/config.toml
+sudo systemctl restart containerd
+</code></pre><ol start="2">
+<li>[WARNING Swap]: swap is enabled; production deployments should disable swap unless testing the NodeSwap feature gate of the kubelet
+ubuntu系统</li>
+</ol>
+<pre tabindex="0"><code>swapoff -a
+</code></pre><ol start="3">
+<li>查看pod出现错误,要是出现类似 pod cidr not assigned,如果是flannel网络插件,那么就是没有设置pod-network-cidr</li>
+<li>排查kubelet 日志</li>
+</ol>
+<pre tabindex="0"><code>sudo systemctl status kubelet.service
+sudo journalctl -xu kubelet.service
+</code></pre>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-06-08</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/istio-getting-started/">
+			上回<br>k8s istio 集成 多版本应用服务 和 网格监测
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="webws/webws.github.io"
+        data-repo-id="R_kgDOJjhGQQ"
+        data-category="Announcements"
+        data-category-id=""
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled=""
+        data-emit-metadata=""
+        data-input-position=""
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="/">
+    
+        <div class="nav-title">
+            套路猿
+        </div>
+        
+        <div class="nav-subtitle">
+            自古深情留不住，唯有套路得人心
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#k8s--docker-%e5%9f%ba%e4%ba%8e-kubeadmin-%e5%a4%9a%e8%8a%82%e7%82%b9%e9%9b%86%e7%be%a4%e9%83%a8%e7%bd%b2" class="nav-k8s--docker-基于-kubeadmin-多节点集群部署">
+									k8s &#43; docker 基于 kubeadmin 多节点集群部署
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%90%84%e4%b8%aa%e8%8a%82%e7%82%b9%e7%8e%af%e5%a2%83%e5%87%86%e5%a4%87" class="nav-各个节点环境准备">
+									各个节点环境准备
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#1-docker-%e5%ae%89%e8%a3%85" class="nav-1-docker-安装">
+									1. docker 安装
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-%e5%ae%89%e8%a3%85-kubeadm-kubelet-%e5%92%8c-kubectl" class="nav-2-安装-kubeadm-kubelet-和-kubectl">
+									2. 安装 kubeadm, kubelet 和 kubectl
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8-systemd-%e4%bd%9c%e4%b8%ba-docker-cgroup-%e9%a9%b1%e5%8a%a8%e7%a8%8b%e5%ba%8f" class="nav-使用-systemd-作为-docker-cgroup-驱动程序">
+									使用 systemd 作为 docker cgroup 驱动程序
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#4-swapoff-%e8%ae%be%e7%bd%ae" class="nav-4-swapoff-设置">
+									4. swapoff 设置
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#kubeadm-%e4%b8%bb%e8%8a%82%e7%82%b9-%e5%ae%89%e8%a3%85-k8s" class="nav-kubeadm-主节点-安装-k8s">
+									kubeadm 主节点 安装 k8s
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#kubeadm-init-%e5%ae%89%e8%a3%85-k8s" class="nav-kubeadm-init-安装-k8s">
+									kubeadm init 安装 k8s
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85%e7%bd%91%e7%bb%9c%e6%8f%92%e4%bb%b6" class="nav-安装网络插件">
+									安装网络插件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%90%e8%8a%82%e7%82%b9%e5%8a%a0%e5%85%a5%e9%9b%86%e7%be%a4" class="nav-子节点加入集群">
+									子节点加入集群
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85%e7%9b%b8%e5%85%b3%e9%97%ae%e9%a2%98%e6%8e%92%e6%9f%a5" class="nav-安装相关问题排查">
+									安装相关问题排查
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

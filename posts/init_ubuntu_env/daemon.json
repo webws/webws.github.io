@@ -1,0 +1,4 @@
+{
+  "registry-mirrors": ["https://docker.mirrors.sjtug.sjtu.edu.cn"],
+  "exec-opts": ["native.cgroupdriver=systemd"]
+}

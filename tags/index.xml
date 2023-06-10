@@ -6,7 +6,43 @@
     <description>Recent content in Tags on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sun, 04 Jun 2023 15:37:03 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 08 Jun 2023 21:36:22 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>docker</title>
+      <link>/tags/docker/</link>
+      <pubDate>Thu, 08 Jun 2023 21:36:22 +0800</pubDate>
+      
+      <guid>/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>flannel</title>
+      <link>/tags/flannel/</link>
+      <pubDate>Thu, 08 Jun 2023 21:36:22 +0800</pubDate>
+      
+      <guid>/tags/flannel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>k8s</title>
+      <link>/tags/k8s/</link>
+      <pubDate>Thu, 08 Jun 2023 21:36:22 +0800</pubDate>
+      
+      <guid>/tags/k8s/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubeadmin</title>
+      <link>/tags/kubeadmin/</link>
+      <pubDate>Thu, 08 Jun 2023 21:36:22 +0800</pubDate>
+      
+      <guid>/tags/kubeadmin/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>istio</title>
       <link>/tags/istio/</link>
@@ -31,15 +67,6 @@
       <pubDate>Sun, 04 Jun 2023 15:37:03 +0800</pubDate>
       
       <guid>/tags/istioctl/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>k8s</title>
-      <link>/tags/k8s/</link>
-      <pubDate>Sun, 04 Jun 2023 15:37:03 +0800</pubDate>
-      
-      <guid>/tags/k8s/</guid>
       <description></description>
     </item>
     
@@ -121,15 +148,6 @@
       <pubDate>Wed, 17 May 2023 22:15:05 +0800</pubDate>
       
       <guid>/tags/frp/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>docker</title>
-      <link>/tags/docker/</link>
-      <pubDate>Tue, 16 May 2023 22:49:57 +0800</pubDate>
-      
-      <guid>/tags/docker/</guid>
       <description></description>
     </item>
     
