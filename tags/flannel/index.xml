@@ -15,7 +15,7 @@
       <guid>/posts/install-k8s/</guid>
       <description>k8s + docker 基于 kubeadm 多节点集群部署 博客文章地址:https://blog.taoluyuan.com/posts/install-k8s/
 各个节点环境准备 [环境准备] 这章的操作都要在两台机器上分别执行,我准备了两台机器,如下:
-一台master,一台node 主机1(master) ip:192.168.31.122,主机2 192.168.31.166 1. docker 安装 如已经安装好docker 可跳过 docker 官方安装 https://docs.docker.com/engine/install/ubuntu/ 有点慢 清华大学 镜像安装方法 https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/
+一台master,一台node 主机1(master) ip:192.168.31.122,主机2 192.168.31.166 1. 安装 docker 如已经安装好docker 可跳过 docker 官方安装 https://docs.docker.com/engine/install/ubuntu/ 有点慢 清华大学 镜像安装方法 https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/
 安装依赖
 sudo apt-get install ca-certificates curl gnupg sudo install -m 0755 -d /etc/apt/keyrings sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg echo \ &amp;#34;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu \ &amp;#34;$(. /etc/os-release &amp;amp;&amp;amp; echo &amp;#34;$VERSION_CODENAME&amp;#34;)&amp;#34; stable&amp;#34; | sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null 安装 docker-ce</description>
     </item>

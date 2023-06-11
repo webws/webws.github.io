@@ -26,76 +26,76 @@
 &lt;li&gt;一台master,一台node&lt;/li&gt;
 &lt;li&gt;主机1(master) ip:192.168.31.122,主机2 192.168.31.166&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id=&#34;1-docker-安装&#34;&gt;1. docker 安装&lt;/h3&gt;
+&lt;h3 id=&#34;1-安装-docker&#34;&gt;1. 安装 docker&lt;/h3&gt;
 &lt;p&gt;如已经安装好docker 可跳过
 docker 官方安装 &lt;a href=&#34;https://docs.docker.com/engine/install/ubuntu/&#34;&gt;https://docs.docker.com/engine/install/ubuntu/&lt;/a&gt; 有点慢
 清华大学 镜像安装方法 &lt;a href=&#34;https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/&#34;&gt;https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;安装依赖&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt-get install ca-certificates curl gnupg
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-echo \
-  &amp;#34;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu \
-  &amp;#34;$(. /etc/os-release &amp;amp;&amp;amp; echo &amp;#34;$VERSION_CODENAME&amp;#34;)&amp;#34; stable&amp;#34; | sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;安装 docker-ce&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt-get update
-sudo apt-get install docker-ce
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;docker组授予用户根级权限,让当前登陆也可以使用docker&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;镜像加速器&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get install ca-certificates curl gnupg
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo install -m &lt;span style=&#34;color:#ae81ff&#34;&gt;0755&lt;/span&gt; -d /etc/apt/keyrings
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;deb [arch=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;dpkg --print-architecture&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu \
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;  &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;. /etc/os-release &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$VERSION_CODENAME&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; stable&amp;#34;&lt;/span&gt; | sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;安装 docker-ce&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get update
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get install docker-ce
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;docker组授予用户根级权限,让当前登陆也可以使用docker&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo groupadd docker
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo usermod -aG docker $USER
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;newgrp docker
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;镜像加速器&lt;/p&gt;
 &lt;p&gt;通过修改daemon配置文件/etc/docker/daemon.json修改 registry,我使用的是上海交大&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo mkdir -p /etc/docker
-sudo tee /etc/docker/daemon.json &amp;lt;&amp;lt;-&amp;#39;EOF&amp;#39;
-{
-  &amp;#34;registry-mirrors&amp;#34;: [&amp;#34;https://docker.mirrors.sjtug.sjtu.edu.cn/&amp;#34;]
-}
-EOF
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;2-安装-kubeadm-kubelet-和-kubectl&#34;&gt;2. 安装 kubeadm, kubelet 和 kubectl&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mkdir -p /etc/docker
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo tee /etc/docker/daemon.json &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;lt;&amp;lt;-&amp;#39;EOF&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;  &amp;#34;registry-mirrors&amp;#34;: [&amp;#34;https://docker.mirrors.sjtug.sjtu.edu.cn/&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo systemctl daemon-reload
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo systemctl restart docker
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;2-安装-kubeadm-kubelet-和-kubectl&#34;&gt;2. 安装 kubeadm, kubelet 和 kubectl&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&#34;https://developer.aliyun.com/mirror/kubernetes?spm=a2c6h.13651102.0.0.560a1b11o3aTbI&#34;&gt;阿里云官方推荐源&lt;/a&gt;&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;apt-get update &amp;amp;&amp;amp; apt-get install -y apt-transport-https
-curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - 
-cat &amp;lt;&amp;lt;EOF &amp;gt;/etc/apt/sources.list.d/kubernetes.list
-deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
-EOF
-sudo apt-get update
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;安装1.22.0版本&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;apt-get install -y kubelet=1.22.0-00 kubeadm=1.22.0-00 kubectl=1.22.0-00
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;查看版本&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;apt-get update &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y apt-transport-https
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;lt;&amp;lt;EOF &amp;gt;/etc/apt/sources.list.d/kubernetes.list
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get update
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;安装1.22.0版本&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;apt-get install -y kubelet&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;1.22.0-00 kubeadm&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;1.22.0-00 kubectl&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;1.22.0-00
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看版本&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kubelet --version
 kubeadm version
 kubectl version
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;kubelet 开机自启&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;systemctl enable kubelet
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;使用-systemd-作为-docker-cgroup-驱动程序&#34;&gt;使用 systemd 作为 docker cgroup 驱动程序&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl enable kubelet
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;3-使用-systemd-作为-docker-cgroup-驱动程序&#34;&gt;3. 使用 systemd 作为 docker cgroup 驱动程序&lt;/h3&gt;
 &lt;p&gt;从 v1.22 开始，在使用 kubeadm 创建集群时,kubeadm 默认使用 systemd,而 docker 默认使用 cgroupfs,所以需要修改 docker 的 cgroup 驱动程序为 systemd,&lt;a href=&#34;https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/#cgroup-drivers&#34;&gt;k8s cgroup-drivers说明&lt;/a&gt;
 打开 /etc/docker/daemon.json 文件,追加以下配置&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;{
-  &amp;#34;exec-opts&amp;#34;: [&amp;#34;native.cgroupdriver=systemd&amp;#34;]
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;重启docker&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;systemctl daemon-reload
-systemctl restart docker
-systemctl enable docker
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;查看cgroup驱动,必须是systemd,才行&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;docker info|grep Cgroup
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;4-swapoff-设置&#34;&gt;4. swapoff 设置&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;exec-opts&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;native.cgroupdriver=systemd&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;重启docker&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl daemon-reload
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl restart docker
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl enable docker
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看cgroup驱动,必须是systemd,才行&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker info|grep Cgroup
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;4-swapoff-设置&#34;&gt;4. swapoff 设置&lt;/h3&gt;
 &lt;p&gt;设置 swapoff&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo swapoff -a
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;永久设置 swapoff,注释掉swap那一行&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo swapoff -a
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;永久设置 swapoff,注释掉swap那一行&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;vim /etc/fstab
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;查看swapon,必须是空的,不然接下来的kubeadm init会报错&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;swapon -s
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;kubeadm-主节点-安装-k8s&#34;&gt;kubeadm 主节点 安装 k8s&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;swapon -s
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;kubeadm-主节点-安装-k8s&#34;&gt;kubeadm 主节点 安装 k8s&lt;/h3&gt;
 &lt;h4 id=&#34;kubeadm-init-安装-k8s&#34;&gt;kubeadm init 安装 k8s&lt;/h4&gt;
 &lt;ol&gt;
 &lt;li&gt;可以先拉取镜像,这样kubeadm init的时候就不会拉取镜&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo kubeadm config images pull --kubernetes-version=v1.22.0 --image-repository registry.aliyuncs.com/google_containers
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo kubeadm config images pull --kubernetes-version&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;v1.22.0 --image-repository registry.aliyuncs.com/google_containers
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;执行init&lt;/li&gt;
 &lt;/ol&gt;
 &lt;ul&gt;
@@ -103,39 +103,39 @@ systemctl enable docker
 &lt;li&gt;&amp;ndash;image-repository 指定镜像仓库为阿里云:registry.aliyuncs.com/google_containers,因为 k8s 默认的镜像仓库是 gcr.io,国内访问不了&lt;/li&gt;
 &lt;li&gt;&amp;ndash;pod-network-cidr 指定pod的网段,需要与cni插件的网段一致,否则会出现pod无法通信的问题 ,flannel的网段是 10.244.0.0/16&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo kubeadm init --kubernetes-version=v1.22.0 --image-repository registry.aliyuncs.com/google_containers --pod-network-cidr=10.244.0.0/16
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo kubeadm init --kubernetes-version&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;v1.22.0 --image-repository registry.aliyuncs.com/google_containers --pod-network-cidr&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;10.244.0.0/16
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;kubectl get nodes 查看节点状态&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kubectl get nodes
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;应该会 出现 localhost:8080 was refused - did you specify the right host or port? 错误
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kubectl get nodes
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;应该会 出现 localhost:8080 was refused - did you specify the right host or port? 错误
 将 /etc/kubernetes/admin.conf 拷贝到 $HOME/.kube/config&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown -R $USER:$USER $HOME/.kube
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;再查看nodes状态&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir -p $HOME/.kube
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo chown -R $USER:$USER $HOME/.kube
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;再查看nodes状态&lt;/p&gt;
 &lt;h4 id=&#34;安装网络插件&#34;&gt;安装网络插件&lt;/h4&gt;
 &lt;p&gt;此时获取节点状态会发现有一个节点是 NotReady 状态，
 而且,查看pod状态会发现,coredns 也是 Pending 状态&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kubectl get pods --all-namespaces
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这是因为还没有安装网络插件,这里我选择安装 flannel&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;网络不好可以使用ghproxy&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kubectl apply -f https://ghproxy.com/https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;等待会再次查看pod状态,coredns状态是 Running,节点状态是 Ready&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kubectl get pods --all-namespaces
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这是因为还没有安装网络插件,这里我选择安装 flannel&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;网络不好可以使用ghproxy&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kubectl apply -f https://ghproxy.com/https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;等待会再次查看pod状态,coredns状态是 Running,节点状态是 Ready&lt;/p&gt;
 &lt;h2 id=&#34;子节点加入集群&#34;&gt;子节点加入集群&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;master节点生成token,并且指定master节点的ip,生成join命令&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kubeadm token create --print-join-command --ttl 0 --kubeconfig /etc/kubernetes/admin.conf
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;会出现 类似以下 join 命令&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kubeadm join 192.168.31.122:6443 --token kzmdey.dk0tcgyg4ivr8y87 --discovery-token-ca-cert-hash sha256:bc2e3252080ba81e342933955682ae119decc948fef2180e5135b0dd891e5891
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kubeadm token create --print-join-command --ttl &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; --kubeconfig /etc/kubernetes/admin.conf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;会出现 类似以下 join 命令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kubeadm join 192.168.31.122:6443 --token kzmdey.dk0tcgyg4ivr8y87 --discovery-token-ca-cert-hash sha256:bc2e3252080ba81e342933955682ae119decc948fef2180e5135b0dd891e5891
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;在子节点执行上面的join命令,加入集群&lt;/li&gt;
 &lt;li&gt;在master节点查看节点状态&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; k get nodes -o wide
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;可以看到两个节点都是 Ready 状态&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; k get nodes -o wide
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到两个节点都是 Ready 状态&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;NAME    STATUS   ROLES                  AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION      CONTAINER-RUNTIME
 song    Ready    control-plane,master   45h   v1.22.0   192.168.31.122   &amp;lt;none&amp;gt;        Ubuntu 22.10   5.19.0-21-generic   docker://24.0.2
 song2   Ready    &amp;lt;none&amp;gt;                 77m   v1.22.0   192.168.31.166   &amp;lt;none&amp;gt;        Ubuntu 22.10   5.19.0-21-generic   docker://24.0.2
@@ -886,10 +886,10 @@ custom_domains =b.abc.baidu.com
         <description>套路猿 /posts/docker-makefile/ -&lt;p&gt;文章博客地址:&lt;a href=&#34;https://blog.taoluyuan.com/posts/docker-makefile/&#34;&gt;https://blog.taoluyuan.com/posts/docker-makefile/&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&#34;本机多服务一次性构建背景&#34;&gt;本机多服务一次性构建背景&lt;/h3&gt;
 &lt;ol&gt;
-&lt;li&gt;本机开发多个服务,每个服务还会互相调用&lt;/li&gt;
-&lt;li&gt;正常情况,开发者需要在本地启动多个服务,并且手动调用&lt;/li&gt;
-&lt;li&gt;想着不使用gitlab ci/cd, 在本机快速通过 makefile+docker-compose 编排多个服务&lt;/li&gt;
-&lt;li&gt;可执行源码在:https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing&lt;/li&gt;
+&lt;li&gt;本机开发多个服务,想要调试之间的调用,需要在本机启动多个&lt;/li&gt;
+&lt;li&gt;或者使用 gitlab ci/cd, push 后 构建服务&lt;/li&gt;
+&lt;li&gt;本文内容是 不使用 gitlab ci/cd, 而是直接 通过 makefile+docker-compose 编排 在本地一次部署多个服务&lt;/li&gt;
+&lt;li&gt;可执行源码:&lt;a href=&#34;https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing&#34;&gt;docker-makefile&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;正常cicd流程&#34;&gt;正常cicd流程&lt;/h3&gt;
 &lt;p&gt;&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230516225200.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
@@ -911,7 +911,7 @@ custom_domains =b.abc.baidu.com
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│   ├── main.go
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── Makefile
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|── docker-compose.yaml
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;四个golang服务,只需要知道他们是golang服务即可,3个api,1个grpc&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;四个golang服务,3个http api,1个grpc&lt;/p&gt;
 &lt;h3 id=&#34;编写makefile&#34;&gt;编写makefile&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SERVICES &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; api1_http api2_http api3_http grpc
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;DOCKERFILE_CONTENT &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; FROM alpine:latest&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;WORKDIR /app
@@ -939,11 +939,11 @@ custom_domains =b.abc.baidu.com
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	@docker-compose up --build
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;makefile 文件内容包含了三个部分&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;build: 批量编译golang服务,生成二进制文件&lt;/li&gt;
+&lt;li&gt;build: 批量编译golang服务,生成二进制文件,放在根目录/bin下&lt;/li&gt;
 &lt;li&gt;dockerfiles: 批量生成dockerfile文件,基于alpine:3.12镜像,运行二进制文件&lt;/li&gt;
-&lt;li&gt;为什么要基于alpine镜像运行二进制文件,因为alpine镜像体积小,适合作为基础镜像&lt;/li&gt;
+&lt;li&gt;为什么要基于alpine镜像运行二进制文件,单纯因为 alpine镜像体积小&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;生成的dockerfile文件内容如下&lt;/p&gt;
+&lt;p&gt;生成的dockerfile文件内容类似如下&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;FROM&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; alpine:3.12&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;WORKDIR&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; /app&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;COPY&lt;/span&gt; ./bin/api1_http ./&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
@@ -992,8 +992,8 @@ custom_domains =b.abc.baidu.com
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#ae81ff&#34;&gt;16685&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;16685&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;docker-compose.yaml 包含了golang 服务 和 jaeger 服务&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;golang服务 的context 是当前目录, 所以dockerfile 文件里的COPY ./bin/api1_http ./ 会将当前目录下的bin/api1_http 复制到镜像的/app目录下&lt;/li&gt;
-&lt;li&gt;这里还有一个.env文件,里面包含了环境变量,主要是在golang业务代码里使用,这里不做过多介绍&lt;/li&gt;
+&lt;li&gt;golang服务 的context:. 代表 docker-compose.yaml 目录,也就是根目录, 所以dockerfile 文件里的COPY ./bin/api1_http ./ 会将根目录下的bin/api1_http 复制到镜像的/app目录下&lt;/li&gt;
+&lt;li&gt;.env文件,里面包含了环境变量,主要是在golang业务代码里使用,不做过多介绍&lt;/li&gt;
 &lt;li&gt;golang 业务里 会进行服务之间调用,集成了 jaeger 服务,所以需要将 jaeger 服务也编排进来&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id=&#34;启动所有服务&#34;&gt;启动所有服务&lt;/h3&gt;

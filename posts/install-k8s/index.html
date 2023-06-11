@@ -167,8 +167,8 @@
 						
 						
 							<li>
-								<a href="#1-docker-%e5%ae%89%e8%a3%85" class="nav-1-docker-安装">
-									1. docker 安装
+								<a href="#1-%e5%ae%89%e8%a3%85-docker" class="nav-1-安装-docker">
+									1. 安装 docker
 								</a>
 							</li>
 						
@@ -203,8 +203,8 @@
 						
 						
 							<li>
-								<a href="#%e4%bd%bf%e7%94%a8-systemd-%e4%bd%9c%e4%b8%ba-docker-cgroup-%e9%a9%b1%e5%8a%a8%e7%a8%8b%e5%ba%8f" class="nav-使用-systemd-作为-docker-cgroup-驱动程序">
-									使用 systemd 作为 docker cgroup 驱动程序
+								<a href="#3-%e4%bd%bf%e7%94%a8-systemd-%e4%bd%9c%e4%b8%ba-docker-cgroup-%e9%a9%b1%e5%8a%a8%e7%a8%8b%e5%ba%8f" class="nav-3-使用-systemd-作为-docker-cgroup-驱动程序">
+									3. 使用 systemd 作为 docker cgroup 驱动程序
 								</a>
 							</li>
 						
@@ -439,76 +439,76 @@
 <li>一台master,一台node</li>
 <li>主机1(master) ip:192.168.31.122,主机2 192.168.31.166</li>
 </ol>
-<h3 id="1-docker-安装">1. docker 安装</h3>
+<h3 id="1-安装-docker">1. 安装 docker</h3>
 <p>如已经安装好docker 可跳过
 docker 官方安装 <a href="https://docs.docker.com/engine/install/ubuntu/">https://docs.docker.com/engine/install/ubuntu/</a> 有点慢
 清华大学 镜像安装方法 <a href="https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/">https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/</a></p>
 <p>安装依赖</p>
-<pre tabindex="0"><code>sudo apt-get install ca-certificates curl gnupg
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-echo \
-  &#34;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu \
-  &#34;$(. /etc/os-release &amp;&amp; echo &#34;$VERSION_CODENAME&#34;)&#34; stable&#34; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
-</code></pre><p>安装 docker-ce</p>
-<pre tabindex="0"><code>sudo apt-get update
-sudo apt-get install docker-ce
-</code></pre><p>docker组授予用户根级权限,让当前登陆也可以使用docker</p>
-<pre tabindex="0"><code>sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker
-</code></pre><p>镜像加速器</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo apt-get install ca-certificates curl gnupg
+</span></span><span style="display:flex;"><span>sudo install -m <span style="color:#ae81ff">0755</span> -d /etc/apt/keyrings
+</span></span><span style="display:flex;"><span>sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+</span></span><span style="display:flex;"><span>echo <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  <span style="color:#e6db74">&#34;deb [arch=</span><span style="color:#66d9ef">$(</span>dpkg --print-architecture<span style="color:#66d9ef">)</span><span style="color:#e6db74"> signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;</span><span style="color:#66d9ef">$(</span>. /etc/os-release <span style="color:#f92672">&amp;&amp;</span> echo <span style="color:#e6db74">&#34;</span>$VERSION_CODENAME<span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34; stable&#34;</span> | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+</span></span></code></pre></div><p>安装 docker-ce</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo apt-get update
+</span></span><span style="display:flex;"><span>sudo apt-get install docker-ce
+</span></span></code></pre></div><p>docker组授予用户根级权限,让当前登陆也可以使用docker</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo groupadd docker
+</span></span><span style="display:flex;"><span>sudo usermod -aG docker $USER
+</span></span><span style="display:flex;"><span>newgrp docker
+</span></span></code></pre></div><p>镜像加速器</p>
 <p>通过修改daemon配置文件/etc/docker/daemon.json修改 registry,我使用的是上海交大</p>
-<pre tabindex="0"><code>sudo mkdir -p /etc/docker
-sudo tee /etc/docker/daemon.json &lt;&lt;-&#39;EOF&#39;
-{
-  &#34;registry-mirrors&#34;: [&#34;https://docker.mirrors.sjtug.sjtu.edu.cn/&#34;]
-}
-EOF
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-</code></pre><h3 id="2-安装-kubeadm-kubelet-和-kubectl">2. 安装 kubeadm, kubelet 和 kubectl</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo mkdir -p /etc/docker
+</span></span><span style="display:flex;"><span>sudo tee /etc/docker/daemon.json <span style="color:#e6db74">&lt;&lt;-&#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;registry-mirrors&#34;: [&#34;https://docker.mirrors.sjtug.sjtu.edu.cn/&#34;]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>sudo systemctl daemon-reload
+</span></span><span style="display:flex;"><span>sudo systemctl restart docker
+</span></span></code></pre></div><h3 id="2-安装-kubeadm-kubelet-和-kubectl">2. 安装 kubeadm, kubelet 和 kubectl</h3>
 <p><a href="https://developer.aliyun.com/mirror/kubernetes?spm=a2c6h.13651102.0.0.560a1b11o3aTbI">阿里云官方推荐源</a></p>
-<pre tabindex="0"><code>apt-get update &amp;&amp; apt-get install -y apt-transport-https
-curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - 
-cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list
-deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
-EOF
-sudo apt-get update
-</code></pre><p>安装1.22.0版本</p>
-<pre tabindex="0"><code>apt-get install -y kubelet=1.22.0-00 kubeadm=1.22.0-00 kubectl=1.22.0-00
-</code></pre><p>查看版本</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install -y apt-transport-https
+</span></span><span style="display:flex;"><span>curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - 
+</span></span><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>sudo apt-get update
+</span></span></code></pre></div><p>安装1.22.0版本</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>apt-get install -y kubelet<span style="color:#f92672">=</span>1.22.0-00 kubeadm<span style="color:#f92672">=</span>1.22.0-00 kubectl<span style="color:#f92672">=</span>1.22.0-00
+</span></span></code></pre></div><p>查看版本</p>
 <pre tabindex="0"><code>kubelet --version
 kubeadm version
 kubectl version
 </code></pre><p>kubelet 开机自启</p>
-<pre tabindex="0"><code>systemctl enable kubelet
-</code></pre><h3 id="使用-systemd-作为-docker-cgroup-驱动程序">使用 systemd 作为 docker cgroup 驱动程序</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>systemctl enable kubelet
+</span></span></code></pre></div><h3 id="3-使用-systemd-作为-docker-cgroup-驱动程序">3. 使用 systemd 作为 docker cgroup 驱动程序</h3>
 <p>从 v1.22 开始，在使用 kubeadm 创建集群时,kubeadm 默认使用 systemd,而 docker 默认使用 cgroupfs,所以需要修改 docker 的 cgroup 驱动程序为 systemd,<a href="https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/#cgroup-drivers">k8s cgroup-drivers说明</a>
 打开 /etc/docker/daemon.json 文件,追加以下配置</p>
-<pre tabindex="0"><code>{
-  &#34;exec-opts&#34;: [&#34;native.cgroupdriver=systemd&#34;]
-}
-</code></pre><p>重启docker</p>
-<pre tabindex="0"><code>systemctl daemon-reload
-systemctl restart docker
-systemctl enable docker
-</code></pre><p>查看cgroup驱动,必须是systemd,才行</p>
-<pre tabindex="0"><code>docker info|grep Cgroup
-</code></pre><h3 id="4-swapoff-设置">4. swapoff 设置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;exec-opts&#34;</span>: <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;native.cgroupdriver=systemd&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>重启docker</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>systemctl daemon-reload
+</span></span><span style="display:flex;"><span>systemctl restart docker
+</span></span><span style="display:flex;"><span>systemctl enable docker
+</span></span></code></pre></div><p>查看cgroup驱动,必须是systemd,才行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>docker info|grep Cgroup
+</span></span></code></pre></div><h3 id="4-swapoff-设置">4. swapoff 设置</h3>
 <p>设置 swapoff</p>
-<pre tabindex="0"><code>sudo swapoff -a
-</code></pre><p>永久设置 swapoff,注释掉swap那一行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo swapoff -a
+</span></span></code></pre></div><p>永久设置 swapoff,注释掉swap那一行</p>
 <pre tabindex="0"><code>vim /etc/fstab
 </code></pre><p>查看swapon,必须是空的,不然接下来的kubeadm init会报错</p>
-<pre tabindex="0"><code>swapon -s
-</code></pre><h3 id="kubeadm-主节点-安装-k8s">kubeadm 主节点 安装 k8s</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>swapon -s
+</span></span></code></pre></div><h3 id="kubeadm-主节点-安装-k8s">kubeadm 主节点 安装 k8s</h3>
 <h4 id="kubeadm-init-安装-k8s">kubeadm init 安装 k8s</h4>
 <ol>
 <li>可以先拉取镜像,这样kubeadm init的时候就不会拉取镜</li>
 </ol>
-<pre tabindex="0"><code>sudo kubeadm config images pull --kubernetes-version=v1.22.0 --image-repository registry.aliyuncs.com/google_containers
-</code></pre><ol start="2">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo kubeadm config images pull --kubernetes-version<span style="color:#f92672">=</span>v1.22.0 --image-repository registry.aliyuncs.com/google_containers
+</span></span></code></pre></div><ol start="2">
 <li>执行init</li>
 </ol>
 <ul>
@@ -516,39 +516,39 @@ systemctl enable docker
 <li>&ndash;image-repository 指定镜像仓库为阿里云:registry.aliyuncs.com/google_containers,因为 k8s 默认的镜像仓库是 gcr.io,国内访问不了</li>
 <li>&ndash;pod-network-cidr 指定pod的网段,需要与cni插件的网段一致,否则会出现pod无法通信的问题 ,flannel的网段是 10.244.0.0/16</li>
 </ul>
-<pre tabindex="0"><code>sudo kubeadm init --kubernetes-version=v1.22.0 --image-repository registry.aliyuncs.com/google_containers --pod-network-cidr=10.244.0.0/16
-</code></pre><ol start="3">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo kubeadm init --kubernetes-version<span style="color:#f92672">=</span>v1.22.0 --image-repository registry.aliyuncs.com/google_containers --pod-network-cidr<span style="color:#f92672">=</span>10.244.0.0/16
+</span></span></code></pre></div><ol start="3">
 <li>kubectl get nodes 查看节点状态</li>
 </ol>
-<pre tabindex="0"><code>kubectl get nodes
-</code></pre><p>应该会 出现 localhost:8080 was refused - did you specify the right host or port? 错误
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kubectl get nodes
+</span></span></code></pre></div><p>应该会 出现 localhost:8080 was refused - did you specify the right host or port? 错误
 将 /etc/kubernetes/admin.conf 拷贝到 $HOME/.kube/config</p>
-<pre tabindex="0"><code>mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown -R $USER:$USER $HOME/.kube
-</code></pre><p>再查看nodes状态</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir -p $HOME/.kube
+</span></span><span style="display:flex;"><span>sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+</span></span><span style="display:flex;"><span>sudo chown -R $USER:$USER $HOME/.kube
+</span></span></code></pre></div><p>再查看nodes状态</p>
 <h4 id="安装网络插件">安装网络插件</h4>
 <p>此时获取节点状态会发现有一个节点是 NotReady 状态，
 而且,查看pod状态会发现,coredns 也是 Pending 状态</p>
-<pre tabindex="0"><code>kubectl get pods --all-namespaces
-</code></pre><p>这是因为还没有安装网络插件,这里我选择安装 flannel</p>
-<pre tabindex="0"><code>kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-</code></pre><p>网络不好可以使用ghproxy</p>
-<pre tabindex="0"><code>kubectl apply -f https://ghproxy.com/https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-</code></pre><p>等待会再次查看pod状态,coredns状态是 Running,节点状态是 Ready</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kubectl get pods --all-namespaces
+</span></span></code></pre></div><p>这是因为还没有安装网络插件,这里我选择安装 flannel</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+</span></span></code></pre></div><p>网络不好可以使用ghproxy</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kubectl apply -f https://ghproxy.com/https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+</span></span></code></pre></div><p>等待会再次查看pod状态,coredns状态是 Running,节点状态是 Ready</p>
 <h2 id="子节点加入集群">子节点加入集群</h2>
 <ol>
 <li>master节点生成token,并且指定master节点的ip,生成join命令</li>
 </ol>
-<pre tabindex="0"><code>kubeadm token create --print-join-command --ttl 0 --kubeconfig /etc/kubernetes/admin.conf
-</code></pre><p>会出现 类似以下 join 命令</p>
-<pre tabindex="0"><code>kubeadm join 192.168.31.122:6443 --token kzmdey.dk0tcgyg4ivr8y87 --discovery-token-ca-cert-hash sha256:bc2e3252080ba81e342933955682ae119decc948fef2180e5135b0dd891e5891
-</code></pre><ol start="2">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kubeadm token create --print-join-command --ttl <span style="color:#ae81ff">0</span> --kubeconfig /etc/kubernetes/admin.conf
+</span></span></code></pre></div><p>会出现 类似以下 join 命令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kubeadm join 192.168.31.122:6443 --token kzmdey.dk0tcgyg4ivr8y87 --discovery-token-ca-cert-hash sha256:bc2e3252080ba81e342933955682ae119decc948fef2180e5135b0dd891e5891
+</span></span></code></pre></div><ol start="2">
 <li>在子节点执行上面的join命令,加入集群</li>
 <li>在master节点查看节点状态</li>
 </ol>
-<pre tabindex="0"><code> k get nodes -o wide
-</code></pre><p>可以看到两个节点都是 Ready 状态</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span> k get nodes -o wide
+</span></span></code></pre></div><p>可以看到两个节点都是 Ready 状态</p>
 <pre tabindex="0"><code>NAME    STATUS   ROLES                  AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION      CONTAINER-RUNTIME
 song    Ready    control-plane,master   45h   v1.22.0   192.168.31.122   &lt;none&gt;        Ubuntu 22.10   5.19.0-21-generic   docker://24.0.2
 song2   Ready    &lt;none&gt;                 77m   v1.22.0   192.168.31.166   &lt;none&gt;        Ubuntu 22.10   5.19.0-21-generic   docker://24.0.2
@@ -772,8 +772,8 @@ uv <span id="busuanzi_value_site_uv"></span> 人
 						
 						
 							<li>
-								<a href="#1-docker-%e5%ae%89%e8%a3%85" class="nav-1-docker-安装">
-									1. docker 安装
+								<a href="#1-%e5%ae%89%e8%a3%85-docker" class="nav-1-安装-docker">
+									1. 安装 docker
 								</a>
 							</li>
 						
@@ -808,8 +808,8 @@ uv <span id="busuanzi_value_site_uv"></span> 人
 						
 						
 							<li>
-								<a href="#%e4%bd%bf%e7%94%a8-systemd-%e4%bd%9c%e4%b8%ba-docker-cgroup-%e9%a9%b1%e5%8a%a8%e7%a8%8b%e5%ba%8f" class="nav-使用-systemd-作为-docker-cgroup-驱动程序">
-									使用 systemd 作为 docker cgroup 驱动程序
+								<a href="#3-%e4%bd%bf%e7%94%a8-systemd-%e4%bd%9c%e4%b8%ba-docker-cgroup-%e9%a9%b1%e5%8a%a8%e7%a8%8b%e5%ba%8f" class="nav-3-使用-systemd-作为-docker-cgroup-驱动程序">
+									3. 使用 systemd 作为 docker cgroup 驱动程序
 								</a>
 							</li>
 						

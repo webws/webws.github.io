@@ -357,10 +357,10 @@
                     <p>文章博客地址:<a href="https://blog.taoluyuan.com/posts/docker-makefile/">https://blog.taoluyuan.com/posts/docker-makefile/</a></p>
 <h3 id="本机多服务一次性构建背景">本机多服务一次性构建背景</h3>
 <ol>
-<li>本机开发多个服务,每个服务还会互相调用</li>
-<li>正常情况,开发者需要在本地启动多个服务,并且手动调用</li>
-<li>想着不使用gitlab ci/cd, 在本机快速通过 makefile+docker-compose 编排多个服务</li>
-<li>可执行源码在:https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing</li>
+<li>本机开发多个服务,想要调试之间的调用,需要在本机启动多个</li>
+<li>或者使用 gitlab ci/cd, push 后 构建服务</li>
+<li>本文内容是 不使用 gitlab ci/cd, 而是直接 通过 makefile+docker-compose 编排 在本地一次部署多个服务</li>
+<li>可执行源码:<a href="https://github.com/webws/go-moda/tree/main/example/tracing/moda_tracing">docker-makefile</a></li>
 </ol>
 <h3 id="正常cicd流程">正常cicd流程</h3>
 <p><img src="https://qiniu.taoluyuan.com/2023/blog20230516225200.png?imageMogr2/auto-orient/interlace/1/blur/1x0/quality/70%7Cwatermark/2/text/YmxvZy50YW9sdXl1YW4uY29t/font/5a6L5L2T/fontsize/500/fill/I0E4QTBBMA==/dissolve/100/gravity/NorthWest/dx/10/dy/10" alt=""></p>
@@ -382,7 +382,7 @@
 </span></span><span style="display:flex;"><span>│   ├── main.go
 </span></span><span style="display:flex;"><span>├── Makefile
 </span></span><span style="display:flex;"><span>|── docker-compose.yaml
-</span></span></code></pre></div><p>四个golang服务,只需要知道他们是golang服务即可,3个api,1个grpc</p>
+</span></span></code></pre></div><p>四个golang服务,3个http api,1个grpc</p>
 <h3 id="编写makefile">编写makefile</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span>SERVICES <span style="color:#f92672">=</span> api1_http api2_http api3_http grpc
 </span></span><span style="display:flex;"><span>DOCKERFILE_CONTENT <span style="color:#f92672">=</span> FROM alpine:latest<span style="color:#ae81ff">\n</span>WORKDIR /app
@@ -410,11 +410,11 @@
 </span></span><span style="display:flex;"><span>	@docker-compose up --build
 </span></span></code></pre></div><p>makefile 文件内容包含了三个部分</p>
 <ol>
-<li>build: 批量编译golang服务,生成二进制文件</li>
+<li>build: 批量编译golang服务,生成二进制文件,放在根目录/bin下</li>
 <li>dockerfiles: 批量生成dockerfile文件,基于alpine:3.12镜像,运行二进制文件</li>
-<li>为什么要基于alpine镜像运行二进制文件,因为alpine镜像体积小,适合作为基础镜像</li>
+<li>为什么要基于alpine镜像运行二进制文件,单纯因为 alpine镜像体积小</li>
 </ol>
-<p>生成的dockerfile文件内容如下</p>
+<p>生成的dockerfile文件内容类似如下</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> alpine:3.12</span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> ./bin/api1_http ./<span style="color:#960050;background-color:#1e0010">
@@ -463,8 +463,8 @@
 </span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">16685</span>:<span style="color:#ae81ff">16685</span>
 </span></span></code></pre></div><p>docker-compose.yaml 包含了golang 服务 和 jaeger 服务</p>
 <ol>
-<li>golang服务 的context 是当前目录, 所以dockerfile 文件里的COPY ./bin/api1_http ./ 会将当前目录下的bin/api1_http 复制到镜像的/app目录下</li>
-<li>这里还有一个.env文件,里面包含了环境变量,主要是在golang业务代码里使用,这里不做过多介绍</li>
+<li>golang服务 的context:. 代表 docker-compose.yaml 目录,也就是根目录, 所以dockerfile 文件里的COPY ./bin/api1_http ./ 会将根目录下的bin/api1_http 复制到镜像的/app目录下</li>
+<li>.env文件,里面包含了环境变量,主要是在golang业务代码里使用,不做过多介绍</li>
 <li>golang 业务里 会进行服务之间调用,集成了 jaeger 服务,所以需要将 jaeger 服务也编排进来</li>
 </ol>
 <h3 id="启动所有服务">启动所有服务</h3>
