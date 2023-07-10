@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html><head>
+<title></title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="/posts/images/favicon.jpg">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.101ef407a1e27ccf92936b24b892c7ca0a5f57d754d0689042310afca8e795d9.css" integrity="sha256-EB70B6HifM&#43;Sk2skuJLHygpfV9dU0GiQQjEK/Kjnldk=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#iptables-%e5%9b%9b%e8%a1%a8%e4%ba%94%e9%93%be-gpt%e4%bb%8b%e7%bb%8d%e9%9a%8f%e4%be%bf%e7%9c%8b%e4%b8%8b" class="nav-iptables-四表五链-gpt介绍随便看下">
+									iptables 四表五链 gpt介绍,随便看下
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#iptables" class="nav-iptables">
+									iptables
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%b7%bb%e5%8a%a0filter%e8%a7%84%e5%88%99" class="nav-添加filter规则">
+									添加filter规则
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%bb%98%e8%ae%a4%e8%a1%a8%e6%98%af-filter-%e8%a1%a8" class="nav-默认表是-filter-表">
+									默认表是 filter 表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#nat-%e8%a1%a8" class="nav-nat-表">
+									nat 表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#nat%e8%a1%a8%e6%b7%bb%e5%8a%a0%e4%bb%a3%e7%90%86" class="nav-nat表添加代理">
+									nat表添加代理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#nat%e8%a1%a8%e5%ae%9e%e7%8e%b0%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1" class="nav-nat表实现负载均衡">
+									nat表实现负载均衡
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#filter%e9%99%90%e6%b5%81%e9%99%90%e9%80%9f" class="nav-filter限流限速">
+									filter限流限速
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#filter-forward%e9%93%be-%e5%92%8c-nat-prerouting%e9%93%be-%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af" class="nav-filter-forward链-和-nat-prerouting链-应用场景">
+									filter forward链 和 nat prerouting链 应用场景
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e9%93%be" class="nav-自定义链">
+									自定义链
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#todo" class="nav-todo">
+									todo
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="">
+            套路猿
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">套路猿</div>
+        
+        <div class="single-column-header-subtitle">自古深情留不住，唯有套路得人心</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    
+                    
+                    <div class="post-meta">
+                        
+
+                        
+
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h2 id="iptables-四表五链-gpt介绍随便看下">iptables 四表五链 gpt介绍,随便看下</h2>
+<p>iptables 是 Linux 系统中用于管理网络数据包过滤和防火墙功能的工具。它允许你在 Linux 内核的网络栈中创建规则，以控制网络流量的传入和传出。iptables 提供了一个规则引擎，用于检查、修改、转发或丢弃数据包，以实现网络安全策略。</p>
+<p>在 iptables 中，有一个概念叫做 &ldquo;表（tables）&quot;，它用于组织和管理规则。每个表包含多个 &ldquo;链（chains）&quot;，而每个链又包含一系列规则。通过在特定的链上添加规则，可以根据特定的条件来决定如何处理数据包。</p>
+<p>常见的 iptables 表包括以下四个：</p>
+<p>filter 表：filter 表是默认的表，用于过滤数据包。它包含了三个默认的链：INPUT、FORWARD 和 OUTPUT。通过在这些链上添加规则，可以控制数据包的接受、转发和发送。</p>
+<p>nat 表：nat 表用于网络地址转换（Network Address Translation，NAT）。它包含了三个默认的链：PREROUTING、POSTROUTING 和 OUTPUT。通过在这些链上添加规则，可以实现端口转发、源地址转换等网络地址转换功能。</p>
+<p>mangle 表：mangle 表用于修改数据包的特定字段。它包含了五个默认的链：PREROUTING、INPUT、FORWARD、OUTPUT 和 POSTROUTING。通过在这些链上添加规则，可以修改数据包的 TTL（Time To Live）、IP 头部等字段。</p>
+<p>raw 表：raw 表用于绕过其他表中的连接跟踪机制。它包含了两个默认的链：PREROUTING 和 OUTPUT。通过在这些链上添加规则，可以对数据包进行原始处理，不受连接跟踪的影响。</p>
+<p>而 &ldquo;4 表 5 链&rdquo; 是一个常见的概念，它指的是默认情况下 iptables 中的四个表和五个链。具体而言，这里的 &ldquo;4 表&rdquo; 指的是 filter、nat、mangle 和 raw 四个表，而 &ldquo;5 链&rdquo; 指的是各表中的五个默认链：INPUT、FORWARD、OUTPUT、PREROUTING 和 POSTROUTING。</p>
+<p>通过在这些表和链上添加规则，可以对网络数据包进行详细的控制和管理，以满足特定的网络安全需求。</p>
+<h2 id="iptables">iptables</h2>
+<h3 id="添加filter规则">添加filter规则</h3>
+<p>iptables -A &lt;链名&gt; &lt;规则&gt;</p>
+<pre tabindex="0"><code>iptables -A INPUT -s &lt;IP 地址&gt; -p tcp --dport 80 -j ACCEPT
+</code></pre><p>这将在 INPUT 链上添加一条规则，允许指定 IP 地址的 TCP 数据包通过端口 80。</p>
+<h3 id="默认表是-filter-表">默认表是 filter 表</h3>
+<p>iptables 不指定表名 默认都是filter表</p>
+<pre tabindex="0"><code>iptables -t nat -A PREROUTING &lt;规则&gt;
+</code></pre><p>在这个命令中，-t nat 参数指定了使用 nat 表</p>
+<h2 id="nat-表">nat 表</h2>
+<p>nat表: 用于网络地址转换（Network Address Translation，NAT）。它包含了三个默认的链：PREROUTING、POSTROUTING 和 OUTPUT。通过在这些链上添加规则，可以实现端口转发、源地址转换等网络地址转换功能。</p>
+<h3 id="nat表添加代理">nat表添加代理</h3>
+<p>用nat表 prerouting链 设置规则:访问192.168.1.20的 80 端口，将流量转发到 8080 端口,需要设置ip</p>
+<pre tabindex="0"><code>iptables -t nat -A PREROUTING -p tcp -d &lt;目标 IP&gt; --dport 80 -j DNAT --to-destination &lt;目标 IP&gt;:8080
+</code></pre><h3 id="nat表实现负载均衡">nat表实现负载均衡</h3>
+<p>iptables 用nat 表 prerouting链 设置规则:访问 192.168.1.20 的 80 端口，将流量负载均衡 分别到 8080 ,8081,8082 端口</p>
+<pre tabindex="0"><code>iptables -t nat -A PREROUTING -p tcp -d 192.168.1.20 --dport 80 -m statistic --mode random --probability 0.333 -j DNAT --to-destination 192.168.1.20:8080
+iptables -t nat -A PREROUTING -p tcp -d 192.168.1.20 --dport 80 -m statistic --mode random --probability 0.333 -j DNAT --to-destination 192.168.1.20:8081
+iptables -t nat -A PREROUTING -p tcp -d 192.168.1.20 --dport 80 -j DNAT --to-destination 192.168.1.20:8082
+</code></pre><p>这三条规则将实现随机负载均衡，将访问 192.168.1.20 的 80 端口的流量随机转发到三个服务的端口：8080、8081 和 8082。</p>
+<p>解释：</p>
+<p>前两条规则使用 &ndash;mode random &ndash;probability 0.333 参数来实现随机负载均衡。每个规则的概率被设置为 0.333，使得流量以大约相等的概率分别转发到 8080 和 8081 端口。
+第三条规则没有指定负载均衡策略，它将剩余的流量转发到 8082 端口。
+这样，流量将以近似相等的概率被分发到三个服务的端口，从而实现随机负载均衡。</p>
+<p>请注意，这里的概率是基于每个规则的比例来设置的，并且根据数据包的随机性进行负载均衡。如果需要更精确的负载均衡算法，可能需要考虑使用专用的负载均衡器或反向代理服务器来实现。</p>
+<h3 id="filter限流限速">filter限流限速</h3>
+<p>限流: 限制单位时间内的流量,比如 访问9090端口 一个ip 一秒钟只能访问一次 ,一个子网段一秒钟只能访问10次
+限速: 限制单位时间内的速度,比如 访问9090端口 一个ip 一秒钟只能访问1k,一个子网段一秒钟只能访问10k
+真实的需要用nginx或者其他网关处理</p>
+<h3 id="filter-forward链-和-nat-prerouting链-应用场景">filter forward链 和 nat prerouting链 应用场景</h3>
+<p>forward 主要处理主机流量规则,比如 网络接口
+用iptables 实现 访问docker 内部容器ip:port,docker 不开启映射情况下</p>
+<pre tabindex="0"><code>命令1:iptables -t nat -A PREROUTING -P tcp --dport 9090 -i DNAT --to-destination 172.18.0 2:9000
+命令2iptables -A FORWARD -i eth0 -o docker0 -j ACCEPT
+</code></pre><p>上面命令1 是 nat表 prerouting链 设置规则:访问9090端口，将流量转发到 172.18.0 2:9000
+上面命令2 是 filter表 forward链 设置规则:允许eth0网卡的流量转发到docker0网卡,这样就可以访问docker内部容器了
+为什么 需要命令2,因为默认是不允许转发的,需要设置转发规则?不是很明白,需要再看看</p>
+<h3 id="自定义链">自定义链</h3>
+<p>其实就是把规则封装到一个链里,然后在filter表的INPUT链上调用这个链,这样就可以把规则封装起来了</p>
+<h3 id="todo">todo</h3>
+<ol>
+<li>禁止端口访问 filter 表</li>
+<li>iptables -L 默认展示filter表 的 链的规则,了解展示的信息,安装了k8s后会有开s的链</li>
+<li>根据行号删除规则,批量删除  <a href="https://www.jtthink.com/course/play/3693">https://www.jtthink.com/course/play/3693</a></li>
+<li>net表 76讲 <a href="https://www.jtthink.com/course/play/3697">https://www.jtthink.com/course/play/3697</a></li>
+<li>net表 prerouting链 实现端口转发</li>
+<li>net表 postrouting链 实现负载均衡</li>
+<li>filter限流限速</li>
+<li>在 docker 不开启端口映射情况下 filter forward链 和 nat prerouting链,访问docker 内部容器ip:port,</li>
+</ol>
+
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/posts/opentelmetry/">
+			下回<br>golang 使用 OpenTelemetry 实现跨服务 全链路追踪
+                </a>
+                
+                
+                
+                <a class="older-posts">
+			上回<br>这是最旧的文章了。
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="webws/webws.github.io"
+        data-repo-id="R_kgDOJjhGQQ"
+        data-category="Announcements"
+        data-category-id=""
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled=""
+        data-emit-metadata=""
+        data-input-position=""
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="/">
+    
+        <div class="nav-title">
+            套路猿
+        </div>
+        
+        <div class="nav-subtitle">
+            自古深情留不住，唯有套路得人心
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#iptables-%e5%9b%9b%e8%a1%a8%e4%ba%94%e9%93%be-gpt%e4%bb%8b%e7%bb%8d%e9%9a%8f%e4%be%bf%e7%9c%8b%e4%b8%8b" class="nav-iptables-四表五链-gpt介绍随便看下">
+									iptables 四表五链 gpt介绍,随便看下
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#iptables" class="nav-iptables">
+									iptables
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%b7%bb%e5%8a%a0filter%e8%a7%84%e5%88%99" class="nav-添加filter规则">
+									添加filter规则
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%bb%98%e8%ae%a4%e8%a1%a8%e6%98%af-filter-%e8%a1%a8" class="nav-默认表是-filter-表">
+									默认表是 filter 表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#nat-%e8%a1%a8" class="nav-nat-表">
+									nat 表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#nat%e8%a1%a8%e6%b7%bb%e5%8a%a0%e4%bb%a3%e7%90%86" class="nav-nat表添加代理">
+									nat表添加代理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#nat%e8%a1%a8%e5%ae%9e%e7%8e%b0%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1" class="nav-nat表实现负载均衡">
+									nat表实现负载均衡
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#filter%e9%99%90%e6%b5%81%e9%99%90%e9%80%9f" class="nav-filter限流限速">
+									filter限流限速
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#filter-forward%e9%93%be-%e5%92%8c-nat-prerouting%e9%93%be-%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af" class="nav-filter-forward链-和-nat-prerouting链-应用场景">
+									filter forward链 和 nat prerouting链 应用场景
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e9%93%be" class="nav-自定义链">
+									自定义链
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#todo" class="nav-todo">
+									todo
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
