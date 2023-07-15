@@ -94,23 +94,5 @@ wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_darwin
 使用 OpenTelemetry 链路追踪说明 工作中常常会遇到需要查看服务调用关系,比如用户请求了一个接口 接口会调用其他grpc,http接口,或者内部的方法 这样的调用链路,如果出现了问题,我们需要快速的定位问题,这时候就需要一个工具来帮助我们查看调用链路 OpenTelemetry就是这样一个工具 本文大概以:main 函数初始化 OpenTelemetry、启动 http server、配置httpclient 请求服务 来进行说明 完整可执行源码在:opentelemetry-go 示例 示例代码已增加 grpc的链路追踪 服务链路关系 关系图 说明: 用户 请求 api1(echo server) 服务的 api1/bar api1 调用 Grpc 服务 api1 调用 api2 (gin server) 服务的 api2/bar api2 调用 api3 (echo server )服务的 api3/bar api3 调用 内部 调用方法 bar-&amp;gt;bar2-&amp;gt;bar3 安装jaeger 下载jaeger:我使用的是 jaeger-all-in-one 启动 jaeger: ~/tool/jaeger-1.31.0-linux-amd64/jaeger-all-in-one 默认查看面板 地址 http://localhost:16686/ tracer Batcher的地址,下面代码会体现: http://localhost:14268/api/traces 初始化 全局的 OpenTelemetry 这里openTelemetry 的exporter 以 jaeger 为例</description>
     </item>
     
-    <item>
-      <title></title>
-      <link>/posts/todo/net-iptables/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/posts/todo/net-iptables/</guid>
-      <description>iptables 四表五链 gpt介绍,随便看下 iptables 是 Linux 系统中用于管理网络数据包过滤和防火墙功能的工具。它允许你在 Linux 内核的网络栈中创建规则，以控制网络流量的传入和传出。iptables 提供了一个规则引擎，用于检查、修改、转发或丢弃数据包，以实现网络安全策略。
-在 iptables 中，有一个概念叫做 &amp;ldquo;表（tables）&amp;quot;，它用于组织和管理规则。每个表包含多个 &amp;ldquo;链（chains）&amp;quot;，而每个链又包含一系列规则。通过在特定的链上添加规则，可以根据特定的条件来决定如何处理数据包。
-常见的 iptables 表包括以下四个：
-filter 表：filter 表是默认的表，用于过滤数据包。它包含了三个默认的链：INPUT、FORWARD 和 OUTPUT。通过在这些链上添加规则，可以控制数据包的接受、转发和发送。
-nat 表：nat 表用于网络地址转换（Network Address Translation，NAT）。它包含了三个默认的链：PREROUTING、POSTROUTING 和 OUTPUT。通过在这些链上添加规则，可以实现端口转发、源地址转换等网络地址转换功能。
-mangle 表：mangle 表用于修改数据包的特定字段。它包含了五个默认的链：PREROUTING、INPUT、FORWARD、OUTPUT 和 POSTROUTING。通过在这些链上添加规则，可以修改数据包的 TTL（Time To Live）、IP 头部等字段。
-raw 表：raw 表用于绕过其他表中的连接跟踪机制。它包含了两个默认的链：PREROUTING 和 OUTPUT。通过在这些链上添加规则，可以对数据包进行原始处理，不受连接跟踪的影响。
-而 &amp;ldquo;4 表 5 链&amp;rdquo; 是一个常见的概念，它指的是默认情况下 iptables 中的四个表和五个链。具体而言，这里的 &amp;ldquo;4 表&amp;rdquo; 指的是 filter、nat、mangle 和 raw 四个表，而 &amp;ldquo;5 链&amp;rdquo; 指的是各表中的五个默认链：INPUT、FORWARD、OUTPUT、PREROUTING 和 POSTROUTING。
-通过在这些表和链上添加规则，可以对网络数据包进行详细的控制和管理，以满足特定的网络安全需求。
-iptables 添加filter规则 iptables -A &amp;lt;链名&amp;gt; &amp;lt;规则&amp;gt;</description>
-    </item>
-    
   </channel>
 </rss>
