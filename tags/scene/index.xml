@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>scene on 套路猿</title>
+    <link>/tags/scene/</link>
+    <description>Recent content in scene on 套路猿</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sun, 27 Aug 2023 20:59:44 +0800</lastBuildDate><atom:link href="/tags/scene/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>golang 使用 viper 加载配置 自动反序列化到结构</title>
+      <link>/posts/golang-viper-load/</link>
+      <pubDate>Sun, 27 Aug 2023 20:59:44 +0800</pubDate>
+      
+      <guid>/posts/golang-viper-load/</guid>
+      <description>使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库 文章博客地址:golang 使用 viper 加载配置 自动反序列化到结构
+viper 正常加载配置文件 golang viper 其中可以用来 查找、加载和反序列化JSON、TOML、YAML、HCL、INI、envfile和格式的配置文件
+viper在后台使用github.com/mitchellh/mapstructure来反序列化 默认情况下使用 定义的结构 tag 需要加 mapstructure,如果不加 比如有下划线的字段无法解析成功
+配置文件 test_toml.toml
+http_addr = &amp;#34;:8082&amp;#34; grpc_addr = &amp;#34;:8083&amp;#34; jaeger_url= &amp;#34;http://localhost:14268/api/traces&amp;#34; tracing= true golang代码
+type ConfigTest struct { HttpAddr string `json:&amp;#34;http_addr&amp;#34; toml:&amp;#34;http_addr&amp;#34; yaml:&amp;#34;http_addr&amp;#34;` GrpcAddr string `json:&amp;#34;grpc_addr&amp;#34; toml:&amp;#34;grpc_addr&amp;#34; yaml:&amp;#34;grpc_addr&amp;#34;` JaegerUrl string `json:&amp;#34;jaeger_url&amp;#34; toml:&amp;#34;jaeger_url&amp;#34; yaml:&amp;#34;jaeger_url&amp;#34; mapstructure:&amp;#34;jaeger_url&amp;#34;` Tracing bool `toml:&amp;#34;tracing&amp;#34; json:&amp;#34;tracing&amp;#34; yaml:&amp;#34;tracing&amp;#34; ` // opentelemetry tracing } // jaeger 加载配置文件 func TestSourceFile_Unmarshal(t *testing.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html><head>
+<title>golang 使用 viper 加载配置 自动反序列化到结构</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="golang使用 viper 无需设置 mapstructure tag 根据配置文件后缀 自动返序列化到结构,解决结构有下划线的字段解析不成功问题">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="/posts/images/favicon.jpg">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.101ef407a1e27ccf92936b24b892c7ca0a5f57d754d0689042310afca8e795d9.css" integrity="sha256-EB70B6HifM&#43;Sk2skuJLHygpfV9dU0GiQQjEK/Kjnldk=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8golang-%e5%9f%ba%e4%ba%8e-openai-embedding--qdrant-%e5%ae%9e%e7%8e%b0k8s%e6%9c%ac%e5%9c%b0%e7%9f%a5%e8%af%86%e5%ba%93" class="nav-使用golang-基于-openai-embedding--qdrant-实现k8s本地知识库">
+									使用golang 基于 OpenAI Embedding &#43; qdrant 实现k8s本地知识库
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#viper-%e6%ad%a3%e5%b8%b8%e5%8a%a0%e8%bd%bd%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6" class="nav-viper-正常加载配置文件">
+									viper 正常加载配置文件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%b8%8d%e5%8a%a0-mapstructure-tag%e5%ae%9e%e7%8e%b0%e8%87%aa%e5%8a%a8%e5%8f%8d%e5%ba%8f%e5%88%97%e5%8c%96" class="nav-不加-mapstructure-tag实现自动反序列化">
+									不加 mapstructure tag实现自动反序列化
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%9f%a5%e7%9c%8bviper-unmarshal-%e4%bb%a3%e7%a0%81" class="nav-查看viper-unmarshal-代码">
+									查看viper Unmarshal 代码
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#viper%e6%a0%b9%e6%8d%ae%e6%96%87%e7%b1%bb%e5%9e%8b%e4%bb%b6%e8%87%aa%e5%8a%a8%e8%a7%a3%e7%a0%81%e5%88%b0%e7%bb%93%e6%9e%84" class="nav-viper根据文类型件自动解码到结构">
+									viper根据文类型件自动解码到结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="">
+            套路猿
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">套路猿</div>
+        
+        <div class="single-column-header-subtitle">自古深情留不住，唯有套路得人心</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    golang 使用 viper 加载配置 自动反序列化到结构
+                    
+                    <div class="post-subtitle">
+                        golang使用 viper 无需设置 mapstructure tag 根据配置文件后缀 自动返序列化到结构,解决结构有下划线的字段解析不成功问题
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-08-27 20:59
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/golang">golang</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/scene">scene</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="使用golang-基于-openai-embedding--qdrant-实现k8s本地知识库">使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库</h1>
+<p>文章博客地址:<a href="https://blog.taoluyuan.com/posts/golang-viper-load/">golang 使用 viper 加载配置 自动反序列化到结构</a></p>
+<h3 id="viper-正常加载配置文件">viper 正常加载配置文件</h3>
+<p>golang viper 其中可以用来 查找、加载和反序列化JSON、TOML、YAML、HCL、INI、envfile和格式的配置文件<br>
+viper在后台使用github.com/mitchellh/mapstructure来反序列化
+默认情况下使用 定义的结构 tag 需要加 mapstructure,如果不加 比如有下划线的字段无法解析成功</p>
+<p>配置文件 test_toml.toml</p>
+<pre tabindex="0"><code>http_addr = &#34;:8082&#34;
+grpc_addr = &#34;:8083&#34;
+jaeger_url= &#34;http://localhost:14268/api/traces&#34;
+tracing= true
+</code></pre><p>golang代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ConfigTest</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">HttpAddr</span>  <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;http_addr&#34; toml:&#34;http_addr&#34; yaml:&#34;http_addr&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">GrpcAddr</span>  <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;grpc_addr&#34; toml:&#34;grpc_addr&#34; yaml:&#34;grpc_addr&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">JaegerUrl</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;jaeger_url&#34; toml:&#34;jaeger_url&#34; yaml:&#34;jaeger_url&#34; mapstructure:&#34;jaeger_url&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Tracing</span>   <span style="color:#66d9ef">bool</span>   <span style="color:#e6db74">`toml:&#34;tracing&#34;  json:&#34;tracing&#34; yaml:&#34;tracing&#34; `</span> <span style="color:#75715e">// opentelemetry tracing
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// jaeger 加载配置文件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">TestSourceFile_Unmarshal</span>(<span style="color:#a6e22e">t</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">T</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">filePath</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;./test_toml.toml&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">SetConfigFile</span>(<span style="color:#a6e22e">filePath</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">ReadInConfig</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ConfigTest</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">c</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Infow</span>(<span style="color:#e6db74">&#34;Unmarshal file sucess&#34;</span>, <span style="color:#e6db74">&#34;v&#34;</span>, <span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>打印返序列化的配置结构</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#34;level&#34;</span>:<span style="color:#e6db74">&#34;info&#34;</span>,<span style="color:#e6db74">&#34;ts&#34;</span>:<span style="color:#e6db74">&#34;2023-08-27T21:35:27.041+0800&#34;</span>,<span style="color:#e6db74">&#34;caller&#34;</span>:<span style="color:#e6db74">&#34;config/source_file_test.go:31&#34;</span>,<span style="color:#e6db74">&#34;msg&#34;</span>:<span style="color:#e6db74">&#34;Unmarshal file sucess&#34;</span>,<span style="color:#e6db74">&#34;v&#34;</span>:<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;http_addr&#34;</span>:<span style="color:#e6db74">&#34;&#34;</span>,<span style="color:#e6db74">&#34;grpc_addr&#34;</span>:<span style="color:#e6db74">&#34;&#34;</span>,<span style="color:#e6db74">&#34;jaeger_url&#34;</span>:<span style="color:#e6db74">&#34;http://localhost:14268/api/traces&#34;</span>,<span style="color:#e6db74">&#34;tracing&#34;</span>:true<span style="color:#f92672">}}</span>
+</span></span></code></pre></div><p>可以看到带下划线的字段,不加 mapstructure 标签,是不会反序列化</p>
+<h3 id="不加-mapstructure-tag实现自动反序列化">不加 mapstructure tag实现自动反序列化</h3>
+<h4 id="查看viper-unmarshal-代码">查看viper Unmarshal 代码</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">v</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Viper</span>) <span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">rawVal</span> <span style="color:#66d9ef">interface</span>{}, <span style="color:#a6e22e">opts</span> <span style="color:#f92672">...</span><span style="color:#a6e22e">DecoderConfigOption</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">decode</span>(<span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">AllSettings</span>(), <span style="color:#a6e22e">defaultDecoderConfig</span>(<span style="color:#a6e22e">rawVal</span>, <span style="color:#a6e22e">opts</span><span style="color:#f92672">...</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">decode</span>(<span style="color:#a6e22e">input</span> <span style="color:#66d9ef">interface</span>{}, <span style="color:#a6e22e">config</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">mapstructure</span>.<span style="color:#a6e22e">DecoderConfig</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">decoder</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">mapstructure</span>.<span style="color:#a6e22e">NewDecoder</span>(<span style="color:#a6e22e">config</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">decoder</span>.<span style="color:#a6e22e">Decode</span>(<span style="color:#a6e22e">input</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewDecoder</span>(<span style="color:#a6e22e">config</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">DecoderConfig</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">Decoder</span>, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">TagName</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">TagName</span> = <span style="color:#e6db74">&#34;mapstructure&#34;</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>从代码看出 Viper使用的是 github.com/mitchellh/mapstructure来解析值
+mapstructure 用于将通用的map[string]interface{}解码到对应的 Go 结构体中
+默认情况下，mapstructure 使用结构体中字段的名称做这个映射,不区分大小写,比如 Name 字段可以映射到 name、NAME、NaMe 等等
+如果没有指定 tagName ，则默认为 mapstructure,这也是为什么带下划线的字段不加 mapstructure 标签无法解析的原因
+viper 中Unmarshal的第二个方法是可以指定 DecoderConfigOption 的,从而可以指定 tagName</p>
+<h4 id="viper根据文类型件自动解码到结构">viper根据文类型件自动解码到结构</h4>
+<ol>
+<li>读取文件后缀比如 toml</li>
+<li>根据后缀设置 tagName</li>
+<li>调用 viper.Unmarshal解析</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">TestSourceFile_Unmarshal1</span>(<span style="color:#a6e22e">t</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">T</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">filePath</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;./test_toml.toml&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ConfigTest</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">viperUnmarshal</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">filePath</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Infow</span>(<span style="color:#e6db74">&#34;Unmarshal file sucess&#34;</span>, <span style="color:#e6db74">&#34;v&#34;</span>, <span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">viperUnmarshal</span>(<span style="color:#a6e22e">v</span> <span style="color:#66d9ef">interface</span>{}, <span style="color:#a6e22e">configPath</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">tagName</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ext</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">filepath</span>.<span style="color:#a6e22e">Ext</span>(<span style="color:#a6e22e">configPath</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">ext</span>) &gt; <span style="color:#ae81ff">1</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">tagName</span> = <span style="color:#a6e22e">ext</span>[<span style="color:#ae81ff">1</span>:]
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// set decode tag_name, default is mapstructure
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">decoderConfigOption</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">mapstructure</span>.<span style="color:#a6e22e">DecoderConfig</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">TagName</span> = <span style="color:#a6e22e">tagName</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cViper</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">viper</span>.<span style="color:#a6e22e">New</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cViper</span>.<span style="color:#a6e22e">SetConfigFile</span>(<span style="color:#a6e22e">configPath</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cViper</span>.<span style="color:#a6e22e">ReadInConfig</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">cViper</span>.<span style="color:#a6e22e">Unmarshal</span>(<span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">decoderConfigOption</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#34;level&#34;</span>:<span style="color:#e6db74">&#34;info&#34;</span>,<span style="color:#e6db74">&#34;ts&#34;</span>:<span style="color:#e6db74">&#34;2023-08-27T21:35:34.553+0800&#34;</span>,<span style="color:#e6db74">&#34;caller&#34;</span>:<span style="color:#e6db74">&#34;config/source_file_test.go:40&#34;</span>,<span style="color:#e6db74">&#34;msg&#34;</span>:<span style="color:#e6db74">&#34;Unmarshal file sucess&#34;</span>,<span style="color:#e6db74">&#34;v&#34;</span>:<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;http_addr&#34;</span>:<span style="color:#e6db74">&#34;:8082&#34;</span>,<span style="color:#e6db74">&#34;grpc_addr&#34;</span>:<span style="color:#e6db74">&#34;:8083&#34;</span>,<span style="color:#e6db74">&#34;jaeger_url&#34;</span>:<span style="color:#e6db74">&#34;http://localhost:14268/api/traces&#34;</span>,<span style="color:#e6db74">&#34;tracing&#34;</span>:true<span style="color:#f92672">}}</span>
+</span></span></code></pre></div><p>我已将viper加载配置集成进自己的项目,完整example 代码可以查看 <a href="https://github.com/webws/go-moda/blob/main/config/source_file_test.go">source_file_test.go</a></p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-08-27</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/install-k8s/">
+			上回<br>k8s &#43; docker 基于 kubeadm 多节点集群部署
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="webws/webws.github.io"
+        data-repo-id="R_kgDOJjhGQQ"
+        data-category="Announcements"
+        data-category-id=""
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled=""
+        data-emit-metadata=""
+        data-input-position=""
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="/">
+    
+        <div class="nav-title">
+            套路猿
+        </div>
+        
+        <div class="nav-subtitle">
+            自古深情留不住，唯有套路得人心
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8golang-%e5%9f%ba%e4%ba%8e-openai-embedding--qdrant-%e5%ae%9e%e7%8e%b0k8s%e6%9c%ac%e5%9c%b0%e7%9f%a5%e8%af%86%e5%ba%93" class="nav-使用golang-基于-openai-embedding--qdrant-实现k8s本地知识库">
+									使用golang 基于 OpenAI Embedding &#43; qdrant 实现k8s本地知识库
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#viper-%e6%ad%a3%e5%b8%b8%e5%8a%a0%e8%bd%bd%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6" class="nav-viper-正常加载配置文件">
+									viper 正常加载配置文件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%b8%8d%e5%8a%a0-mapstructure-tag%e5%ae%9e%e7%8e%b0%e8%87%aa%e5%8a%a8%e5%8f%8d%e5%ba%8f%e5%88%97%e5%8c%96" class="nav-不加-mapstructure-tag实现自动反序列化">
+									不加 mapstructure tag实现自动反序列化
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%9f%a5%e7%9c%8bviper-unmarshal-%e4%bb%a3%e7%a0%81" class="nav-查看viper-unmarshal-代码">
+									查看viper Unmarshal 代码
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#viper%e6%a0%b9%e6%8d%ae%e6%96%87%e7%b1%bb%e5%9e%8b%e4%bb%b6%e8%87%aa%e5%8a%a8%e8%a7%a3%e7%a0%81%e5%88%b0%e7%bb%93%e6%9e%84" class="nav-viper根据文类型件自动解码到结构">
+									viper根据文类型件自动解码到结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
