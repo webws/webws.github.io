@@ -18,7 +18,7 @@
         <pubDate>Sun, 27 Aug 2023 20:59:44 +0800</pubDate>
         
         <guid>/posts/golang-viper-load/</guid>
-        <description>套路猿 /posts/golang-viper-load/ -&lt;h1 id=&#34;使用golang-基于-openai-embedding--qdrant-实现k8s本地知识库&#34;&gt;使用golang 基于 OpenAI Embedding + qdrant 实现k8s本地知识库&lt;/h1&gt;
+        <description>套路猿 /posts/golang-viper-load/ -&lt;h1 id=&#34;heading&#34;&gt;&lt;/h1&gt;
 &lt;p&gt;文章博客地址:&lt;a href=&#34;https://blog.taoluyuan.com/posts/golang-viper-load/&#34;&gt;golang 使用 viper 加载配置 自动反序列化到结构&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&#34;viper-正常加载配置文件&#34;&gt;viper 正常加载配置文件&lt;/h3&gt;
 &lt;p&gt;golang viper 其中可以用来 查找、加载和反序列化JSON、TOML、YAML、HCL、INI、envfile和格式的配置文件&lt;br&gt;
