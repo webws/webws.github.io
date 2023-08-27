@@ -14,8 +14,7 @@
       
       <guid>/posts/golang-viper-load/</guid>
       <description>文章博客地址:golang 使用 viper 加载配置 自动反序列化到结构
-viper 正常加载配置文件 golang viper 其中可以用来 查找、加载和反序列化JSON、TOML、YAML、HCL、INI、envfile和格式的配置文件
-viper在后台使用github.com/mitchellh/mapstructure来反序列化 默认情况下使用 定义的结构 tag 需要加 mapstructure,如果不加 比如有下划线的字段无法解析成功
+golang使用 viper 无需设置 mapstructure tag 根据配置文件后缀 自动返序列化到结构 解决结构有下划线的字段解析不成功问题 viper 正常加载配置文件 golang viper 其中可以用来 查找、加载和反序列化JSON、TOML、YAML、HCL、INI、envfile和格式的配置文件
 配置文件 test_toml.toml
 http_addr = &amp;#34;:8082&amp;#34; grpc_addr = &amp;#34;:8083&amp;#34; jaeger_url= &amp;#34;http://localhost:14268/api/traces&amp;#34; tracing= true golang代码
 type ConfigTest struct { HttpAddr string `json:&amp;#34;http_addr&amp;#34; toml:&amp;#34;http_addr&amp;#34; yaml:&amp;#34;http_addr&amp;#34;` GrpcAddr string `json:&amp;#34;grpc_addr&amp;#34; toml:&amp;#34;grpc_addr&amp;#34; yaml:&amp;#34;grpc_addr&amp;#34;` JaegerUrl string `json:&amp;#34;jaeger_url&amp;#34; toml:&amp;#34;jaeger_url&amp;#34; yaml:&amp;#34;jaeger_url&amp;#34; mapstructure:&amp;#34;jaeger_url&amp;#34;` Tracing bool `toml:&amp;#34;tracing&amp;#34; json:&amp;#34;tracing&amp;#34; yaml:&amp;#34;tracing&amp;#34; ` // opentelemetry tracing } // jaeger 加载配置文件 func TestSourceFile_Unmarshal(t *testing.T) { filePath := &amp;#34;.</description>

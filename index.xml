@@ -20,10 +20,12 @@
         <guid>/posts/golang-viper-load/</guid>
         <description>套路猿 /posts/golang-viper-load/ -&lt;h1 id=&#34;heading&#34;&gt;&lt;/h1&gt;
 &lt;p&gt;文章博客地址:&lt;a href=&#34;https://blog.taoluyuan.com/posts/golang-viper-load/&#34;&gt;golang 使用 viper 加载配置 自动反序列化到结构&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;golang使用 viper 无需设置 mapstructure tag 根据配置文件后缀 自动返序列化到结构&lt;/li&gt;
+&lt;li&gt;解决结构有下划线的字段解析不成功问题&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3 id=&#34;viper-正常加载配置文件&#34;&gt;viper 正常加载配置文件&lt;/h3&gt;
-&lt;p&gt;golang viper 其中可以用来 查找、加载和反序列化JSON、TOML、YAML、HCL、INI、envfile和格式的配置文件&lt;br&gt;
-viper在后台使用github.com/mitchellh/mapstructure来反序列化
-默认情况下使用 定义的结构 tag 需要加 mapstructure,如果不加 比如有下划线的字段无法解析成功&lt;/p&gt;
+&lt;p&gt;golang viper 其中可以用来 查找、加载和反序列化JSON、TOML、YAML、HCL、INI、envfile和格式的配置文件&lt;/p&gt;
 &lt;p&gt;配置文件 test_toml.toml&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;http_addr = &amp;#34;:8082&amp;#34;
 grpc_addr = &amp;#34;:8083&amp;#34;
@@ -72,11 +74,13 @@ tracing= true
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// ...
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;从代码看出 Viper使用的是 github.com/mitchellh/mapstructure来解析值
-mapstructure 用于将通用的map[string]interface{}解码到对应的 Go 结构体中
-默认情况下，mapstructure 使用结构体中字段的名称做这个映射,不区分大小写,比如 Name 字段可以映射到 name、NAME、NaMe 等等
-如果没有指定 tagName ，则默认为 mapstructure,这也是为什么带下划线的字段不加 mapstructure 标签无法解析的原因
-viper 中Unmarshal的第二个方法是可以指定 DecoderConfigOption 的,从而可以指定 tagName&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;从代码看出 Viper使用的是 github.com/mitchellh/mapstructure来解析值&lt;/li&gt;
+&lt;li&gt;mapstructure 用于将通用的map[string]interface{}解码到对应的 Go 结构体中&lt;/li&gt;
+&lt;li&gt;默认情况下，mapstructure 使用结构体中字段的名称做这个映射,不区分大小写,比如 Name 字段可以映射到 name、NAME、NaMe 等等&lt;/li&gt;
+&lt;li&gt;如果没有指定 tagName ，则默认为 mapstructure,这也是为什么带下划线的字段不加 mapstructure 标签无法解析的原因&lt;/li&gt;
+&lt;li&gt;viper 中Unmarshal的第二个参数是可以指定 DecoderConfigOption 的,从而可以指定 tagName&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h4 id=&#34;viper根据文类型件自动解码到结构&#34;&gt;viper根据文类型件自动解码到结构&lt;/h4&gt;
 &lt;ol&gt;
 &lt;li&gt;读取文件后缀比如 toml&lt;/li&gt;

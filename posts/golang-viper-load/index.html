@@ -290,10 +290,12 @@
                 
                     <h1 id="heading"></h1>
 <p>文章博客地址:<a href="https://blog.taoluyuan.com/posts/golang-viper-load/">golang 使用 viper 加载配置 自动反序列化到结构</a></p>
+<ul>
+<li>golang使用 viper 无需设置 mapstructure tag 根据配置文件后缀 自动返序列化到结构</li>
+<li>解决结构有下划线的字段解析不成功问题</li>
+</ul>
 <h3 id="viper-正常加载配置文件">viper 正常加载配置文件</h3>
-<p>golang viper 其中可以用来 查找、加载和反序列化JSON、TOML、YAML、HCL、INI、envfile和格式的配置文件<br>
-viper在后台使用github.com/mitchellh/mapstructure来反序列化
-默认情况下使用 定义的结构 tag 需要加 mapstructure,如果不加 比如有下划线的字段无法解析成功</p>
+<p>golang viper 其中可以用来 查找、加载和反序列化JSON、TOML、YAML、HCL、INI、envfile和格式的配置文件</p>
 <p>配置文件 test_toml.toml</p>
 <pre tabindex="0"><code>http_addr = &#34;:8082&#34;
 grpc_addr = &#34;:8083&#34;
@@ -342,11 +344,13 @@ tracing= true
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ...
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
-</span></span></code></pre></div><p>从代码看出 Viper使用的是 github.com/mitchellh/mapstructure来解析值
-mapstructure 用于将通用的map[string]interface{}解码到对应的 Go 结构体中
-默认情况下，mapstructure 使用结构体中字段的名称做这个映射,不区分大小写,比如 Name 字段可以映射到 name、NAME、NaMe 等等
-如果没有指定 tagName ，则默认为 mapstructure,这也是为什么带下划线的字段不加 mapstructure 标签无法解析的原因
-viper 中Unmarshal的第二个方法是可以指定 DecoderConfigOption 的,从而可以指定 tagName</p>
+</span></span></code></pre></div><ul>
+<li>从代码看出 Viper使用的是 github.com/mitchellh/mapstructure来解析值</li>
+<li>mapstructure 用于将通用的map[string]interface{}解码到对应的 Go 结构体中</li>
+<li>默认情况下，mapstructure 使用结构体中字段的名称做这个映射,不区分大小写,比如 Name 字段可以映射到 name、NAME、NaMe 等等</li>
+<li>如果没有指定 tagName ，则默认为 mapstructure,这也是为什么带下划线的字段不加 mapstructure 标签无法解析的原因</li>
+<li>viper 中Unmarshal的第二个参数是可以指定 DecoderConfigOption 的,从而可以指定 tagName</li>
+</ul>
 <h4 id="viper根据文类型件自动解码到结构">viper根据文类型件自动解码到结构</h4>
 <ol>
 <li>读取文件后缀比如 toml</li>
