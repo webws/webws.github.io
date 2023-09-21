@@ -6,7 +6,43 @@
     <description>Recent content in Tags on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sun, 27 Aug 2023 20:59:44 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 Sep 2023 00:33:34 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ai</title>
+      <link>/tags/ai/</link>
+      <pubDate>Fri, 22 Sep 2023 00:33:34 +0800</pubDate>
+      
+      <guid>/tags/ai/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>chatgpt</title>
+      <link>/tags/chatgpt/</link>
+      <pubDate>Fri, 22 Sep 2023 00:33:34 +0800</pubDate>
+      
+      <guid>/tags/chatgpt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cobra</title>
+      <link>/tags/cobra/</link>
+      <pubDate>Fri, 22 Sep 2023 00:33:34 +0800</pubDate>
+      
+      <guid>/tags/cobra/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>qdrant</title>
+      <link>/tags/qdrant/</link>
+      <pubDate>Fri, 22 Sep 2023 00:33:34 +0800</pubDate>
+      
+      <guid>/tags/qdrant/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>scene</title>
       <link>/tags/scene/</link>
@@ -139,15 +175,6 @@
       <pubDate>Fri, 26 May 2023 01:03:00 +0800</pubDate>
       
       <guid>/tags/embedding/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>qdrant</title>
-      <link>/tags/qdrant/</link>
-      <pubDate>Fri, 26 May 2023 01:03:00 +0800</pubDate>
-      
-      <guid>/tags/qdrant/</guid>
       <description></description>
     </item>
     

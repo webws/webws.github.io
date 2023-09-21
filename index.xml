@@ -6,9 +6,165 @@
     <description>Recent content on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sun, 27 Aug 2023 20:59:44 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 22 Sep 2023 00:33:34 +0800</lastBuildDate>
     
         <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>golang 结合 cobra 使用 chatgpt  qdrant 实现 ai知识库 cli</title>
+        <link>/posts/kbai/</link>
+        <pubDate>Fri, 22 Sep 2023 00:33:34 +0800</pubDate>
+        
+        <guid>/posts/kbai/</guid>
+        <description>套路猿 /posts/kbai/ -&lt;h1 id=&#34;golang-结合-cobra-使用-chatgpt--qdrant-实现-ai知识库-cli&#34;&gt;golang 结合 cobra 使用 chatgpt  qdrant 实现 ai知识库 cli&lt;/h1&gt;
+&lt;h2 id=&#34;流程&#34;&gt;流程&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiniu.taoluyuan.com/2023/blog20230527115805.png?imagemogr2/auto-orient/thumbnail/!70p/blur/9x0/quality/75&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将数据集 通过 openai embedding 得到向量+组装payload,存入 qdrant&lt;/li&gt;
+&lt;li&gt;用户进行问题搜索,通过 openai embedding 得到向量,从 qdrant 中搜索相似度大于0.8的数据&lt;/li&gt;
+&lt;li&gt;从 qdrant 中取出数据得到参考答案&lt;/li&gt;
+&lt;li&gt;将问题标题+参考答案,组装成promot 向gpt进行提问,得到偏向于 已有知识库设定的扩展知识回答&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;kabi-知识库的导入和搜索&#34;&gt;kabi 知识库的导入和搜索&lt;/h2&gt;
+&lt;p&gt;仓库地址:&lt;a href=&#34;%22https://github.com/webws/embedding-knowledge-base%22&#34;&gt;https://github.com/webws/embedding-knowledge-base&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;kabi 是使用 golang 基于 openai chatgpt embedding + qdrant 实现知识库的导入和问答&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;❯ kabi -h
+a local knowledge base, based on chatgpt and qdrant
+
+usage:
+  kbai [flags]
+  kbai [command]
+
+available commands:
+  completion  generate the autocompletion script for the specified shell
+  help        help about any command
+  import      import data to vector database
+  search      ask the knowledge base example: kbai ask --msg &amp;#39;first, the chicken or the egg&amp;#39;
+
+flags:
+      --apikey string       openai apikey:default from env apikey
+      --collection string   qdrant collection name default: kubernetes (default &amp;#34;kubernetes&amp;#34;)
+  -h, --help                help for kbai
+      --proxy string        http client proxy default:socks5://127.0.0.1:1080  (default &amp;#34;socks5://127.0.0.1:1080&amp;#34;)
+      --qdrant string       qdrant address default: 127.0.0.1:6334 (default &amp;#34;127.0.0.1:6334&amp;#34;)
+      --vectorsize uint     qdrant vector size default: 1536 (default 1536)
+
+use &amp;#34;kbai [command] --help&amp;#34; for more information about a command.
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;启动向量数据库&#34;&gt;启动向量数据库&lt;/h5&gt;
+&lt;p&gt;qdrant 是一个开源的向量搜索引擎,支持多种向量距离计算方式&lt;/p&gt;
+&lt;p&gt;docker 运行 qdrant&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;docker run --rm -p 6334:6334 qdrant/qdrant
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;kbai库导入数据到知识库&#34;&gt;kbai库导入数据到知识库&lt;/h5&gt;
+&lt;p&gt;clone 源码运行(后续提供二进制文件)&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git clone https://github.com/webws/embedding-knowledge-base.git
+
+cd ./embedding-knowledge-base
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这里使用的测试数据是k8s相关的知识库,真实数据需自己准备&lt;/p&gt;
+&lt;p&gt;1.设置 openai apikey&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;export apikey=xxx
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;2.导入知识库(源码运行)&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;go run ./ import --datafile ./example/data.json
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;data.json 数据格式如下,为 真实数据需自己准备&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[
+    {
+        &amp;#34;questions&amp;#34;: &amp;#34;这是问题&amp;#34;,
+        &amp;#34;answers&amp;#34;: &amp;#34;这是答案&amp;#34;
+    },
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;说明:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;默认的 代理 是 &amp;#34;socks5://127.0.0.1:1080&amp;#34; 自定义 可使用 --proxy 指定
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;kbai-搜索数据&#34;&gt;kbai 搜索数据&lt;/h5&gt;
+&lt;p&gt;搜索问题(源码执行)&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; go run ./ search --msg &amp;#34;网关是什么&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;回答&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;the answer to the knowledge base:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;在kubernetes中，网关通常指的是ingress（入 口）资源对象。ingress是一种kubernetes api对象，用于配置和管理集群中的http和https流量入口。它充当了从集群外部访问集群内部服务的入口点
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;results of chatgpt answers  with reference answers:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;，同时提供负载均衡、ssl/tls终止和基于域名的路由等功能。ingress资源对象定义了一组规则，这些规则指定了通过特定http路径或主机名将请求路由到后端服务的方式。可以使用不同的ingress控制器实现这些规则，如nginx、traefik等。这样就可以在集群中创建多个ingress资源对象来管理不同的流量入口。
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;only chatgpt answers:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;网关是一种网络设备，用于连接两个或多个不同类型的网络，以便实现数据以不同协议进行传递和转换。网关起到了连接不同网络之间的桥梁作用，将两个或多个网络互相连接起来，并负责数据的路由和转发。网关可以是硬件设备，如路由器，也可以是软件程序，如互联网网关。网关通常用于连接本地网络与互联网，使得局域网中的计算机能够访问互联网上的资源。除了连接不同网络的功能，网关还可以实现安全性、负载均衡、数据过滤等功能。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;第一个是知识库的回答(the answer to the knowledge base):&lt;/li&gt;
+&lt;li&gt;第二个 是结合知识库 chatgpt 的回答(results of chatgpt answers  with reference answers)&lt;/li&gt;
+&lt;li&gt;第三个 仅chatgpt 回答&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;可以看出 直接问chatgpt,得到的答案可能跟k8s无关,结合k8s本地知识库,可以让回答偏向 数据集设定的主题&lt;/p&gt;
+&lt;p&gt;如果直接搜索 与知识库无关或违规问题,将搜索不到任务数据&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;go run ./ search --msg &amp;#34;苹果不洗能吃吗&amp;#34;
+rearch term violation or exceeding category
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;kabi-golang-实现-ai知识库导入原理&#34;&gt;kabi golang 实现 ai知识库导入原理&lt;/h2&gt;
+&lt;h4 id=&#34;导入&#34;&gt;导入&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;接入 qdrant 和 openai cleint&lt;/li&gt;
+&lt;li&gt;解释原始知识库数据 为 q(问) a(答)&lt;/li&gt;
+&lt;li&gt;将 问题 经过 openai embedding 得到向量+答案存入 qdrant&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;以下是 &lt;a href=&#34;%22https://github.com/webws/embedding-knowledge-base%22&#34;&gt;kbai&lt;/a&gt; go 导入逻辑代码&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#a6e22e&#34;&gt;qdrantclient&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;qdrant&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;newqdrantclient&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;configflags&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;qdrant&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;configflags&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;collection&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;configflags&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;vectorsize&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#66d9ef&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;qdrantclient&lt;/span&gt;.close()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;aiclient&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ai&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;newaiclient&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;configflags&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;proxy&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;configflags&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;apikey&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;qdrantclient&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;createcollection&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;configflags&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;collection&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;configflags&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;vectorsize&lt;/span&gt;); &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;qas&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;converttoqas&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;datafile&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;points&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; []&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;pb&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;pointstruct&lt;/span&gt;{}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;logger&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;infow&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;import&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;qas&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;qpslenth&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; len(&lt;span style=&#34;color:#a6e22e&#34;&gt;qas&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;qa&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;qas&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#a6e22e&#34;&gt;embedding&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;aiclient&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;simplegetvec&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;qa&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;questions&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;					&lt;span style=&#34;color:#a6e22e&#34;&gt;logger&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;errorw&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;simplegetvec&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;err&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;question&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;qa&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;questions&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;index&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;total&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;qpslenth&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;					&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#a6e22e&#34;&gt;point&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;buildpoint&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;qa&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;questions&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;qa&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;answers&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;embedding&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#a6e22e&#34;&gt;points&lt;/span&gt; = append(&lt;span style=&#34;color:#a6e22e&#34;&gt;points&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;point&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;搜索&#34;&gt;搜索&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;问题搜索,通过 openai embedding 得到向量&lt;/li&gt;
+&lt;li&gt;根据向量 从 qdrant 中搜索相似度大于0.8的数据&lt;/li&gt;
+&lt;li&gt;根据 qdrant 里的知识库答案(参考答案) +  从 chatgpt 提问 得到扩展知识&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;以下是 &lt;a href=&#34;%22https://github.com/webws/embedding-knowledge-base%22&#34;&gt;kbai&lt;/a&gt; go 搜索代码逻辑&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;            qdrantclient := qdrant.newqdrantclient(configflags.qdrant, configflags.collection, configflags.vectorsize)
+			defer qdrantclient.close()
+
+			aiclient, err := ai.newaiclient(configflags.proxy, configflags.apikey)
+			if err != nil {
+				return err
+			}
+			vector, err := aiclient.simplegetvec(msg)
+			if err != nil {
+				return err
+			}
+			points, err := qdrantclient.search(vector)
+			if err != nil {
+				logger.errorw(&amp;#34;qdrant search fail&amp;#34;, &amp;#34;err&amp;#34;, err)
+				return err
+			}
+			if len(points) == 0 {
+				fmt.println(&amp;#34;rearch term violation or exceeding category&amp;#34;)
+				return nil
+				// return errors.new(&amp;#34;rearch term violation or exceeding category&amp;#34;)
+			}
+			// score less than 0.8, rearch term violation or exceeding category
+			if points[0].score &amp;lt; 0.8 {
+				fmt.println(&amp;#34;rearch term violation or exceeding category&amp;#34;)
+				return nil
+				// return errors.new(&amp;#34;rearch term violation or exceeding category&amp;#34;)
+			}
+&lt;/code&gt;&lt;/pre&gt;- /posts/kbai/ - </description>
+        </item>
     
     
     

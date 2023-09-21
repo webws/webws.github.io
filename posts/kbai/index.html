@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html><head>
+<title>golang 结合 cobra 使用 chatgpt  qdrant 实现 ai知识库 cli</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="Kbai">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="/posts/images/favicon.jpg">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.101ef407a1e27ccf92936b24b892c7ca0a5f57d754d0689042310afca8e795d9.css" integrity="sha256-EB70B6HifM&#43;Sk2skuJLHygpfV9dU0GiQQjEK/Kjnldk=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#golang-%e7%bb%93%e5%90%88-cobra-%e4%bd%bf%e7%94%a8-chatgpt--qdrant-%e5%ae%9e%e7%8e%b0-ai%e7%9f%a5%e8%af%86%e5%ba%93-cli" class="nav-golang-结合-cobra-使用-chatgpt--qdrant-实现-ai知识库-cli">
+									golang 结合 cobra 使用 chatgpt qdrant 实现 ai知识库 cli
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%b5%81%e7%a8%8b" class="nav-流程">
+									流程
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#kabi-%e7%9f%a5%e8%af%86%e5%ba%93%e7%9a%84%e5%af%bc%e5%85%a5%e5%92%8c%e6%90%9c%e7%b4%a2" class="nav-kabi-知识库的导入和搜索">
+									kabi 知识库的导入和搜索
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#kabi-golang-%e5%ae%9e%e7%8e%b0-ai%e7%9f%a5%e8%af%86%e5%ba%93%e5%af%bc%e5%85%a5%e5%8e%9f%e7%90%86" class="nav-kabi-golang-实现-ai知识库导入原理">
+									kabi golang 实现 ai知识库导入原理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%af%bc%e5%85%a5" class="nav-导入">
+									导入
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%90%9c%e7%b4%a2" class="nav-搜索">
+									搜索
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="">
+            套路猿
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">套路猿</div>
+        
+        <div class="single-column-header-subtitle">自古深情留不住，唯有套路得人心</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    golang 结合 cobra 使用 chatgpt  qdrant 实现 ai知识库 cli
+                    
+                    <div class="post-subtitle">
+                        Kbai
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-09-22 00:33
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/aiops">AiOps</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/chatgpt">chatgpt</a>
+                                &nbsp;
+                            
+                                <a href="/tags/cobra">cobra</a>
+                                &nbsp;
+                            
+                                <a href="/tags/qdrant">qdrant</a>
+                                &nbsp;
+                            
+                                <a href="/tags/ai">Ai</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="golang-结合-cobra-使用-chatgpt--qdrant-实现-ai知识库-cli">golang 结合 cobra 使用 chatgpt  qdrant 实现 ai知识库 cli</h1>
+<h2 id="流程">流程</h2>
+<p><img src="https://qiniu.taoluyuan.com/2023/blog20230527115805.png?imagemogr2/auto-orient/thumbnail/!70p/blur/9x0/quality/75" alt=""></p>
+<ol>
+<li>将数据集 通过 openai embedding 得到向量+组装payload,存入 qdrant</li>
+<li>用户进行问题搜索,通过 openai embedding 得到向量,从 qdrant 中搜索相似度大于0.8的数据</li>
+<li>从 qdrant 中取出数据得到参考答案</li>
+<li>将问题标题+参考答案,组装成promot 向gpt进行提问,得到偏向于 已有知识库设定的扩展知识回答</li>
+</ol>
+<h2 id="kabi-知识库的导入和搜索">kabi 知识库的导入和搜索</h2>
+<p>仓库地址:<a href="%22https://github.com/webws/embedding-knowledge-base%22">https://github.com/webws/embedding-knowledge-base</a></p>
+<p>kabi 是使用 golang 基于 openai chatgpt embedding + qdrant 实现知识库的导入和问答</p>
+<pre tabindex="0"><code>❯ kabi -h
+a local knowledge base, based on chatgpt and qdrant
+
+usage:
+  kbai [flags]
+  kbai [command]
+
+available commands:
+  completion  generate the autocompletion script for the specified shell
+  help        help about any command
+  import      import data to vector database
+  search      ask the knowledge base example: kbai ask --msg &#39;first, the chicken or the egg&#39;
+
+flags:
+      --apikey string       openai apikey:default from env apikey
+      --collection string   qdrant collection name default: kubernetes (default &#34;kubernetes&#34;)
+  -h, --help                help for kbai
+      --proxy string        http client proxy default:socks5://127.0.0.1:1080  (default &#34;socks5://127.0.0.1:1080&#34;)
+      --qdrant string       qdrant address default: 127.0.0.1:6334 (default &#34;127.0.0.1:6334&#34;)
+      --vectorsize uint     qdrant vector size default: 1536 (default 1536)
+
+use &#34;kbai [command] --help&#34; for more information about a command.
+</code></pre><h5 id="启动向量数据库">启动向量数据库</h5>
+<p>qdrant 是一个开源的向量搜索引擎,支持多种向量距离计算方式</p>
+<p>docker 运行 qdrant</p>
+<pre tabindex="0"><code>docker run --rm -p 6334:6334 qdrant/qdrant
+</code></pre><h5 id="kbai库导入数据到知识库">kbai库导入数据到知识库</h5>
+<p>clone 源码运行(后续提供二进制文件)</p>
+<pre tabindex="0"><code>git clone https://github.com/webws/embedding-knowledge-base.git
+
+cd ./embedding-knowledge-base
+</code></pre><p>这里使用的测试数据是k8s相关的知识库,真实数据需自己准备</p>
+<p>1.设置 openai apikey</p>
+<pre tabindex="0"><code>export apikey=xxx
+</code></pre><p>2.导入知识库(源码运行)</p>
+<pre tabindex="0"><code>go run ./ import --datafile ./example/data.json
+</code></pre><p>data.json 数据格式如下,为 真实数据需自己准备</p>
+<pre tabindex="0"><code>[
+    {
+        &#34;questions&#34;: &#34;这是问题&#34;,
+        &#34;answers&#34;: &#34;这是答案&#34;
+    },
+]
+</code></pre><p>说明:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>默认的 代理 是 &#34;socks5://127.0.0.1:1080&#34; 自定义 可使用 --proxy 指定
+</span></span></code></pre></div><h5 id="kbai-搜索数据">kbai 搜索数据</h5>
+<p>搜索问题(源码执行)</p>
+<pre tabindex="0"><code> go run ./ search --msg &#34;网关是什么&#34;
+</code></pre><p>回答</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>the answer to the knowledge base:
+</span></span><span style="display:flex;"><span>在kubernetes中，网关通常指的是ingress（入 口）资源对象。ingress是一种kubernetes api对象，用于配置和管理集群中的http和https流量入口。它充当了从集群外部访问集群内部服务的入口点
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>results of chatgpt answers  with reference answers:
+</span></span><span style="display:flex;"><span>，同时提供负载均衡、ssl/tls终止和基于域名的路由等功能。ingress资源对象定义了一组规则，这些规则指定了通过特定http路径或主机名将请求路由到后端服务的方式。可以使用不同的ingress控制器实现这些规则，如nginx、traefik等。这样就可以在集群中创建多个ingress资源对象来管理不同的流量入口。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>only chatgpt answers:
+</span></span><span style="display:flex;"><span>网关是一种网络设备，用于连接两个或多个不同类型的网络，以便实现数据以不同协议进行传递和转换。网关起到了连接不同网络之间的桥梁作用，将两个或多个网络互相连接起来，并负责数据的路由和转发。网关可以是硬件设备，如路由器，也可以是软件程序，如互联网网关。网关通常用于连接本地网络与互联网，使得局域网中的计算机能够访问互联网上的资源。除了连接不同网络的功能，网关还可以实现安全性、负载均衡、数据过滤等功能。
+</span></span></code></pre></div><ol>
+<li>第一个是知识库的回答(the answer to the knowledge base):</li>
+<li>第二个 是结合知识库 chatgpt 的回答(results of chatgpt answers  with reference answers)</li>
+<li>第三个 仅chatgpt 回答</li>
+</ol>
+<p>可以看出 直接问chatgpt,得到的答案可能跟k8s无关,结合k8s本地知识库,可以让回答偏向 数据集设定的主题</p>
+<p>如果直接搜索 与知识库无关或违规问题,将搜索不到任务数据</p>
+<pre tabindex="0"><code>go run ./ search --msg &#34;苹果不洗能吃吗&#34;
+rearch term violation or exceeding category
+</code></pre><h2 id="kabi-golang-实现-ai知识库导入原理">kabi golang 实现 ai知识库导入原理</h2>
+<h4 id="导入">导入</h4>
+<ol>
+<li>接入 qdrant 和 openai cleint</li>
+<li>解释原始知识库数据 为 q(问) a(答)</li>
+<li>将 问题 经过 openai embedding 得到向量+答案存入 qdrant</li>
+</ol>
+<p>以下是 <a href="%22https://github.com/webws/embedding-knowledge-base%22">kbai</a> go 导入逻辑代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span>            <span style="color:#a6e22e">qdrantclient</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">qdrant</span>.<span style="color:#a6e22e">newqdrantclient</span>(<span style="color:#a6e22e">configflags</span>.<span style="color:#a6e22e">qdrant</span>, <span style="color:#a6e22e">configflags</span>.<span style="color:#a6e22e">collection</span>, <span style="color:#a6e22e">configflags</span>.<span style="color:#a6e22e">vectorsize</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">qdrantclient</span>.close()
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">aiclient</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ai</span>.<span style="color:#a6e22e">newaiclient</span>(<span style="color:#a6e22e">configflags</span>.<span style="color:#a6e22e">proxy</span>, <span style="color:#a6e22e">configflags</span>.<span style="color:#a6e22e">apikey</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">qdrantclient</span>.<span style="color:#a6e22e">createcollection</span>(<span style="color:#a6e22e">configflags</span>.<span style="color:#a6e22e">collection</span>, <span style="color:#a6e22e">configflags</span>.<span style="color:#a6e22e">vectorsize</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">qas</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">converttoqas</span>(<span style="color:#a6e22e">datafile</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">points</span> <span style="color:#f92672">:=</span> []<span style="color:#f92672">*</span><span style="color:#a6e22e">pb</span>.<span style="color:#a6e22e">pointstruct</span>{}
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">infow</span>(<span style="color:#e6db74">&#34;import&#34;</span>, <span style="color:#e6db74">&#34;data&#34;</span>, <span style="color:#a6e22e">qas</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">qpslenth</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">qas</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">qa</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">qas</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">embedding</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">aiclient</span>.<span style="color:#a6e22e">simplegetvec</span>(<span style="color:#a6e22e">qa</span>.<span style="color:#a6e22e">questions</span>)
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>					<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">errorw</span>(<span style="color:#e6db74">&#34;simplegetvec&#34;</span>, <span style="color:#e6db74">&#34;err&#34;</span>, <span style="color:#a6e22e">err</span>, <span style="color:#e6db74">&#34;question&#34;</span>, <span style="color:#a6e22e">qa</span>.<span style="color:#a6e22e">questions</span>, <span style="color:#e6db74">&#34;index&#34;</span>, <span style="color:#a6e22e">i</span>, <span style="color:#e6db74">&#34;total&#34;</span>, <span style="color:#a6e22e">qpslenth</span>)
+</span></span><span style="display:flex;"><span>					<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">point</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">buildpoint</span>(<span style="color:#a6e22e">qa</span>.<span style="color:#a6e22e">questions</span>, <span style="color:#a6e22e">qa</span>.<span style="color:#a6e22e">answers</span>, <span style="color:#a6e22e">embedding</span>)
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">points</span> = append(<span style="color:#a6e22e">points</span>, <span style="color:#a6e22e">point</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span></code></pre></div><h3 id="搜索">搜索</h3>
+<ol>
+<li>问题搜索,通过 openai embedding 得到向量</li>
+<li>根据向量 从 qdrant 中搜索相似度大于0.8的数据</li>
+<li>根据 qdrant 里的知识库答案(参考答案) +  从 chatgpt 提问 得到扩展知识</li>
+</ol>
+<p>以下是 <a href="%22https://github.com/webws/embedding-knowledge-base%22">kbai</a> go 搜索代码逻辑</p>
+<pre tabindex="0"><code>            qdrantclient := qdrant.newqdrantclient(configflags.qdrant, configflags.collection, configflags.vectorsize)
+			defer qdrantclient.close()
+
+			aiclient, err := ai.newaiclient(configflags.proxy, configflags.apikey)
+			if err != nil {
+				return err
+			}
+			vector, err := aiclient.simplegetvec(msg)
+			if err != nil {
+				return err
+			}
+			points, err := qdrantclient.search(vector)
+			if err != nil {
+				logger.errorw(&#34;qdrant search fail&#34;, &#34;err&#34;, err)
+				return err
+			}
+			if len(points) == 0 {
+				fmt.println(&#34;rearch term violation or exceeding category&#34;)
+				return nil
+				// return errors.new(&#34;rearch term violation or exceeding category&#34;)
+			}
+			// score less than 0.8, rearch term violation or exceeding category
+			if points[0].score &lt; 0.8 {
+				fmt.println(&#34;rearch term violation or exceeding category&#34;)
+				return nil
+				// return errors.new(&#34;rearch term violation or exceeding category&#34;)
+			}
+</code></pre>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-09-22</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/golang-viper-load/">
+			上回<br>golang 使用 viper 加载配置文件 自动反序列化到结构
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://giscus.app/client.js"
+        data-repo="webws/webws.github.io"
+        data-repo-id="R_kgDOJjhGQQ"
+        data-category="Announcements"
+        data-category-id=""
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled=""
+        data-emit-metadata=""
+        data-input-position=""
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="/">
+    
+        <div class="nav-title">
+            套路猿
+        </div>
+        
+        <div class="nav-subtitle">
+            自古深情留不住，唯有套路得人心
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#golang-%e7%bb%93%e5%90%88-cobra-%e4%bd%bf%e7%94%a8-chatgpt--qdrant-%e5%ae%9e%e7%8e%b0-ai%e7%9f%a5%e8%af%86%e5%ba%93-cli" class="nav-golang-结合-cobra-使用-chatgpt--qdrant-实现-ai知识库-cli">
+									golang 结合 cobra 使用 chatgpt qdrant 实现 ai知识库 cli
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%b5%81%e7%a8%8b" class="nav-流程">
+									流程
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#kabi-%e7%9f%a5%e8%af%86%e5%ba%93%e7%9a%84%e5%af%bc%e5%85%a5%e5%92%8c%e6%90%9c%e7%b4%a2" class="nav-kabi-知识库的导入和搜索">
+									kabi 知识库的导入和搜索
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#kabi-golang-%e5%ae%9e%e7%8e%b0-ai%e7%9f%a5%e8%af%86%e5%ba%93%e5%af%bc%e5%85%a5%e5%8e%9f%e7%90%86" class="nav-kabi-golang-实现-ai知识库导入原理">
+									kabi golang 实现 ai知识库导入原理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%af%bc%e5%85%a5" class="nav-导入">
+									导入
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%90%9c%e7%b4%a2" class="nav-搜索">
+									搜索
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+pv <span id="busuanzi_value_site_pv"></span> 次
+
+uv <span id="busuanzi_value_site_uv"></span> 人
+<p>  </p> 
+
+<p> </p>
+
+
+
+
+
+
+
+&copy;
+	
+	2023 套路猿
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

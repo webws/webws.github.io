@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>chatgpt on 套路猿</title>
+    <link>/tags/chatgpt/</link>
+    <description>Recent content in chatgpt on 套路猿</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Fri, 22 Sep 2023 00:33:34 +0800</lastBuildDate><atom:link href="/tags/chatgpt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>golang 结合 cobra 使用 chatgpt  qdrant 实现 ai知识库 cli</title>
+      <link>/posts/kbai/</link>
+      <pubDate>Fri, 22 Sep 2023 00:33:34 +0800</pubDate>
+      
+      <guid>/posts/kbai/</guid>
+      <description>golang 结合 cobra 使用 chatgpt qdrant 实现 ai知识库 cli 流程 将数据集 通过 openai embedding 得到向量+组装payload,存入 qdrant 用户进行问题搜索,通过 openai embedding 得到向量,从 qdrant 中搜索相似度大于0.8的数据 从 qdrant 中取出数据得到参考答案 将问题标题+参考答案,组装成promot 向gpt进行提问,得到偏向于 已有知识库设定的扩展知识回答 kabi 知识库的导入和搜索 仓库地址:https://github.com/webws/embedding-knowledge-base
+kabi 是使用 golang 基于 openai chatgpt embedding + qdrant 实现知识库的导入和问答
+❯ kabi -h a local knowledge base, based on chatgpt and qdrant usage: kbai [flags] kbai [command] available commands: completion generate the autocompletion script for the specified shell help help about any command import import data to vector database search ask the knowledge base example: kbai ask --msg &amp;#39;first, the chicken or the egg&amp;#39; flags: --apikey string openai apikey:default from env apikey --collection string qdrant collection name default: kubernetes (default &amp;#34;kubernetes&amp;#34;) -h, --help help for kbai --proxy string http client proxy default:socks5://127.</description>
+    </item>
+    
+  </channel>
+</rss>

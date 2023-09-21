@@ -6,7 +6,16 @@
     <description>Recent content in Categories on 套路猿</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Sun, 27 Aug 2023 20:59:44 +0800</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 Sep 2023 00:33:34 +0800</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AiOps</title>
+      <link>/categories/aiops/</link>
+      <pubDate>Fri, 22 Sep 2023 00:33:34 +0800</pubDate>
+      
+      <guid>/categories/aiops/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>golang</title>
       <link>/categories/golang/</link>
@@ -22,15 +31,6 @@
       <pubDate>Thu, 08 Jun 2023 21:36:22 +0800</pubDate>
       
       <guid>/categories/devops/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>AiOps</title>
-      <link>/categories/aiops/</link>
-      <pubDate>Fri, 26 May 2023 01:03:00 +0800</pubDate>
-      
-      <guid>/categories/aiops/</guid>
       <description></description>
     </item>
     
